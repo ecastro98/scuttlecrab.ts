@@ -1,10 +1,10 @@
 {
   "name": "scuttlecrab.ts",
   "version": "1.0.0",
-  "description": "",
+  "description": "A League of Legends Discord Bot (version beta).",
   "main": "dist/index.js",
   "scripts": {
-    "start": "yarn run build ; yarn run start:prod",
+    "start": "npm run build ; npm run start:prod",
     "start:prod": "node dist/index.js",
     "build": "rm -rf dist && tsc"
   },
@@ -13,9 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "@dimensional-fun/logger": "^1.0.1",
-    "@types/node": "^16.11.11",
     "detritus-client": "0.16.4-beta.6",
     "dotenv": "^10.0.0",
     "typescript": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^16.11.11"
   }
 }

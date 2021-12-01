@@ -1,7 +1,11 @@
-import { config } from 'dotenv';
-config();
+import 'dotenv/config';
 
-import { CommandClient, ShardClient } from 'detritus-client';
+import { CommandClient, ShardClient, Utils } from 'detritus-client';
+import {
+  ClientEvents,
+  MarkupTimestampStyles,
+} from 'detritus-client/lib/constants';
+const { Markup } = Utils;
 
 const { token, prefix } = {
   token: process.env.token,
@@ -40,7 +44,41 @@ const ScuttleCommandClient = new CommandClient(ScuttleClient, {
   ignoreMe: true,
   useClusterClient: false,
   activateOnEdits: true,
+  mentionsEnabled: true,
 });
+
+ScuttleCommandClient.on(
+  ClientEvents.COMMAND_RAN,
+  async ({ command, context }) => {
+    if (command.name === 'eval') return;
+
+    const channel = context.guilds.cache
+      .get(process.env.guildId)
+      .channels.cache.get('915654402394693642');
+
+    const date = Markup.timestamp(
+      context.message.timestampUnix,
+      MarkupTimestampStyles.BOTH_LONG,
+    );
+
+    const array: Array<string> = [
+      '**Command Executed**',
+      '',
+      `Command: ${Markup.codestring(command.name)}.`,
+      `Author: ${Markup.codestring(context.user.tag)} | ${Markup.codestring(
+        context.user.id,
+      )}.`,
+      `Guild: ${Markup.codestring(context.guild.name)} | ${Markup.codestring(
+        context.guild.id,
+      )}.`,
+      `Date: ${date}.`,
+    ];
+
+    await channel.createMessage({
+      content: array.join('\n'),
+    });
+  },
+);
 
 (async () => {
   await ScuttleClient.run();
