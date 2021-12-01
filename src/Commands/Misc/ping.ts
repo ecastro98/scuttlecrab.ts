@@ -10,12 +10,12 @@ export default class Ping extends BaseCommand {
       metadata: {
         description: "Get the latency time of discord's API.",
         examples: ['ping', 'pong', 'latency'],
-        category: 'Util',
+        category: 'Misc',
         usage: 'ping',
         onlyDevs: false,
         nsfw: false,
       },
-      disableDm: true,
+      disableDm: false,
       ratelimit: { duration: 3000, limit: 1, type: 'user' },
       responseOptional: true,
     });
@@ -23,7 +23,7 @@ export default class Ping extends BaseCommand {
   async run(ctx: Context) {
     const { gateway, rest } = await ctx.client.ping();
     return await ctx.editOrReply({
-      content: `Pong, (gateway: ${gateway}ms) (rest: ${rest}ms).`,
+      content: `Pong! (gateway: ${gateway}ms) (rest: ${rest}ms).`,
     });
   }
 }

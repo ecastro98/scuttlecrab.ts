@@ -11,7 +11,7 @@ export default class Eval extends BaseCommand {
       metadata: {
         description: 'Eval some code.',
         examples: ['eval ctx.client.token', 'eval this'],
-        category: 'Developer',
+        category: 'Private',
         usage: 'eval [code]',
         onlyDevs: true,
         nsfw: false,
@@ -28,7 +28,6 @@ export default class Eval extends BaseCommand {
         console.error(err);
       },
       disableDm: true,
-      disableDmReply: false,
       responseOptional: true,
     });
   }

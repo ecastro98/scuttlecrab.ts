@@ -29,6 +29,9 @@ const ScuttleClient = new ShardClient(token, {
     stickers: false,
     voiceConnections: false,
   },
+  gateway: {
+    intents: 14023,
+  },
   imageFormat: 'png',
 });
 
@@ -56,5 +59,5 @@ const ScuttleCommandClient = new CommandClient(ScuttleClient, {
     })
     .catch((err) => console.error(err));
   await ScuttleCommandClient.run();
-  console.log(`Bot Online.\nRunning on node '${process.version}'.`);
+  console.log(`Bot Online.`);
 })();
