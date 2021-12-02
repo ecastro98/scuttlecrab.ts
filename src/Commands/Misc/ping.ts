@@ -1,6 +1,6 @@
+import BaseCommand from '../../Classes/BaseComand';
 import { CommandClient } from 'detritus-client';
 import { Context } from 'detritus-client/lib/command';
-import BaseCommand from '../../Classes/BaseComand';
 
 export default class Ping extends BaseCommand {
   constructor(client: CommandClient) {

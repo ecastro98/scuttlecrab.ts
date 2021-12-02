@@ -1,7 +1,8 @@
-import { CommandClient, Utils } from 'detritus-client';
-import { Context } from 'detritus-client/lib/command';
-import { inspect } from 'util';
 import BaseCommand from '../../Classes/BaseComand';
+import { CommandClient } from 'detritus-client';
+import { Context } from 'detritus-client/lib/command';
+import { codeblock } from 'detritus-client/lib/utils/markup';
+import { inspect } from 'util';
 
 export default class Eval extends BaseCommand {
   constructor(client: CommandClient) {
@@ -51,7 +52,7 @@ export default class Eval extends BaseCommand {
             if (typeof evaluated !== 'string')
               evaluated = inspect(evaluated, { depth: 0 });
             await m.edit({
-              content: Utils.Markup.codeblock(evaluated, {
+              content: codeblock(evaluated, {
                 language: 'js',
                 limit: 1980,
               }),
@@ -62,7 +63,7 @@ export default class Eval extends BaseCommand {
             if (typeof evaluated !== 'string')
               evaluated = inspect(evaluated, { depth: 0 });
             await m.edit({
-              content: Utils.Markup.codeblock(evaluated, {
+              content: codeblock(evaluated, {
                 language: 'js',
                 limit: 1980,
               }),
@@ -72,7 +73,7 @@ export default class Eval extends BaseCommand {
         if (typeof evaluated !== 'string')
           evaluated = inspect(evaluated, { depth: 0 });
         await ctx.editOrReply({
-          content: Utils.Markup.codeblock(evaluated, {
+          content: codeblock(evaluated, {
             language: 'js',
             limit: 1980,
           }),
@@ -80,7 +81,7 @@ export default class Eval extends BaseCommand {
       }
     } catch (error) {
       await ctx.editOrReply({
-        content: Utils.Markup.codeblock(`${error.name}: ${error.message}.`, {
+        content: codeblock(`${error.name}: ${error.message}.`, {
           language: 'js',
           limit: 1980,
         }),
