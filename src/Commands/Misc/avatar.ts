@@ -4,7 +4,7 @@ import { Context } from 'detritus-client/lib/command';
 import { codestring } from 'detritus-client/lib/utils/markup';
 import axios from 'axios';
 
-export default class Ping extends BaseCommand {
+export default class Avatar extends BaseCommand {
   constructor(client: CommandClient) {
     super(client, {
       name: 'avatar',
