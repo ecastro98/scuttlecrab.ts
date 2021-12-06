@@ -42,3 +42,17 @@ export const DiscordPermissions = {
   [String(Permissions.USE_EXTERNAL_STICKERS)]: 'Use External Stickers',
   [String(Permissions.SEND_MESSAGES_IN_THREADS)]: 'Send Messages In Threads',
 };
+
+export enum CommandTypes {
+  MISC = 'Misc',
+  IMG = 'Image',
+  INFO = 'Information',
+  PRIVATE = 'Private',
+  DOCS = 'Detritus Client',
+}
+
+export enum EmbedColors {
+  DEFAULT = 0x0078ff,
+  ERROR = 0xff0000,
+  SUCCESS = 0x3aff00,
+}

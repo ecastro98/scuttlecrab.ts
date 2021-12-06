@@ -1,18 +1,24 @@
 import 'dotenv/config';
-
-import { CommandClient, ShardClient } from 'detritus-client';
 import {
-  ClientEvents,
-  MarkupTimestampStyles,
-} from 'detritus-client/lib/constants';
-import { codestring, timestamp } from 'detritus-client/lib/utils/markup';
+  CommandClient,
+  ShardClient,
+  InteractionCommandClient,
+} from 'detritus-client';
+import { readdirSync } from 'fs';
+import { resolve } from 'path';
+import { Logger } from '@dimensional-fun/logger';
+const log = new Logger('🤖', {
+  defaults: { timestamp: false },
+});
 
-const { token, prefix } = {
-  token: process.env.token,
-  prefix: process.env.prefix,
-};
+interface EventImport {
+  default: {
+    name: string;
+    run(payload: any, commandClient: CommandClient): void | Promise<void>;
+  };
+}
 
-const ScuttleClient = new ShardClient(token, {
+const ScuttleClient = new ShardClient(process.env.token as string, {
   cache: {
     channels: {
       limit: 100,
@@ -22,8 +28,9 @@ const ScuttleClient = new ShardClient(token, {
       limit: 50,
       expire: 15 * 60000,
     },
-    users: false,
-    members: false,
+    members: {
+      limit: 1000,
+    },
     voiceStates: false,
     emojis: false,
     interactions: false,
@@ -33,62 +40,53 @@ const ScuttleClient = new ShardClient(token, {
     stickers: false,
     voiceConnections: false,
   },
-  gateway: {
-    intents: 14023,
-  },
   imageFormat: 'png',
 });
 
 const ScuttleCommandClient = new CommandClient(ScuttleClient, {
-  prefix: prefix,
+  prefix: '?',
   ignoreMe: true,
   useClusterClient: false,
   activateOnEdits: true,
-  mentionsEnabled: true,
 });
 
-ScuttleCommandClient.on(
-  ClientEvents.COMMAND_RAN,
-  async ({ command, context }) => {
-    if (command.name === 'eval') return;
-
-    const channel = context.guilds
-      .get(process.env.guildId)
-      .channels.get('915654402394693642');
-
-    if (!channel) return;
-
-    const cmd = codestring(command.name);
-
-    const author = `${codestring(context.user.tag)} | ${codestring(
-      context.user.id,
-    )}`;
-
-    const guild = `${codestring(context.guild.name)} | ${codestring(
-      context.guild.id,
-    )}`;
-
-    const date = timestamp(
-      context.message.timestampUnix,
-      MarkupTimestampStyles.BOTH_LONG,
-    );
-
-    const array: Array<string> = [
-      '**Command Executed**',
-      '\u200B',
-      `Command: ${cmd}.`,
-      `Author: ${author}.`,
-      `Guild: ${guild}.`,
-      `Date: ${date}.`,
-    ];
-
-    await channel.createMessage({
-      content: array.join('\n'),
-    });
-  },
+const ScuttleInteractionCommandClient = new InteractionCommandClient(
+  ScuttleClient,
 );
 
+async function runEvents() {
+  try {
+    const commandClientEvents = readdirSync(
+      resolve(__dirname, './Events/Command'),
+      {
+        withFileTypes: true,
+      },
+    ).filter(
+      (file) =>
+        ['js', 'ts'].some((e) => file.name.endsWith(e)) &&
+        !file.name.endsWith('.d.ts'),
+    );
+
+    for (const file of commandClientEvents) {
+      const ret: EventImport = await import(
+        resolve(__dirname, `./Events/Command/${file.name}`)
+      );
+
+      ScuttleCommandClient.on(ret.default.name, (payload) =>
+        ret.default.run(payload, ScuttleCommandClient),
+      );
+
+      log.info(`Loaded event '${file.name.split('.')[0]}' to Command Client.`);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 (async () => {
+  // const usage = process.memoryUsage();
+  // const bytes = 100 * 100 * 100;
+
   await ScuttleClient.run();
   ScuttleClient.gateway.setPresence({
     activity: {
@@ -101,9 +99,22 @@ ScuttleCommandClient.on(
     subdirectories: true,
   })
     .then(async ({ commands }) => {
-      console.log(`Loaded ${commands.length.toString()} Commands.`);
+      log.info(`Loaded ${commands.length.toString()} Commands.`);
+    })
+    .catch((err) => console.error(err));
+
+  await ScuttleInteractionCommandClient.addMultipleIn('./InteractionCommands', {
+    subdirectories: true,
+  })
+    .then(async ({ commands }) => {
+      log.info(`Loaded ${commands.length.toString()} Slash Commands.`);
     })
     .catch((err) => console.error(err));
   await ScuttleCommandClient.run();
-  console.log(`Bot Online.`);
+  await ScuttleInteractionCommandClient.run();
+  await runEvents();
+  log.info(`${ScuttleClient.user!.tag} is ready.`);
+  // log.info(`Heap Used: ${(usage.heapUsed / bytes).toFixed(2)}mb.`);
+  // log.info(`Heap Total: ${(usage.heapTotal / bytes).toFixed(2)}mb.`);
+  // log.info(`Memory Usage RSS: ${(usage.rss / bytes).toFixed(2)}mb.`);
 })();

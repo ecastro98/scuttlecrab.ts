@@ -3,23 +3,38 @@ import { CommandClient } from 'detritus-client';
 import { Context } from 'detritus-client/lib/command';
 import { codeblock } from 'detritus-client/lib/utils/markup';
 import { inspect } from 'util';
+import { CommandTypes } from '../../Utils/constants';
+
+export interface CommandArgs {
+  code: string;
+}
+
+export const commandName = 'eval';
 
 export default class Eval extends BaseCommand {
   constructor(client: CommandClient) {
     super(client, {
+      name: commandName,
       aliases: ['ev', 'e'],
       label: 'code',
       metadata: {
         description: 'Eval some code.',
-        examples: ['eval ctx.client.token', 'eval this'],
-        category: 'Private',
-        usage: 'eval [code]',
+        examples: [`${commandName} ctx.client.token`, `${commandName} this`],
+        type: CommandTypes.PRIVATE,
+        usage: `${commandName} [code]`,
         onlyDevs: true,
         nsfw: false,
+        disabled: {
+          is: false,
+          reason: null,
+          severity: null,
+          date: 0,
+        },
       },
-      name: 'eval',
       args: [{ name: 'code', type: 'string' }],
-      onBefore: async (ctx) => ctx.user.isClientOwner,
+      onBeforeRun: async (context: Context, args: CommandArgs) => {
+        return context.user.isClientOwner;
+      },
       onCancel: async (ctx) =>
         await ctx.editOrReply({
           content: '⚠️ Command available only to developers.',
@@ -33,7 +48,7 @@ export default class Eval extends BaseCommand {
     });
   }
 
-  async run(ctx: Context, args: any) {
+  async run(ctx: Context, args: CommandArgs) {
     try {
       if (!args.code || args.code === '') {
         return await ctx.editOrReply({
@@ -72,19 +87,31 @@ export default class Eval extends BaseCommand {
       } else {
         if (typeof evaluated !== 'string')
           evaluated = inspect(evaluated, { depth: 0 });
-        await ctx.editOrReply({
-          content: codeblock(evaluated, {
-            language: 'js',
-            limit: 1980,
-          }),
-        });
+        await ctx
+          .editOrReply({
+            content: codeblock(evaluated, {
+              language: 'js',
+              limit: 1980,
+            }),
+          })
+          .catch((error: Error) => {
+            ctx.editOrReply({
+              content: codeblock(`${error.name}: ${error.message}.`, {
+                language: 'js',
+                limit: 1980,
+              }),
+            });
+          });
       }
     } catch (error) {
       await ctx.editOrReply({
-        content: codeblock(`${error.name}: ${error.message}.`, {
-          language: 'js',
-          limit: 1980,
-        }),
+        content: codeblock(
+          `${(error as Error).name}: ${(error as Error).message}.`,
+          {
+            language: 'js',
+            limit: 1980,
+          },
+        ),
       });
     }
   }

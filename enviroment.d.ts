@@ -4,6 +4,7 @@ declare global {
       token: string;
       prefix: string;
       guildId: string;
+      docsUrl: string;
     }
   }
 }

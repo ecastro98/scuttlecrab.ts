@@ -11,7 +11,7 @@
     "outDir": "dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": false,
+    "strict": true,
     "skipLibCheck": true
   },
   "files": ["./node_modules/@types/node/index.d.ts"],

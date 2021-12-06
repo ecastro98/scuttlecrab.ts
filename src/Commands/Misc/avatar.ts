@@ -2,51 +2,54 @@ import BaseCommand from '../../Classes/BaseComand';
 import { CommandClient } from 'detritus-client';
 import { Context } from 'detritus-client/lib/command';
 import { codestring } from 'detritus-client/lib/utils/markup';
-import axios from 'axios';
+import { fetchGuildMember } from '../../Utils/functions';
+import { CommandTypes, EmbedColors } from '../../Utils/constants';
+import { Embed } from 'detritus-client/lib/utils';
+import { User } from 'detritus-client/lib/structures';
+
+export const commandName = 'avatar';
 
 export default class Avatar extends BaseCommand {
   constructor(client: CommandClient) {
     super(client, {
-      name: 'avatar',
+      name: commandName,
       aliases: ['av'],
       metadata: {
         description: 'Get the avatar for a user, defaults to self.',
-        examples: ['avatar', 'avatar @Scuttle Crab#7877'],
-        category: 'Misc',
-        usage: 'avatar (user mention)',
+        examples: [commandName, `${commandName} @Scuttle Crab#7877`],
+        type: CommandTypes.MISC,
+        usage: `${commandName} (user mention)`,
         onlyDevs: false,
         nsfw: false,
+        disabled: {
+          is: false,
+          reason: null,
+          severity: null,
+          date: 0,
+        },
       },
-      ratelimit: { duration: 4000, limit: 1, type: 'user' },
+      ratelimits: [
+        { duration: 3500, limit: 1, type: 'user' },
+        { duration: 5500, limit: 5, type: 'channel' },
+        { duration: 10000, limit: 10, type: 'guild' },
+      ],
       disableDm: true,
       responseOptional: true,
     });
   }
   async run(ctx: Context) {
-    //@ts-ignore
-    const user = ctx.message.mentions.first()?.user || ctx.user;
+    const user = (fetchGuildMember(ctx) as User) || ctx.message.author;
 
-    // const buffer = Buffer.from(
-    //   user.avatar
-    //     ? user.avatarUrlFormat(null, { size: 512 })
-    //     : user.defaultAvatarUrl,
-    // );
-
-    let url = user.avatar
-      ? user.avatarUrlFormat(null, { size: 512 })
-      : user.defaultAvatarUrl;
-
-    const response = await axios.get(url, { responseType: 'arraybuffer' });
-    const buffer = Buffer.from(response.data, 'utf-8');
-
+    const embed_success = new Embed()
+      .setColor(EmbedColors.DEFAULT)
+      .setDescription(`Avatar of ${codestring(user.tag)}.`)
+      .setImage(user.avatarUrlFormat(null, { size: 512 }))
+      .setFooter(
+        `Requested by: ${ctx.user.tag}.`,
+        ctx.user.avatarUrlFormat(null, { size: 512 }),
+      );
     return await ctx.editOrReply({
-      content: `Avatar of ${codestring(user.tag)}.`,
-      files: [
-        {
-          value: buffer,
-          filename: `avatar.gif`,
-        },
-      ],
+      embeds: [embed_success],
     });
   }
 }

@@ -2,22 +2,35 @@ import BaseCommand from '../../Classes/BaseComand';
 import { CommandClient } from 'detritus-client';
 import { Context } from 'detritus-client/lib/command';
 import { ComponentActionRow, ComponentButton } from 'detritus-client/lib/utils';
+import { CommandTypes } from '../../Utils/constants';
+
+export const commandName = 'links';
 
 export default class Ping extends BaseCommand {
   constructor(client: CommandClient) {
     super(client, {
-      name: 'links',
+      name: commandName,
       aliases: ['invite', 'support'],
       metadata: {
-        description: "Get the latency time of discord's API.",
-        examples: ['ping', 'pong', 'latency'],
-        category: 'Misc',
-        usage: 'ping',
+        description: 'Get the most important links in the Bot.',
+        examples: [commandName],
+        type: CommandTypes.MISC,
+        usage: commandName,
         onlyDevs: false,
         nsfw: false,
+        disabled: {
+          is: false,
+          reason: null,
+          severity: null,
+          date: 0,
+        },
       },
+      ratelimits: [
+        { duration: 3500, limit: 1, type: 'user' },
+        { duration: 5500, limit: 5, type: 'channel' },
+        { duration: 10000, limit: 10, type: 'guild' },
+      ],
       disableDm: false,
-      ratelimit: { duration: 3000, limit: 1, type: 'user' },
       responseOptional: true,
     });
   }

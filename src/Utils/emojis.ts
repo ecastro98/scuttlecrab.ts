@@ -1,4 +1,4 @@
-export enum emojis {
+export enum Emojis {
   x = '❌',
   check = '✅',
   warning = '⚠',
