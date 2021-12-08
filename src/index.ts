@@ -84,18 +84,18 @@ async function runEvents() {
 }
 
 (async () => {
-  // const usage = process.memoryUsage();
-  // const bytes = 100 * 100 * 100;
+  const usage = process.memoryUsage();
+  const bytes = 100 * 100 * 100;
 
   await ScuttleClient.run();
   ScuttleClient.gateway.setPresence({
     activity: {
-      name: 'with Detritus',
+      name: 'with Detritus | Powered by Riot Games API',
       type: 0,
     },
     status: 'dnd',
   });
-  await ScuttleCommandClient.addMultipleIn('./Commands', {
+  await ScuttleCommandClient.addMultipleIn('./Cmds', {
     subdirectories: true,
   })
     .then(async ({ commands }) => {
@@ -103,7 +103,7 @@ async function runEvents() {
     })
     .catch((err) => console.error(err));
 
-  await ScuttleInteractionCommandClient.addMultipleIn('./InteractionCommands', {
+  await ScuttleInteractionCommandClient.addMultipleIn('./Commands', {
     subdirectories: true,
   })
     .then(async ({ commands }) => {
@@ -114,7 +114,7 @@ async function runEvents() {
   await ScuttleInteractionCommandClient.run();
   await runEvents();
   log.info(`${ScuttleClient.user!.tag} is ready.`);
-  // log.info(`Heap Used: ${(usage.heapUsed / bytes).toFixed(2)}mb.`);
-  // log.info(`Heap Total: ${(usage.heapTotal / bytes).toFixed(2)}mb.`);
-  // log.info(`Memory Usage RSS: ${(usage.rss / bytes).toFixed(2)}mb.`);
+  log.info(`Heap Used: ${(usage.heapUsed / bytes).toFixed(2)}mb.`);
+  log.info(`Heap Total: ${(usage.heapTotal / bytes).toFixed(2)}mb.`);
+  log.info(`Memory Usage RSS: ${(usage.rss / bytes).toFixed(2)}mb.`);
 })();

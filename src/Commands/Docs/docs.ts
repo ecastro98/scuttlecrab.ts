@@ -1,5 +1,5 @@
 import { InteractionContext } from 'detritus-client/lib/interaction';
-import { BaseInteractionCommand } from '../../Classes/BaseInteractionCommand';
+import { BaseInteractionCommandOption } from '../../Classes/BaseInteractionCommand';
 import { CommandTypes, EmbedColors } from '../../Utils/constants';
 import { GatewayClientEvents } from 'detritus-client';
 import { parseMessage } from '../../Utils/functions';
@@ -14,9 +14,13 @@ import {
 import { ApplicationCommandOptionTypes } from 'detritus-client/lib/constants';
 import { Emojis } from '../../Utils/emojis';
 
+export interface CommandArgs {
+  query: string;
+}
+
 export const commandName = 'docs';
 
-export default class Docs extends BaseInteractionCommand {
+export class Docs extends BaseInteractionCommandOption {
   constructor() {
     super({
       name: commandName,
@@ -57,7 +61,7 @@ export default class Docs extends BaseInteractionCommand {
                   };
                 }),
               );
-            return ctx.respond({ choices: choices });
+            return await ctx.respond({ choices: choices });
           },
         },
       ],
@@ -80,12 +84,15 @@ export default class Docs extends BaseInteractionCommand {
     });
   }
 
-  async run(ctx: InteractionContext) {
+  async run(ctx: InteractionContext, args: CommandArgs) {
     const DATA = await fetchContent(process.env.docsUrl as string);
     if (!ctx.options) return;
-    const query = ctx.options.get('query')!;
-    if (!query.value) return;
-    const [name, link] = (query.value as string).split('~');
+    const query = args.query;
+    if (!query)
+      return await ctx.editOrRespond({
+        content: `${Emojis.warning} Please provide a query.`,
+      });
+    const [name, link] = (query as string).split('~');
     if (!link) {
       findAndSend(ctx, name, DATA, true, 8);
       return;

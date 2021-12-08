@@ -4,8 +4,12 @@ import {
 } from 'detritus-client/lib/constants';
 import { InteractionContext } from 'detritus-client/lib/interaction';
 import { Embed } from 'detritus-client/lib/utils';
-import { codestring, timestamp } from 'detritus-client/lib/utils/markup';
-import { BaseInteractionCommand } from '../../Classes/BaseInteractionCommand';
+import {
+  codestring,
+  timestamp,
+  underline,
+} from 'detritus-client/lib/utils/markup';
+import { BaseInteractionCommandOption } from '../../Classes/BaseInteractionCommand';
 import { CommandTypes, EmbedColors } from '../../Utils/constants';
 import { Emojis } from '../../Utils/emojis';
 
@@ -15,7 +19,7 @@ export interface CommandArgs {
 
 export const commandName = 'fetch-invite';
 
-export default class FetchInvite extends BaseInteractionCommand {
+export class FetchInvite extends BaseInteractionCommandOption {
   constructor() {
     super({
       name: commandName,
@@ -79,7 +83,7 @@ export default class FetchInvite extends BaseInteractionCommand {
       const { guild, channel, inviter } = invite;
       const embed_success = new Embed()
         .setColor(EmbedColors.DEFAULT)
-        .setTitle('Invitation Information')
+        .setTitle(underline('Invitation Information'))
         .setFooter(
           `Requested by: ${ctx.user.tag}.`,
           ctx.user.avatarUrlFormat(null, { size: 512 }),
@@ -87,7 +91,7 @@ export default class FetchInvite extends BaseInteractionCommand {
 
       if (inviter) {
         embed_success.addField(
-          '> Inviter Information',
+          underline('Inviter Information'),
           [
             `User: ${codestring(inviter.tag)}.`,
             `Avatar URL: [${codestring(
@@ -107,7 +111,7 @@ export default class FetchInvite extends BaseInteractionCommand {
           guild.iconUrlFormat(null, { size: 512 }) as string,
         );
         embed_success.addField(
-          '> Guild Information',
+          underline('Guild Information'),
           [
             `Name: ${codestring(guild.name)}.`,
             `Acronym: ${codestring(guild.acronym)}.`,
@@ -120,7 +124,7 @@ export default class FetchInvite extends BaseInteractionCommand {
         );
       }
       embed_success.addField(
-        '> Code Information',
+        underline('Code Information'),
         [
           `URL: [${codestring('Click here')}](${invite.url}).`,
           `Uses: ${codestring(String(invite.uses || 'Not found'))}.`,
@@ -139,7 +143,7 @@ export default class FetchInvite extends BaseInteractionCommand {
 
       if (channel) {
         embed_success.addField(
-          '> Channel Information',
+          underline('Channel Information'),
           [
             `Name: ${codestring(channel.name)}.`,
             `Created At: ${timestamp(

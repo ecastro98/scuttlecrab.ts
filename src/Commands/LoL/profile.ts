@@ -3,7 +3,13 @@ import {
   InteractionCallbackTypes,
 } from 'detritus-client/lib/constants';
 import { InteractionContext } from 'detritus-client/lib/interaction';
-import { BaseInteractionCommand } from '../../Classes/BaseInteractionCommand';
+import {
+  ComponentActionRow,
+  ComponentButton,
+  Embed,
+} from 'detritus-client/lib/utils';
+import { bold, codeblock, underline } from 'detritus-client/lib/utils/markup';
+import { BaseInteractionCommandOption } from '../../Classes/BaseInteractionCommand';
 import {
   CommandTypes,
   ChoicesRegion,
@@ -20,12 +26,6 @@ import {
   RankedEmojis,
   SpellEmojis,
 } from '../../Utils/emojis';
-import {
-  ComponentActionRow,
-  ComponentButton,
-  Embed,
-} from 'detritus-client/lib/utils';
-import { bold, codeblock, underline } from 'detritus-client/lib/utils/markup';
 import { summonerIcon } from '../../Utils/functions';
 import { mostPlayed } from '../../Utils/types';
 
@@ -36,7 +36,7 @@ export interface CommandArgs {
 
 export const commandName = 'profile';
 
-export default class Profile extends BaseInteractionCommand {
+export class Profile extends BaseInteractionCommandOption {
   constructor() {
     super({
       name: commandName,

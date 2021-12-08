@@ -1,28 +1,21 @@
-import BaseCommand from '../../Classes/BaseComand';
-import { CommandClient } from 'detritus-client';
-import { Context } from 'detritus-client/lib/command';
+import { InteractionContext } from 'detritus-client/lib/interaction';
+import { BaseInteractionCommandOption } from '../../Classes/BaseInteractionCommand';
 import { CommandTypes } from '../../Utils/constants';
 
 export const commandName = 'ping';
 
-export default class Ping extends BaseCommand {
-  constructor(client: CommandClient) {
-    super(client, {
+export class Ping extends BaseInteractionCommandOption {
+  constructor() {
+    super({
       name: commandName,
-      aliases: ['latency', 'pong'],
+      description: "Get the latency time of discord's API.",
       metadata: {
         description: "Get the latency time of discord's API.",
-        examples: [commandName, 'pong', 'latency'],
+        examples: [commandName],
         type: CommandTypes.MISC,
         usage: commandName,
         onlyDevs: false,
         nsfw: false,
-        disabled: {
-          is: false,
-          reason: null,
-          severity: null,
-          date: 0,
-        },
       },
       ratelimits: [
         { duration: 3500, limit: 1, type: 'user' },
@@ -30,12 +23,12 @@ export default class Ping extends BaseCommand {
         { duration: 10000, limit: 10, type: 'guild' },
       ],
       disableDm: false,
-      responseOptional: true,
     });
   }
-  async run(ctx: Context) {
+
+  async run(ctx: InteractionContext) {
     const { gateway, rest } = await ctx.client.ping();
-    return await ctx.editOrReply({
+    return await ctx.editOrRespond({
       content: `Pong! (gateway: ${gateway}ms) (rest: ${rest}ms).`,
     });
   }

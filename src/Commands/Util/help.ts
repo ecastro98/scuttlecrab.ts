@@ -111,34 +111,22 @@ export default class Help extends BaseInteractionCommand {
       });
     }
 
-    const embed_help_success = new Embed()
-      .setColor(EmbedColors.DEFAULT)
-      .setTitle('Command List')
-      .addField(
-        underline('Detritus'),
-        getCommands(
-          ctx,
-          'Detritus Client',
-          'interaction',
-          true,
-          ', ',
-        ) as string,
-      )
-      .addField(
-        underline('Image'),
-        getCommands(ctx, 'Image', 'interaction', true, ', ') as string,
-      )
-      .addField(
-        underline('Misc'),
-        getCommands(ctx, 'Misc', 'interaction', true, ', ') as string,
-      )
-      .addField(
-        underline('Util'),
-        getCommands(ctx, 'Util', 'interaction', true, ', ') as string,
-      );
+    const content: Array<string> = [
+      '# Command List',
+      ' * Type "/help command: <Command Name>" for more info on a command.',
+      '\u200B',
+      '# Detritus Client:',
+      getCommands(ctx, 'Detritus Client', 'interaction', false) as string,
+      '# Image:',
+      getCommands(ctx, 'Image', 'interaction', false) as string,
+      '# Misc:',
+      getCommands(ctx, 'Misc', 'interaction', false) as string,
+      '# Util:',
+      getCommands(ctx, 'Util', 'interaction', false) as string,
+    ];
 
     return await ctx.editOrRespond({
-      embeds: [embed_help_success],
+      content: codeblock(content.join('\n'), { language: 'markdown' }),
     });
   }
 }

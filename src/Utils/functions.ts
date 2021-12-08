@@ -108,7 +108,14 @@ export function getCommands(
         (cmd) => cmd.metadata.type === category,
       );
       const map_prefixed_commands = filter_prefixed_category
-        .map((cmd) => (codeString ? codestring(cmd.name) : cmd.name))
+        .map((cmd) =>
+          '  - ' +
+          (codeString ? codestring(cmd.name) : cmd.name) +
+          '   ' +
+          (cmd.metadata.description.length > 30)
+            ? cmd.metadata.description.substring(0, 30) + '...'
+            : cmd.metadata.description,
+        )
         .join(join);
       return map_prefixed_commands;
 
@@ -118,7 +125,15 @@ export function getCommands(
           (cmd) => cmd.metadata.type === category,
         );
       const map_interaction_commands = filter_interaction_category
-        .map((cmd) => (codeString ? codestring(cmd.name) : cmd.name))
+        .map(
+          (cmd) =>
+            '  - ' +
+            (codeString ? codestring(cmd.name) : cmd.name) +
+            '   ' +
+            (cmd.description.length > 40
+              ? cmd.description.substring(0, 40) + '...'
+              : cmd.description),
+        )
         .join(join);
       return map_interaction_commands;
   }

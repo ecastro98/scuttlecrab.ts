@@ -1,54 +1,58 @@
-import BaseCommand from '../../Classes/BaseComand';
-import { CommandClient } from 'detritus-client';
-import { Context } from 'detritus-client/lib/command';
-import { codestring } from 'detritus-client/lib/utils/markup';
-import { fetchGuildMember } from '../../Utils/functions';
-import { CommandTypes, EmbedColors } from '../../Utils/constants';
+import { ApplicationCommandOptionTypes } from 'detritus-client/lib/constants';
+import { InteractionContext } from 'detritus-client/lib/interaction';
+import { Member, User } from 'detritus-client/lib/structures';
 import { Embed } from 'detritus-client/lib/utils';
-import { User } from 'detritus-client/lib/structures';
+import { codestring } from 'detritus-client/lib/utils/markup';
+import { BaseInteractionCommandOption } from '../../Classes/BaseInteractionCommand';
+import { CommandTypes, EmbedColors } from '../../Utils/constants';
+
+export interface CommandArgs {
+  user: Member | User;
+}
 
 export const commandName = 'avatar';
 
-export default class Avatar extends BaseCommand {
-  constructor(client: CommandClient) {
-    super(client, {
+export class Avatar extends BaseInteractionCommandOption {
+  constructor() {
+    super({
       name: commandName,
-      aliases: ['av'],
+      description: 'Get the avatar of a user.',
       metadata: {
-        description: 'Get the avatar for a user, defaults to self.',
-        examples: [commandName, `${commandName} @Scuttle Crab#7877`],
+        description: 'Get the avatar of a user.',
+        examples: [commandName],
         type: CommandTypes.MISC,
-        usage: `${commandName} (user mention)`,
+        usage: commandName,
         onlyDevs: false,
         nsfw: false,
-        disabled: {
-          is: false,
-          reason: null,
-          severity: null,
-          date: 0,
-        },
       },
+      options: [
+        {
+          name: 'user',
+          description: 'The user to get the avatar of.',
+          default: (ctx: InteractionContext) => ctx.member || ctx.user,
+          type: ApplicationCommandOptionTypes.USER,
+          required: false,
+        },
+      ],
       ratelimits: [
         { duration: 3500, limit: 1, type: 'user' },
         { duration: 5500, limit: 5, type: 'channel' },
         { duration: 10000, limit: 10, type: 'guild' },
       ],
-      disableDm: true,
-      responseOptional: true,
+      disableDm: false,
     });
   }
-  async run(ctx: Context) {
-    const user = (fetchGuildMember(ctx) as User) || ctx.message.author;
 
+  async run(ctx: InteractionContext, args: CommandArgs) {
     const embed_success = new Embed()
       .setColor(EmbedColors.DEFAULT)
-      .setDescription(`Avatar of ${codestring(user.tag)}.`)
-      .setImage(user.avatarUrlFormat(null, { size: 512 }))
+      .setDescription(`Avatar of ${codestring(args.user.tag)}.`)
+      .setImage(args.user.avatarUrlFormat(null, { size: 512 }))
       .setFooter(
         `Requested by: ${ctx.user.tag}.`,
         ctx.user.avatarUrlFormat(null, { size: 512 }),
       );
-    return await ctx.editOrReply({
+    return await ctx.editOrRespond({
       embeds: [embed_success],
     });
   }

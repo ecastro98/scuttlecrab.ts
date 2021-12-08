@@ -4,6 +4,7 @@ import {
   ApplicationCommandTypes,
   MessageFlags,
 } from 'detritus-client/lib/constants';
+import { InteractionContext } from 'detritus-client/lib/interaction';
 import { ComponentActionRow, ComponentButton } from 'detritus-client/lib/utils';
 import { bold, codeblock, codestring } from 'detritus-client/lib/utils/markup';
 import { DiscordPermissions, EmbedColors } from '../Utils/constants';
@@ -28,7 +29,7 @@ export class BaseInteractionCommand<
   current: Array<any> = [];
 
   async onDmBlocked(ctx: Interaction.InteractionContext) {
-    const command = codestring(ctx.command.name);
+    const command = codestring(ctx.name);
     return await ctx
       .editOrRespond({
         content: `${Emojis.warning} Command ${command} cannot be used in a DM.`,
@@ -46,7 +47,7 @@ export class BaseInteractionCommand<
       if (item.usages - 1 > ratelimit.limit) return;
 
       const user = bold(ctx.user.username);
-      const command = codestring(ctx.command.name);
+      const command = codestring(ctx.name);
       const timeRemaining = codestring(`${(remaining / 1000).toFixed(2)}`);
       const end = remaining < 1000 ? 'milliseconds' : 'seconds';
 
@@ -110,7 +111,7 @@ export class BaseInteractionCommand<
                 language: 'js',
               }),
             )
-            .setFooter(`Slash Command: ${ctx.command.name}.`),
+            .setFooter(`Slash Command: ${ctx.name}.`),
         ],
       })
       .catch(() => false);
@@ -150,7 +151,7 @@ export class BaseInteractionCommand<
         codeblock(permissions.map((x) => `${x}: ${Emojis.x}`).join('.\n')),
       )
       .setTimestamp(happened)
-      .setFooter(`${ctx.command.name} command`);
+      .setFooter(`${ctx.name} command`);
 
     return await ctx
       .editOrRespond({
@@ -186,7 +187,7 @@ export class BaseInteractionCommand<
         codeblock(permissions.map((x) => `${x}: ${Emojis.x}`).join('\n')),
       )
       .setTimestamp(happened)
-      .setFooter(`${ctx.command.name} command`);
+      .setFooter(`${ctx.name} command`);
 
     return await ctx
       .editOrRespond({
@@ -228,16 +229,35 @@ export class BaseInteractionCommand<
   }
 }
 
-export class BaseCommandOption<
+export class BaseInteractionCommandOption<
   ParsedArgsFinished = Interaction.ParsedArgs,
 > extends Interaction.InteractionCommandOption<ParsedArgsFinished> {
   type = ApplicationCommandOptionTypes.SUB_COMMAND;
+  current: Array<any> = [];
+
+  async onCancelRun(
+    ctx: Interaction.InteractionContext,
+    args: Record<string, any>,
+  ) {
+    const command = codestring(ctx.name);
+    return await ctx.editOrRespond({
+      content: `⚠ Slash Command \`${command}\` error strangely, give me a report.`,
+      flags: MessageFlags.EPHEMERAL,
+    });
+  }
 }
 
-export class BaseCommandOptionGroup<
+export class BaseInteractionCommandOptionGroup<
   ParsedArgsFinished = Interaction.ParsedArgs,
 > extends Interaction.InteractionCommandOption<ParsedArgsFinished> {
   type = ApplicationCommandOptionTypes.SUB_COMMAND_GROUP;
+  async onCancelRun(ctx: InteractionContext, args: Record<string, any>) {
+    const command = codestring(ctx.name);
+    return await ctx.editOrRespond({
+      content: `⚠ Slash Command \`${command}\` error strangely, give me a report.`,
+      flags: MessageFlags.EPHEMERAL,
+    });
+  }
 }
 
 export class BaseSlashCommand<
@@ -245,23 +265,4 @@ export class BaseSlashCommand<
 > extends BaseInteractionCommand<ParsedArgsFinished> {
   error = 'Slash Command';
   type = ApplicationCommandTypes.CHAT_INPUT;
-}
-
-export interface ContextMenuMessageArgs {
-  message: Structures.Message;
-}
-
-export class BaseContextMenuMessageCommand extends BaseInteractionCommand<ContextMenuMessageArgs> {
-  error = 'Message Context Menu';
-  type = ApplicationCommandTypes.MESSAGE;
-}
-
-export interface ContextMenuUserArgs {
-  member?: Structures.Member;
-  user: Structures.User;
-}
-
-export class BaseContextMenuUserCommand extends BaseInteractionCommand<ContextMenuUserArgs> {
-  error = 'User Context Menu';
-  type = ApplicationCommandTypes.USER;
 }
