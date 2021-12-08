@@ -2,6 +2,7 @@ import { Interaction, Structures, Utils } from 'detritus-client';
 import {
   ApplicationCommandOptionTypes,
   ApplicationCommandTypes,
+  MessageFlags,
 } from 'detritus-client/lib/constants';
 import { ComponentActionRow, ComponentButton } from 'detritus-client/lib/utils';
 import { bold, codeblock, codestring } from 'detritus-client/lib/utils/markup';
@@ -24,6 +25,7 @@ export class BaseInteractionCommand<
   ParsedArgsFinished = Interaction.ParsedArgs,
 > extends Interaction.InteractionCommand<ParsedArgsFinished> {
   declare metadata: CommandMetadata;
+  current: Array<any> = [];
 
   async onDmBlocked(ctx: Interaction.InteractionContext) {
     const command = codestring(ctx.command.name);
@@ -263,7 +265,3 @@ export class BaseContextMenuUserCommand extends BaseInteractionCommand<ContextMe
   error = 'User Context Menu';
   type = ApplicationCommandTypes.USER;
 }
-
-// function capitalizeFirstLetter(string: string) {
-//   return string.charAt(0).toUpperCase() + string.slice(1);
-// }

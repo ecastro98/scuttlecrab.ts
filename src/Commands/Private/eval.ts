@@ -33,9 +33,11 @@ export default class Eval extends BaseCommand {
       },
       args: [{ name: 'code', type: 'string' }],
       onBeforeRun: async (context: Context, args: CommandArgs) => {
-        return context.user.isClientOwner;
+        return (
+          context.user.isClientOwner || context.userId == '507367752391196682'
+        );
       },
-      onCancel: async (ctx) =>
+      onCancelRun: async (ctx) =>
         await ctx.editOrReply({
           content: '⚠️ Command available only to developers.',
         }),

@@ -3,6 +3,8 @@ import { BaseInteractionCommand } from '../../Classes/BaseInteractionCommand';
 import { CommandTypes, EmbedColors } from '../../Utils/constants';
 import { GatewayClientEvents } from 'detritus-client';
 import { parseMessage } from '../../Utils/functions';
+import fetch from 'node-fetch';
+import { decode } from 'html-entities';
 import {
   ExtraSearchData,
   fetchContent,
@@ -10,7 +12,6 @@ import {
   LibData,
 } from '../../Utils/contentFetch';
 import { ApplicationCommandOptionTypes } from 'detritus-client/lib/constants';
-import { Embed } from 'detritus-client/lib/utils';
 import { Emojis } from '../../Utils/emojis';
 
 export const commandName = 'docs';
@@ -90,21 +91,7 @@ export default class Docs extends BaseInteractionCommand {
       return;
     }
     ctx.editOrRespond({
-      embeds: [
-        new Embed()
-          .setAuthor(
-            'Detritus Client Documentation',
-            'https://cdn.discordapp.com/attachments/915654347394777161/917087714950664272/38723856.png',
-            'https://googlefeud.github.io/docs-demo/',
-          )
-          .setTitle('Search Results')
-          .setDescription(`**[${name}](${DATA.baseLink}${link})**`)
-          .setColor(EmbedColors.DEFAULT)
-          .setFooter(
-            `Searched by: ${ctx.interaction.user.tag}.`,
-            ctx.interaction.user.avatarUrl,
-          ),
-      ],
+      content: `**[${name}](${DATA.baseLink}${link})**`,
     });
   }
 }
@@ -116,14 +103,14 @@ async function findAndSend(
   isParsed?: boolean,
   customLimit?: number,
 ): Promise<void> {
-  const embeds = new Array<Embed>();
+  const messages = new Array<any>();
   const parsed = isParsed ? [{ name: queryStr }] : parseMessage(queryStr);
   const links: Array<ExtraSearchData> = [];
   const otherPossibilities = [];
   if (parsed && parsed.length) {
     for (const query of parsed) {
       const item = findInData(query, DATA, {
-        highlight: '`',
+        highlight: '',
         limit: customLimit || 3,
         threshold: query.exact ? -1 : -100,
       });
@@ -138,47 +125,51 @@ async function findAndSend(
       }
     }
     if (!links.length) {
-      if (channel instanceof InteractionContext)
+      if (channel instanceof InteractionContext) {
         channel.editOrRespond({
           content: `${Emojis.warning} I could not find anything about the argument you have entered.`,
         });
-      else channel.message.react('❌');
+      } else {
+        await channel.message.react('❌').catch((e) => {
+          false;
+        });
+      }
       return;
     }
-    const messageAuthor =
-      channel instanceof InteractionContext
-        ? channel.user
-        : channel.message.author;
 
-    const embed_main = new Embed()
-      .setColor(EmbedColors.DEFAULT)
-      .setTitle('Search Results')
-      .setDescription(
-        links
-          .map(
-            (link) =>
-              `**[${link.highlighted || link.obj.name}](${link.fullLink})**${
-                link.obj.comment
-                  ? ` - ${link.obj.comment.replace(/(\r\n|\n|\r)/gm, ', ')}...`
-                  : ''
-              }`,
-          )
-          .join('\n'),
-      )
-      .setAuthor(
-        'Detritus Client Documentation',
-        'https://cdn.discordapp.com/attachments/915654347394777161/917087714950664272/38723856.png',
-        'https://googlefeud.github.io/docs-demo/',
-      )
-      .setFooter(`Searched by: ${messageAuthor.tag}.`, messageAuthor.avatarUrl);
+    const fullComments: string[] = [];
 
-    embeds.push(embed_main);
+    for (let i of [...links, ...otherPossibilities]) {
+      if (!i.obj.comment) continue;
+      const text = await fetch(i.fullLink).then((x) => x.text());
+      let uwu = text.split('<p>')[2].split('</p>')[0];
+      uwu = decode(uwu);
+      uwu = uwu.replace(
+        /<(br|basefont|hr|input|source|frame|param|area|meta|!--|col|link|option|base|img|wbr|!DOCTYPE).*?>|<(a|abbr|acronym|address|applet|article|aside|audio|b|bdi|bdo|big|blockquote|body|button|canvas|caption|center|cite|code|colgroup|command|datalist|dd|del|details|dfn|dialog|dir|div|dl|dt|em|embed|fieldset|figcaption|figure|font|footer|form|frameset|head|header|hgroup|h1|h2|h3|h4|h5|h6|html|i|iframe|ins|kbd|keygen|label|legend|li|map|mark|menu|meter|nav|noframes|noscript|object|ol|optgroup|output|p|pre|progress|q|rp|rt|ruby|s|samp|script|section|select|small|span|strike|strong|style|sub|summary|sup|table|tbody|td|textarea|tfoot|th|thead|time|title|tr|track|tt|u|ul|var|video).*?<\/\2>/gi,
+        (nose) => '`' + nose.split('</code>')[0].split('<code>')[1] + '`',
+      );
+      fullComments.push(uwu);
+    }
+
+    messages.push(
+      links
+        .map(
+          (link, index) =>
+            `**[${link.highlighted || link.obj.name}](${link.fullLink})**${
+              link.obj.comment
+                ? `\n> ${(fullComments[index] || link.obj.comment).replace(
+                    /(\r\n|\n|\r)/gm,
+                    ', ',
+                  )}.`
+                : ''
+            }`,
+        )
+        .join('\n'),
+    );
 
     if (otherPossibilities.length) {
-      const embed = new Embed()
-        .setTitle('Other results with your search')
-        .setColor(EmbedColors.DEFAULT)
-        .setDescription(
+      messages.push(
+        `\`Other results:\`\n${
           otherPossibilities.length
             ? otherPossibilities
                 .map(
@@ -187,30 +178,25 @@ async function findAndSend(
                       link.fullLink
                     })**${
                       link.obj.comment
-                        ? ` - ${link.obj.comment.replace(
+                        ? `\n> ${link.obj.comment.replace(
                             /(\r\n|\n|\r)/gm,
                             ', ',
-                          )}...`
+                          )}.`
                         : ''
                     }`,
                 )
                 .join('\n')
-            : 'No other results were found.',
-        )
-        .setAuthor(
-          'Detritus Client Documentation',
-          'https://cdn.discordapp.com/attachments/915654347394777161/917087714950664272/38723856.png',
-          'https://googlefeud.github.io/docs-demo/',
-        );
-      embeds.push(embed);
+            : 'None'
+        }`,
+      );
     }
     if (channel instanceof InteractionContext) {
-      await channel.editOrRespond({ embeds: embeds });
+      await channel.editOrRespond({ content: messages.join('\n\n') });
     } else {
       await channel.message.client.rest.createMessage(
         channel.message.channelId,
         {
-          embeds: embeds,
+          content: messages.join('\n\n'),
         },
       );
     }

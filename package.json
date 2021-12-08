@@ -13,12 +13,16 @@
   "license": "ISC",
   "dependencies": {
     "@dimensional-fun/logger": "^1.0.1",
+    "@fabricio-191/ms": "^1.2.0-2",
     "axios": "^0.24.0",
     "canvas": "^2.8.0",
     "detritus-client": "0.16.4-beta.6",
     "dotenv": "^10.0.0",
     "emoji-aware": "^3.0.5",
     "fuzzysort": "^1.1.4",
+    "html-entities": "^2.3.2",
+    "i": "^0.3.7",
+    "javascript-time-ago": "^2.3.10",
     "svg2img": "^0.9.4",
     "twemoji-parser": "^13.1.0",
     "typescript": "^4.5.2"
