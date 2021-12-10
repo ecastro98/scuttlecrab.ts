@@ -1,4 +1,4 @@
-import { BaseSlashCommand } from '../../Classes/BaseInteractionCommand';
+import { BaseSlashCommand } from '../../../Classes/BaseInteractionCommand';
 import { Profile } from './profile';
 import { Current } from './current';
 

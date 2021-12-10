@@ -1,15 +1,18 @@
 import {
   ApplicationCommandOptionTypes,
   InteractionCallbackTypes,
+  MessageComponentButtonStyles,
+  MessageFlags,
 } from 'detritus-client/lib/constants';
 import { InteractionContext } from 'detritus-client/lib/interaction';
 import {
   ComponentActionRow,
   ComponentButton,
+  Components,
   Embed,
 } from 'detritus-client/lib/utils';
 import { bold, codeblock, underline } from 'detritus-client/lib/utils/markup';
-import { BaseInteractionCommandOption } from '../../Classes/BaseInteractionCommand';
+import { BaseInteractionCommandOption } from '../../../Classes/BaseInteractionCommand';
 import {
   CommandTypes,
   ChoicesRegion,
@@ -18,16 +21,21 @@ import {
   OPRegions,
   URegions,
   LolApiErrors,
-} from '../../Utils/constants';
-import { SummonerData } from '../../Classes/SummonerData';
+} from '../../../Utils/constants';
+import { SummonerData } from '../../../Classes/SummonerData';
 import {
   ChampionEmojis,
   Emojis,
   RankedEmojis,
   SpellEmojis,
-} from '../../Utils/emojis';
-import { summonerIcon } from '../../Utils/functions';
-import { mostPlayed } from '../../Utils/types';
+} from '../../../Utils/emojis';
+import {
+  capitalize,
+  format,
+  getQueueById,
+  summonerIcon,
+} from '../../../Utils/functions';
+import { mostPlayed } from '../../../Utils/types';
 
 export interface CommandArgs {
   region: string;
@@ -82,6 +90,7 @@ export class Profile extends BaseInteractionCommandOption {
     try {
       const region = args.region;
       const summoner = args.summoner;
+      const embeds: Array<Embed> = [];
 
       const summoner_data = new SummonerData(region, summoner);
 
@@ -90,23 +99,28 @@ export class Profile extends BaseInteractionCommandOption {
       });
 
       const basic_data = await summoner_data.profileBasicData();
-      const patch = await summoner_data.getCurrentPatch();
-      const lastMatch = await summoner_data.lastPlayedMatch();
-      const rankedInfo = await summoner_data.rankedInfo(basic_data.id);
+      const patch = await summoner_data.getCurrentPatch().catch(() => null);
+      const lastMatch = await summoner_data.lastPlayedMatch().catch(() => null);
+      const rankedInfo = await summoner_data
+        .rankedInfo(basic_data.id)
+        .catch(() => null);
+      // const live_match = await summoner_data
+      //   .getCurrentMatch(basic_data.id)
+      //   .catch(() => null);
 
       const most_played_champions = await summoner_data.mostPlayedChampions(
         basic_data.id,
         mostPlayed.DEFAULT,
       );
 
-      const icon = summonerIcon(patch, basic_data.profileIconId);
+      const icon = summonerIcon(patch as string, basic_data.profileIconId);
 
       const embed_main = new Embed()
         .setColor(EmbedColors.DEFAULT)
         .setTitle(`Scuttle Profile: ${underline(basic_data.name)}`)
         .setThumbnail(icon)
         .setFooter(
-          `Requested by ${ctx.user.tag} | Powered by Riot Games API.`,
+          `This information is updated approximately every 10 minutes.`,
           ctx.user.avatarUrlFormat(null, { size: 128 }),
         )
         .addField(
@@ -162,34 +176,40 @@ export class Profile extends BaseInteractionCommandOption {
         );
       }
 
-      if (rankedInfo.solo!.length || rankedInfo.flex!.length) {
-        const { solo, flex } = rankedInfo;
-        const tierName_solo = solo![0].tier
-          .split(' ')
-          .map((x) => x[0]?.toUpperCase() + x.slice(1)?.toLowerCase())
-          .join(' ');
+      if (rankedInfo) {
+        const { solo, flex } = rankedInfo!;
 
-        embed_main.addField(underline('Ranked Stats'), '\u200B');
         if (solo?.length) {
-          embed_main.addField(
-            underline('Solo/Duo'),
-            solo
-              ? [
-                  `${RankedEmojis[tierName_solo]} ${tierName_solo} ${solo[0].rank}.`,
-                  `${bold('LP:')} ${solo[0].leaguePoints}.`,
-                  `${bold('Wins:')} ${solo[0].wins}.`,
-                  `${bold('Losses:')} ${solo[0].losses}.`,
-                  `${bold('Winrate:')} ${
-                    (
-                      (solo[0].wins * 100) /
-                      (solo[0].wins + solo[0].losses)
-                    ).toFixed(1) || 0
-                  }%.`,
-                ].join('\n')
-              : 'No stats in this game mode.',
-            true,
-          );
+          const tierName_solo = solo![0]?.tier
+            .split(' ')
+            .map((x) => x[0]?.toUpperCase() + x.slice(1)?.toLowerCase())
+            .join(' ');
+
+          embed_main.addField(underline('Ranked Stats'), '\u200B');
+          if (solo?.length) {
+            embed_main.addField(
+              underline('Solo/Duo'),
+              solo
+                ? [
+                    `${RankedEmojis[tierName_solo!]} ${tierName_solo!} ${
+                      solo[0].rank
+                    }.`,
+                    `${bold('LP:')} ${solo[0].leaguePoints}.`,
+                    `${bold('Wins:')} ${solo[0].wins}.`,
+                    `${bold('Losses:')} ${solo[0].losses}.`,
+                    `${bold('Winrate:')} ${
+                      (
+                        (solo[0].wins * 100) /
+                        (solo[0].wins + solo[0].losses)
+                      ).toFixed(1) || 0
+                    }%.`,
+                  ].join('\n')
+                : 'No stats in this game mode.',
+              true,
+            );
+          }
         }
+
         if (flex?.length) {
           const tierName_flex = flex![0].tier
             .split(' ')
@@ -217,6 +237,86 @@ export class Profile extends BaseInteractionCommandOption {
         }
       }
 
+      embeds.push(embed_main);
+      // const embed_live_match = new Embed();
+
+      // if (live_match) {
+      //   const queue = getQueueById(live_match.gameQueueConfigId);
+      //   embed_live_match
+      //     .setColor(EmbedColors.DEFAULT)
+      //     .setTitle(`Live Match: ${underline(basic_data.name)}`)
+      //     .setThumbnail(icon)
+      //     .addField(
+      //       underline('Basic Data'),
+      //       [
+      //         `${capitalize(live_match.gameMode.toLowerCase())}, ${
+      //           queue?.map
+      //         } (${queue?.description}).`,
+      //         `${bold('In game ago:')} ${
+      //           live_match.startTimeGame < 1
+      //             ? '00:00 elapsed'
+      //             : format(Date.now() - live_match.startTimeGame).split(
+      //                 ' | ',
+      //               )[0] + ' elapsed'
+      //         }.`,
+      //       ].join('\n'),
+      //     )
+      //     .addField(
+      //       underline('Blue Team'),
+      //       live_match.userTeam
+      //         .map(
+      //           (player) =>
+      //             `${ChampionEmojis[player.championName]} ${
+      //               player.summonerName === basic_data.name
+      //                 ? underline(player.summonerName)
+      //                 : player.summonerName
+      //             }.`,
+      //         )
+      //         .join('\n'),
+      //     )
+      //     .addField(
+      //       underline('Red Team'),
+      //       live_match.enemyTeam
+      //         .map(
+      //           (player) =>
+      //             `${ChampionEmojis[player.championName]} ${
+      //               player.summonerName === basic_data.name
+      //                 ? underline(player.summonerName)
+      //                 : player.summonerName
+      //             }.`,
+      //         )
+      //         .join('\n'),
+      //       true,
+      //     );
+      // }
+
+      // const components = new Components({
+      //   timeout: 30000,
+      // });
+      // components.createButton({
+      //   label: 'Live match',
+      //   style: MessageComponentButtonStyles.SUCCESS,
+      //   disabled: !live_match,
+      //   run: (context) => {
+      //     if (context.user.id === ctx.user.id) {
+      //       return context.respond(
+      //         InteractionCallbackTypes.CHANNEL_MESSAGE_WITH_SOURCE,
+      //         {
+      //           embeds: [embed_live_match],
+      //         },
+      //       );
+      //     } else {
+      //       return context.respond(
+      //         InteractionCallbackTypes.CHANNEL_MESSAGE_WITH_SOURCE,
+      //         {
+      //           content: `${Emojis.warning} You can't use this button.`,
+      //           flags: MessageFlags.EPHEMERAL,
+      //         },
+      //       );
+      //     }
+      //   },
+      // });
+
       return await ctx.editOrRespond({
         content: `View on [OP.GG](${makeUrl.opgg(
           OPRegions[String(region.toUpperCase())],
@@ -225,7 +325,8 @@ export class Profile extends BaseInteractionCommandOption {
           URegions[region],
           encodeURIComponent(summoner),
         )}).`,
-        embeds: [embed_main],
+        embeds: embeds,
+        // components,
       });
     } catch (error: any) {
       if (
@@ -261,17 +362,3 @@ export class Profile extends BaseInteractionCommandOption {
     }
   }
 }
-
-function isInfinite(n: number) {
-  return n === Infinity || n === -Infinity;
-}
-
-//Create a function to get champion build
-// function getChampionBuild(champion: string) {
-//   const championFile = fs.readFileSync(
-//     `${__dirname}/../../assets/champion_builds/${champion}.json`,
-//     'utf8',
-//   );
-//   const championBuild = JSON.parse(championFile);
-//   return championBuild;
-// }

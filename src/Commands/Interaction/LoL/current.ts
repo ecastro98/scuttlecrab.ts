@@ -1,11 +1,11 @@
 import { InteractionContext } from 'detritus-client/lib/interaction';
-import { BaseInteractionCommandOption } from '../../Classes/BaseInteractionCommand';
-import { CommandTypes, EmbedColors } from '../../Utils/constants';
-import { ChampionEmojis } from '../../Utils/emojis';
+import { BaseInteractionCommandOption } from '../../../Classes/BaseInteractionCommand';
+import { SummonerData } from '../../../Classes/SummonerData';
+import { CommandTypes, EmbedColors } from '../../../Utils/constants';
+import { ChampionEmojis } from '../../../Utils/emojis';
 import { underline } from 'detritus-client/lib/utils/markup';
 import { InteractionCallbackTypes } from 'detritus-client/lib/constants';
 import { Embed } from 'detritus-client/lib/utils';
-import axios from 'axios';
 
 export const commandName = 'current';
 
@@ -42,32 +42,8 @@ export class Current extends BaseInteractionCommandOption {
       type: InteractionCallbackTypes.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
     });
 
-    const response = await axios.get(
-      `https://la1.api.riotgames.com/lol/platform/v3/champion-rotations?api_key=${process.env.RIOT_API_TOKEN}`,
-    );
-
-    const freeWeekIds = response.data.freeChampionIds;
-    const championsResponse = await axios.get(
-      'http://ddragon.leagueoflegends.com/cdn/11.24.1/data/en_US/champion.json',
-    );
-
-    const championsInfo = Object.values(championsResponse.data.data);
-    const getChampionInfo: any = (id: any) => {
-      return championsInfo.find((champion: any) => champion.key === String(id));
-    };
-
-    const arr: any = [];
-    let pos = 0;
-    for (const freeId of freeWeekIds) {
-      if (!Array.isArray(arr[pos])) arr[pos] = [];
-      arr[pos].push(freeId);
-    }
-
-    for (const ids of arr) {
-      var champions = ids
-        .map((id: any) => ({ id, ...getChampionInfo(id) }))
-        .filter((x: any) => !!x.name);
-    }
+    const basic_data = new SummonerData('lan', 'NoSoySimpDeVi');
+    const champions = await basic_data.getChampRotation();
 
     const embed = new Embed()
       .setColor(EmbedColors.DEFAULT)
@@ -92,10 +68,6 @@ export class Current extends BaseInteractionCommandOption {
       )
       .setImage(
         'https://cdn.discordapp.com/attachments/915654347394777161/917981058396467221/120721_LOL1124Infographic_Image_v2.png',
-      )
-      .setFooter(
-        `Requested by ${ctx.user.tag}.`,
-        ctx.user.avatarUrlFormat(null, { size: 512 }),
       );
 
     this.current.push(embed);

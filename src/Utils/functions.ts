@@ -1,7 +1,8 @@
 import { Context } from 'detritus-client/lib/command';
 import { InteractionContext } from 'detritus-client/lib/interaction';
 import { codestring } from 'detritus-client/lib/utils/markup';
-import { Role } from './constants';
+import { QueueTypes, Role } from './constants';
+import { Queue } from './types';
 
 export function getAvatar(
   user: any,
@@ -231,4 +232,40 @@ export function normalizeRole(role: string): Role | null {
   }
 
   return null;
+}
+
+export function getQueueById(id: number): Queue | null {
+  const find = QueueTypes.find((queue) => queue.queueId === id);
+  return find ? find : null;
+}
+
+export function format(millis: number) {
+  var h = Math.floor(millis / 3600000),
+    m = Math.floor(millis / 60000),
+    s = ((millis % 60000) / 1000).toFixed(0);
+  if (h < 1)
+    return (
+      (m < 10 ? '0' : '') +
+      m +
+      ':' +
+      (Number(s) < 10 ? '0' : '') +
+      s +
+      ' | ' +
+      Math.floor(millis / 1000) +
+      ' elapsed'
+    );
+  else
+    return (
+      (h < 10 ? '0' : '') +
+      h +
+      ':' +
+      (m < 10 ? '0' : '') +
+      m +
+      ':' +
+      (Number(s) < 10 ? '0' : '') +
+      s +
+      ' | ' +
+      Math.floor(millis / 1000) +
+      ' elapse'
+    );
 }

@@ -1,8 +1,8 @@
 import { ApplicationCommandOptionTypes } from 'detritus-client/lib/constants';
 import { InteractionContext } from 'detritus-client/lib/interaction';
-import { BaseInteractionCommand } from '../../Classes/BaseInteractionCommand';
-import { CommandTypes } from '../../Utils/constants';
-import { Emojis } from '../../Utils/emojis';
+import { BaseInteractionCommand } from '../../../Classes/BaseInteractionCommand';
+import { CommandTypes } from '../../../Utils/constants';
+import { Emojis } from '../../../Utils/emojis';
 import { parse } from 'twemoji-parser';
 import svg2img from 'svg2img';
 

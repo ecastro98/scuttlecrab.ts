@@ -1,8 +1,8 @@
-import BaseCommand from '../../Classes/BaseComand';
+import BaseCommand from '../../../Classes/BaseComand';
 import { CommandClient } from 'detritus-client';
 import { Context } from 'detritus-client/lib/command';
 import { ComponentActionRow, ComponentButton } from 'detritus-client/lib/utils';
-import { CommandTypes } from '../../Utils/constants';
+import { CommandTypes } from '../../../Utils/constants';
 
 export const commandName = 'links';
 

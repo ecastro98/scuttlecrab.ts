@@ -7,8 +7,13 @@ import {
 import { readdirSync } from 'fs';
 import { resolve } from 'path';
 import { Logger } from '@dimensional-fun/logger';
+import { RedisClient } from './Cache';
 const log = new Logger('🤖', {
-  defaults: { timestamp: false },
+  defaults: {
+    timestamp: new Date().toLocaleString('en-US', {
+      timeZone: 'America/Mexico_City',
+    }),
+  },
 });
 
 interface EventImport {
@@ -95,7 +100,7 @@ async function runEvents() {
     },
     status: 'dnd',
   });
-  await ScuttleCommandClient.addMultipleIn('./Cmds', {
+  await ScuttleCommandClient.addMultipleIn('./Commands/Prefixed', {
     subdirectories: true,
   })
     .then(async ({ commands }) => {
@@ -103,9 +108,12 @@ async function runEvents() {
     })
     .catch((err) => console.error(err));
 
-  await ScuttleInteractionCommandClient.addMultipleIn('./Commands', {
-    subdirectories: true,
-  })
+  await ScuttleInteractionCommandClient.addMultipleIn(
+    './Commands/Interaction',
+    {
+      subdirectories: true,
+    },
+  )
     .then(async ({ commands }) => {
       log.info(`Loaded ${commands.length.toString()} Slash Commands.`);
     })
@@ -113,6 +121,7 @@ async function runEvents() {
   await ScuttleCommandClient.run();
   await ScuttleInteractionCommandClient.run();
   await runEvents();
+  await RedisClient.connect();
   log.info(`${ScuttleClient.user!.tag} is ready.`);
   log.info(`Heap Used: ${(usage.heapUsed / bytes).toFixed(2)}mb.`);
   log.info(`Heap Total: ${(usage.heapTotal / bytes).toFixed(2)}mb.`);

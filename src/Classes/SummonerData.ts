@@ -1,5 +1,6 @@
 import axios from 'axios';
 import fabricio from '@fabricio-191/ms';
+import { Logger } from '@dimensional-fun/logger';
 import { LolRegions, twoLolRegions } from '../Utils/constants';
 import {
   ObjectChampion,
@@ -8,10 +9,16 @@ import {
   mostPlayedChampion,
   rankedData,
   queueTypes,
+  CurrentGameInfo,
 } from '../Utils/types';
-import { Logger } from '@dimensional-fun/logger';
+import { RedisClient } from '../Cache';
+
 const log = new Logger('🎮', {
-  defaults: { timestamp: false },
+  defaults: {
+    timestamp: new Date().toLocaleString('en-US', {
+      timeZone: 'America/Mexico_City',
+    }),
+  },
 });
 
 const RiotToken = process.env.RIOT_API_TOKEN;
@@ -21,12 +28,14 @@ export class SummonerData {
   username: string;
   currentPatch!: string;
   matchesURL: string;
+  region: string;
   constructor(region: string, username: string) {
     this.baseURL = `https://${SummonerData.Region(
       region,
     )}.api.riotgames.com/lol`;
     this.username = username;
     this.matchesURL = SummonerData.twoRegion(region);
+    this.region = SummonerData.Region(region);
   }
 
   static Region(region: string): string {
@@ -45,6 +54,11 @@ export class SummonerData {
   }
 
   async profileBasicData(): Promise<SummonerBasicData> {
+    const get = await RedisClient.get(
+      `basicData:${this.username}_${this.region}`,
+    );
+    if (get) return JSON.parse(get);
+
     try {
       const url = `${
         this.baseURL
@@ -52,6 +66,14 @@ export class SummonerData {
         this.username,
       )}?api_key=${RiotToken}`;
       const { data: basicData } = await axios.get(url);
+
+      await RedisClient.set(
+        `basicData:${this.username}_${this.region}`,
+        JSON.stringify(basicData),
+        {
+          EX: 600,
+        },
+      );
       return basicData;
     } catch (err: any) {
       if (err?.response?.status! == 401) {
@@ -78,9 +100,21 @@ export class SummonerData {
   async profileBasicDataBySummonerId(
     summonerId: SummonerBasicData['id'],
   ): Promise<SummonerBasicData | Error> {
+    const get = await RedisClient.get(
+      `profileBasicDataBySummonerId:${summonerId}`,
+    );
+    if (get) return JSON.parse(get);
+
     try {
       const url = `${this.baseURL}/summoner/v4/summoners/${summonerId}?api_key=${RiotToken}`;
       const { data: basicData } = await axios.get(url);
+      await RedisClient.set(
+        `profileBasicDataBySummonerId:${summonerId}`,
+        JSON.stringify(basicData),
+        {
+          EX: 600,
+        },
+      );
       return basicData;
     } catch (err: any) {
       if (err?.response?.status! == 401) {
@@ -105,14 +139,21 @@ export class SummonerData {
   }
 
   async getCurrentPatch(): Promise<string> {
-    if (this.currentPatch) return this.currentPatch;
+    const get = await RedisClient.get('patch:current');
+    if (get) return get;
+
     const url = `https://ddragon.leagueoflegends.com/api/versions.json`;
     const { data } = await axios.get(url);
     this.currentPatch = data[0];
+
+    await RedisClient.set('patch:current', String(data[0]));
     return data[0];
   }
 
   async getChampionById(id: ObjectChampion['id']): Promise<ObjectChampion> {
+    const get = await RedisClient.get(`champion:${id}`);
+    if (get) return JSON.parse(get);
+
     const patch = await this.getCurrentPatch();
     const url = `http://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion.json`;
     const { data: response } = await axios.get(url);
@@ -126,6 +167,12 @@ export class SummonerData {
 
     const url_2 = `http://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion/${champId}.json`;
     const { data: response_2 } = await axios.get(url_2);
+
+    await RedisClient.set(
+      `champion:${id}`,
+      JSON.stringify(response_2.data[String(champId)]),
+    );
+
     return response_2.data[String(champId)];
   }
 
@@ -148,10 +195,11 @@ export class SummonerData {
     summonerId: SummonerBasicData['id'],
     type: mostPlayed,
   ): Promise<mostPlayedChampion[]> {
-    /*
-        This is purely for writing the code.
-        I recommend caching the full current patch, so you don't eat a bit of Riot API.
-      */
+    const get = await RedisClient.get(
+      `mostPlayedChampions:${summonerId}_${type}`,
+    );
+    if (get) return JSON.parse(get);
+
     try {
       const urlMPC = `${this.baseURL}/champion-mastery/v4/champion-masteries/by-summoner/${summonerId}?api_key=${RiotToken}`;
       const { data } = await axios.get(urlMPC);
@@ -166,6 +214,15 @@ export class SummonerData {
         const { name } = await this.getChampionById(championId);
         mostPlayedChampionsArray.push({ name, points, level });
       }
+
+      await RedisClient.set(
+        `mostPlayedChampions:${summonerId}_${type}`,
+        JSON.stringify(mostPlayedChampionsArray),
+        {
+          EX: 600,
+        },
+      );
+
       return mostPlayedChampionsArray;
     } catch (err: any) {
       if (err?.response?.status! == 401) {
@@ -190,16 +247,35 @@ export class SummonerData {
   }
 
   async getMatchesBySummoner(puuid: string) {
+    const get = await RedisClient.get(
+      `getMatchesBySummoner:${puuid}_${this.region}`,
+    );
+    if (get) return JSON.parse(get);
+
     const url = `${this.matchesURL}/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=5&api_key=${RiotToken}`;
     const { data } = await axios.get(url);
+
+    await RedisClient.set(
+      `getMatchesBySummoner:${puuid}_${this.region}`,
+      JSON.stringify(data),
+      {
+        EX: 600,
+      },
+    );
+
     return data;
   }
 
   async rankedInfo(summonerId: SummonerBasicData['id']): Promise<rankedInfo> {
+    const get = await RedisClient.get(
+      `rankedInfo:${summonerId}_${this.region}`,
+    );
+    if (get) return JSON.parse(get);
+
     try {
       const urlRanked = `${this.baseURL}/league/v4/entries/by-summoner/${summonerId}?api_key=${RiotToken}`;
       const { data: rankedData } = await axios.get(urlRanked);
-      const data: any = [];
+      const data: any = {};
       data.solo = [];
       data.flex = [];
       rankedData.forEach((item: any) => {
@@ -225,7 +301,14 @@ export class SummonerData {
           });
         }
       });
-      return data!;
+      await RedisClient.set(
+        `rankedInfo:${summonerId}_${this.region}`,
+        JSON.stringify(data),
+        {
+          EX: 600,
+        },
+      );
+      return data;
     } catch (err: any) {
       if (err?.response?.status! == 401) {
         throw new Error(
@@ -249,28 +332,31 @@ export class SummonerData {
   }
 
   async getQueueById(queueId: queueTypes['queueId']): Promise<queueTypes> {
+    const get = await RedisClient.get(`getQueueById:${queueId}`);
+    if (get) return JSON.parse(get);
+
     const urlQueues =
       'http://static.developer.riotgames.com/docs/lol/queues.json';
     const { data } = await axios.get(urlQueues);
     const queue = data.filter((q: any) => q.queueId == queueId);
+
+    await RedisClient.set(`getQueueById:${queueId}`, JSON.stringify(queue[0]));
     return queue[0];
   }
 
-  async getCurrentMatch(id: string) {
+  async getCurrentMatch(id: string): Promise<CurrentGameInfo> {
     try {
       const urlCurrentMatch = `${this.baseURL}/spectator/v4/active-games/by-summoner/${id}?api_key=${RiotToken}`;
       const { data: match } = await axios.get(urlCurrentMatch);
-      let data: any;
-      Object.assign(data, {
-        userTeam: [],
-        enemyTeam: [],
-        gameId: match.gameId,
-        mapId: match.mapId,
-        bans: match.bannedChampions,
-        startTimeGame: match.gameStartTime,
-        mode: match.gameMode,
-        gameQueueConfigId: match.gameQueueConfigId,
-      });
+      const data: any = [];
+      data.userTeam = [];
+      data.enemyTeam = [];
+      data.gameId = match.gameId;
+      data.mapId = match.mapId;
+      data.bans = match.bannedChampions;
+      data.startTimeGame = match.gameStartTime;
+      data.gameMode = match.gameMode;
+      data.gameQueueConfigId = match.gameQueueConfigId;
       for (let i = 0; i < match.participants.length; i++) {
         const user = match.participants[i];
         if (user.teamId == 100) {
@@ -283,7 +369,6 @@ export class SummonerData {
               one: String(spell1Id),
               two: String(spell2Id),
             },
-            bans: match.bannedChampions.filter((x: any) => x.teamId == 100),
           });
         }
         if (user.teamId == 200) {
@@ -296,7 +381,6 @@ export class SummonerData {
               one: String(spell1Id),
               two: String(spell2Id),
             },
-            bans: match.bannedChampions.filter((x: any) => x.teamId == 200),
           });
         }
       }
@@ -323,6 +407,11 @@ export class SummonerData {
     }
   }
   async lastPlayedMatch(): Promise<any[]> {
+    const get = await RedisClient.get(
+      `lastPlayedMatch:${this.username}_${this.region}`,
+    );
+    if (get) return JSON.parse(get);
+
     try {
       const { puuid } = await this.profileBasicData();
       const url_lastMatch = `${this.matchesURL}/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=1&api_key=${RiotToken}`;
@@ -390,11 +479,63 @@ export class SummonerData {
           champion: { name: champ.name },
         },
       });
+
+      await RedisClient.set(
+        `lastPlayedMatch:${this.username}_${this.region}`,
+        JSON.stringify(dataArray),
+        {
+          EX: 600,
+        },
+      );
+
       return dataArray;
     } catch (e: any) {
       log.error(`LastPlayedMatch: ${e?.message!}.`);
       return null!;
     }
+  }
+
+  async getChampRotation() {
+    const patch = await this.getCurrentPatch();
+
+    const get = await RedisClient.get(`getChampRotation:${patch}`);
+    if (get) return JSON.parse(get);
+
+    const response = await axios.get(
+      `https://la1.api.riotgames.com/lol/platform/v3/champion-rotations?api_key=${process.env.RIOT_API_TOKEN}`,
+    );
+
+    const freeWeekIds = response.data.freeChampionIds;
+    const championsResponse = await axios.get(
+      `http://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion.json`,
+    );
+
+    const championsInfo = Object.values(championsResponse.data.data);
+    const getChampionInfo: any = (id: any) => {
+      return championsInfo.find((champion: any) => champion.key === String(id));
+    };
+
+    const arr: any = [];
+    let pos = 0;
+    for (const freeId of freeWeekIds) {
+      if (!Array.isArray(arr[pos])) arr[pos] = [];
+      arr[pos].push(freeId);
+    }
+
+    let champions: any;
+    for (const ids of arr) {
+      champions = ids
+        .map((id: any) => ({ id, ...getChampionInfo(id) }))
+        .filter((x: any) => !!x.name);
+    }
+
+    await RedisClient.set(
+      `getChampRotation:${patch}`,
+      JSON.stringify(champions),
+      { EX: 172800 },
+    );
+
+    return champions;
   }
 }
 

@@ -2,14 +2,14 @@ import { ApplicationCommandOptionTypes } from 'detritus-client/lib/constants';
 import { InteractionContext } from 'detritus-client/lib/interaction';
 import { Embed } from 'detritus-client/lib/utils';
 import { codeblock, underline } from 'detritus-client/lib/utils/markup';
-import { BaseInteractionCommand } from '../../Classes/BaseInteractionCommand';
+import { BaseInteractionCommand } from '../../../Classes/BaseInteractionCommand';
 import {
   CommandTypes,
   DiscordPermissions,
   EmbedColors,
-} from '../../Utils/constants';
-import { Emojis } from '../../Utils/emojis';
-import { capitalize, getCommandInfo, getCommands } from '../../Utils/functions';
+} from '../../../Utils/constants';
+import { Emojis } from '../../../Utils/emojis';
+import { capitalize, getCommandInfo, getCommands } from '../../../Utils/functions';
 
 export interface CommandArgs {
   command: string;

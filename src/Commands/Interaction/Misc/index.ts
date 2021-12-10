@@ -1,4 +1,4 @@
-import { BaseSlashCommand } from '../../Classes/BaseInteractionCommand';
+import { BaseSlashCommand } from '../../../Classes/BaseInteractionCommand';
 import { Avatar } from './avatar';
 import { Ping } from './ping';
 import { FetchInvite } from './fetch-invite';

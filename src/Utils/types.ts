@@ -94,3 +94,33 @@ export enum mostPlayed {
   HISTORY = '20',
   ALL = 'ALL',
 }
+
+export type Team = {
+  summonerName: string;
+  championName: string;
+  spell: Array<any>;
+  bans: Array<any>;
+};
+
+export type Bans = {
+  championId: number;
+  teamId: number;
+  pickTurn: number;
+};
+
+export type CurrentGameInfo = {
+  userTeam: Array<Team>;
+  enemyTeam: Array<Team>;
+  gameId: number;
+  mapId: number;
+  bans: Array<Bans>;
+  startTimeGame: number;
+  gameMode: string;
+  gameQueueConfigId: number;
+};
+
+export type Queue = {
+  queueId: number;
+  map: string;
+  description: string;
+};

@@ -1,4 +1,4 @@
-import { BaseSlashCommand } from '../../Classes/BaseInteractionCommand';
+import { BaseSlashCommand } from '../../../Classes/BaseInteractionCommand';
 import { Docs } from './docs';
 
 export default class DetritusGroupCommand extends BaseSlashCommand {

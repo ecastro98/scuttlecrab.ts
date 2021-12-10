@@ -1,8 +1,8 @@
 import { InteractionContext } from 'detritus-client/lib/interaction';
-import { BaseInteractionCommandOption } from '../../Classes/BaseInteractionCommand';
-import { CommandTypes, EmbedColors } from '../../Utils/constants';
+import { BaseInteractionCommandOption } from '../../../Classes/BaseInteractionCommand';
+import { CommandTypes, EmbedColors } from '../../../Utils/constants';
 import { GatewayClientEvents } from 'detritus-client';
-import { parseMessage } from '../../Utils/functions';
+import { parseMessage } from '../../../Utils/functions';
 import fetch from 'node-fetch';
 import { decode } from 'html-entities';
 import {
@@ -10,9 +10,9 @@ import {
   fetchContent,
   findInData,
   LibData,
-} from '../../Utils/contentFetch';
+} from '../../../Utils/contentFetch';
 import { ApplicationCommandOptionTypes } from 'detritus-client/lib/constants';
-import { Emojis } from '../../Utils/emojis';
+import { Emojis } from '../../../Utils/emojis';
 
 export interface CommandArgs {
   query: string;

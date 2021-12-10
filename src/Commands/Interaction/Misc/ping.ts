@@ -1,6 +1,6 @@
 import { InteractionContext } from 'detritus-client/lib/interaction';
-import { BaseInteractionCommandOption } from '../../Classes/BaseInteractionCommand';
-import { CommandTypes } from '../../Utils/constants';
+import { BaseInteractionCommandOption } from '../../../Classes/BaseInteractionCommand';
+import { CommandTypes } from '../../../Utils/constants';
 
 export const commandName = 'ping';
 

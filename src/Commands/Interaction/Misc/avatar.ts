@@ -3,8 +3,8 @@ import { InteractionContext } from 'detritus-client/lib/interaction';
 import { Member, User } from 'detritus-client/lib/structures';
 import { Embed } from 'detritus-client/lib/utils';
 import { codestring } from 'detritus-client/lib/utils/markup';
-import { BaseInteractionCommandOption } from '../../Classes/BaseInteractionCommand';
-import { CommandTypes, EmbedColors } from '../../Utils/constants';
+import { BaseInteractionCommandOption } from '../../../Classes/BaseInteractionCommand';
+import { CommandTypes, EmbedColors } from '../../../Utils/constants';
 
 export interface CommandArgs {
   user: Member | User;

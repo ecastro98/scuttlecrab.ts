@@ -1,9 +1,9 @@
-import BaseCommand from '../../Classes/BaseComand';
+import BaseCommand from '../../../Classes/BaseComand';
 import { CommandClient } from 'detritus-client';
 import { Context } from 'detritus-client/lib/command';
 import { codeblock } from 'detritus-client/lib/utils/markup';
 import { inspect } from 'util';
-import { CommandTypes } from '../../Utils/constants';
+import { CommandTypes } from '../../../Utils/constants';
 
 export interface CommandArgs {
   code: string;

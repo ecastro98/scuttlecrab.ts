@@ -9,9 +9,9 @@ import {
   timestamp,
   underline,
 } from 'detritus-client/lib/utils/markup';
-import { BaseInteractionCommandOption } from '../../Classes/BaseInteractionCommand';
-import { CommandTypes, EmbedColors } from '../../Utils/constants';
-import { Emojis } from '../../Utils/emojis';
+import { BaseInteractionCommandOption } from '../../../Classes/BaseInteractionCommand';
+import { CommandTypes, EmbedColors } from '../../../Utils/constants';
+import { Emojis } from '../../../Utils/emojis';
 
 export interface CommandArgs {
   code: string;
