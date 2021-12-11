@@ -61,21 +61,23 @@ export enum EmbedColors {
 
 //League of Legends
 export const LolApiErrors = {
-  400: 'It has not been possible to obtain the information because the request or request was incorrect. Try again.',
-  401: 'The information could not be obtained as the "Development API Key" provided by Riot Games has expired. Report on the [support server](https://discord.gg/pE6efwjXYJ).',
-  404: 'This user does not exist in the current region.',
+  [String(400)]:
+    'It has not been possible to obtain the information because the request or request was incorrect. Try again.',
+  [String(401)]:
+    'The information could not be obtained as the "Development API Key" provided by Riot Games has expired. Report on the [support server](https://discord.gg/pE6efwjXYJ).',
+  [String(404)]: 'This user does not exist in the current region.',
 };
 
-export const LolRegions: any = {
-  ru: 'ru',
-  kr: 'kr',
-  lan: 'la1',
-  las: 'la2',
-  oce: 'oc1',
-  eune: 'eun1',
+export const LolRegions = {
+  [String('ru')]: 'ru',
+  [String('kr')]: 'kr',
+  [String('lan')]: 'la1',
+  [String('las')]: 'la2',
+  [String('oce')]: 'oc1',
+  [String('eune')]: 'eun1',
 };
 
-export const twoLolRegions: any = {
+export const twoLolRegions = {
   1: {
     regions: ['kr', 'jp'],
     value: 'https://asia.api.riotgames.com/lol',
@@ -85,7 +87,7 @@ export const twoLolRegions: any = {
     value: 'https://europe.api.riotgames.com/lol',
   },
   3: {
-    regions: ['lan', 'las', 'oce', 'na', 'br'],
+    regions: ['lan', 'las', 'oc', 'na', 'br'],
     value: 'https://americas.api.riotgames.com/lol',
   },
 };
@@ -108,7 +110,7 @@ export const ChoicesRegion = [
     value: 'ru',
   },
   {
-    name: 'OC',
+    name: 'OCE',
     value: 'oc',
   },
   {
@@ -124,7 +126,7 @@ export const ChoicesRegion = [
     value: 'euw',
   },
   {
-    name: 'EUN',
+    name: 'EUNE',
     value: 'eun',
   },
   {
@@ -133,31 +135,31 @@ export const ChoicesRegion = [
   },
 ];
 
-export const OPRegions: any = {
-  LAN: 'lan',
-  LAS: 'las',
-  NA: 'na',
-  KR: 'www',
-  TR: 'tr',
-  JP: 'jp',
-  RU: 'ru',
-  OC: 'oce',
-  EUW: 'euw',
-  EUN: 'eune',
-  BR: 'br',
+export const OPRegions = {
+  [String('lan')]: 'lan',
+  [String('las')]: 'las',
+  [String('na')]: 'na',
+  [String('kr')]: 'www',
+  [String('tr')]: 'tr',
+  [String('jp')]: 'jp',
+  [String('ru')]: 'ru',
+  [String('oc')]: 'oce',
+  [String('euw')]: 'euw',
+  [String('eun')]: 'eune',
+  [String('br')]: 'br',
 };
 
-export const URegions: any = {
-  ru: 'ru',
-  kr: 'kr',
-  lan: 'la1',
-  las: 'la2',
-  oce: 'oc1',
-  eune: 'eun1',
-  na: 'na',
-  euw: 'euw1',
-  br: 'br1',
-  jp: 'jp',
+export const URegions = {
+  [String('ru')]: 'ru',
+  [String('kr')]: 'kr',
+  [String('lan')]: 'la1',
+  [String('las')]: 'la2',
+  [String('oc')]: 'oc1',
+  [String('eun')]: 'eun1',
+  [String('na')]: 'na',
+  [String('euw')]: 'euw1',
+  [String('br')]: 'br1',
+  [String('jp')]: 'jp',
 };
 
 interface makeUrl {

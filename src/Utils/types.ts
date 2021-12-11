@@ -124,3 +124,8 @@ export type Queue = {
   map: string;
   description: string;
 };
+
+export type RankedInfo = {
+  solo?: rankedData[];
+  flex?: rankedData[];
+};

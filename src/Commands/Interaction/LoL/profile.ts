@@ -120,14 +120,16 @@ export class Profile extends BaseInteractionCommandOption {
         .setTitle(`Scuttle Profile: ${underline(basic_data.name)}`)
         .setThumbnail(icon)
         .setFooter(
-          `This information is updated approximately every 10 minutes.`,
+          `Requested by: ${ctx.user.tag}.`,
           ctx.user.avatarUrlFormat(null, { size: 128 }),
         )
         .addField(
           underline('Basic Data'),
           [
             `${bold('Level:')} ${basic_data.summonerLevel}.`,
-            `${bold('Region:')} ${region.toUpperCase()}.`,
+            `${bold('Region:')} ${
+              region === 'oc' ? 'OCE' : region.toUpperCase()
+            }.`,
             `${bold('Icon URL:')} [Click here](${icon}).`,
           ].join('\n'),
           true,
@@ -175,6 +177,10 @@ export class Profile extends BaseInteractionCommandOption {
           ].join('\n'),
         );
       }
+      embed_main.addField(
+        underline('Last Matches'),
+        'No information obtained.',
+      );
 
       if (rankedInfo) {
         const { solo, flex } = rankedInfo!;
@@ -185,10 +191,9 @@ export class Profile extends BaseInteractionCommandOption {
             .map((x) => x[0]?.toUpperCase() + x.slice(1)?.toLowerCase())
             .join(' ');
 
-          embed_main.addField(underline('Ranked Stats'), '\u200B');
           if (solo?.length) {
             embed_main.addField(
-              underline('Solo/Duo'),
+              underline('Ranked Solo/Duo'),
               solo
                 ? [
                     `${RankedEmojis[tierName_solo!]} ${tierName_solo!} ${
@@ -217,7 +222,7 @@ export class Profile extends BaseInteractionCommandOption {
             .join(' ');
 
           embed_main.addField(
-            underline('Flex'),
+            underline('Ranked Flex'),
             solo
               ? [
                   `${RankedEmojis[tierName_flex]} ${tierName_flex} ${flex[0].rank}.`,
@@ -316,10 +321,9 @@ export class Profile extends BaseInteractionCommandOption {
       //     }
       //   },
       // });
-
       return await ctx.editOrRespond({
         content: `View on [OP.GG](${makeUrl.opgg(
-          OPRegions[String(region.toUpperCase())],
+          OPRegions[region],
           encodeURIComponent(summoner),
         )}) or [U.GG](${makeUrl.ugg(
           URegions[region],

@@ -1,16 +1,8 @@
 import axios from 'axios';
 import fabricio from '@fabricio-191/ms';
 import { Logger } from '@dimensional-fun/logger';
-import { LolRegions, twoLolRegions } from '../Utils/constants';
-import {
-  ObjectChampion,
-  SummonerBasicData,
-  mostPlayed,
-  mostPlayedChampion,
-  rankedData,
-  queueTypes,
-  CurrentGameInfo,
-} from '../Utils/types';
+import { LolApiErrors, LolRegions, twoLolRegions } from '../Utils/constants';
+import { ObjectChampion, SummonerBasicData, mostPlayed, mostPlayedChampion, queueTypes, CurrentGameInfo, RankedInfo } from '../Utils/types';
 import { RedisClient } from '../Cache';
 
 const log = new Logger('🎮', {
@@ -34,7 +26,6 @@ export class SummonerData {
     this.baseURL = `https://${this.region}.api.riotgames.com/lol`;
     this.username = username;
     this.matchesURL = SummonerData.twoRegion(region);
-
   }
 
   static Region(region: string): string {
@@ -54,7 +45,7 @@ export class SummonerData {
 
   async profileBasicData(): Promise<SummonerBasicData> {
     const get = await RedisClient.get(
-      `basicData:${this.username}_${this.region}`,
+      `basicData:${this.username.toLowerCase()}_${this.region}`,
     );
     if (get) return JSON.parse(get);
 
@@ -67,7 +58,7 @@ export class SummonerData {
       const { data: basicData } = await axios.get(url);
 
       await RedisClient.set(
-        `basicData:${this.username}_${this.region}`,
+        `basicData:${this.username.toLowerCase()}_${this.region}`,
         JSON.stringify(basicData),
         {
           EX: 600,
@@ -75,30 +66,24 @@ export class SummonerData {
       );
       return basicData;
     } catch (err: any) {
-      if (err?.response?.status! == 401) {
-        throw new Error(
-          'The information could not be obtained as the "Development API Key" provided by Riot Games has expired.',
-        );
-      }
-      if (err?.response?.status! == 404) {
-        throw new Error('This user does not exist in the current region.');
-      }
-      if (err?.response?.status! == 400) {
-        throw new Error(
-          'It has not been possible to obtain the information because the request or request was incorrect.',
-        );
-      } else {
+      if (err?.response) {
+        const error = LolApiErrors[err?.response?.status];
+        if (error) {
+          throw new Error(error);
+        }
         log.error(`ProfileBasicData: ${err?.message!}.`);
         throw new Error(
           'An error occurred while trying to retrieve user data.',
         );
       }
+      log.error(`ProfileBasicData: ${err?.message!}.`);
+      throw new Error('An error occurred while trying to retrieve user data.');
     }
   }
 
   async profileBasicDataBySummonerId(
     summonerId: SummonerBasicData['id'],
-  ): Promise<SummonerBasicData | Error> {
+  ): Promise<SummonerBasicData> {
     const get = await RedisClient.get(
       `profileBasicDataBySummonerId:${summonerId}`,
     );
@@ -116,24 +101,18 @@ export class SummonerData {
       );
       return basicData;
     } catch (err: any) {
-      if (err?.response?.status! == 401) {
-        throw new Error(
-          'The information could not be obtained as the "Development API Key" provided by Riot Games has expired.',
-        );
-      }
-      if (err?.response?.status! == 404) {
-        throw new Error('This user does not exist in the current region.');
-      }
-      if (err?.response?.status! == 400) {
-        throw new Error(
-          'It has not been possible to obtain the information because the request or request was incorrect.',
-        );
-      } else {
+      if (err?.response) {
+        const error = LolApiErrors[err?.response?.status];
+        if (error) {
+          throw new Error(error);
+        }
         log.error(`ProfileBasicDataBySummonerId: ${err?.message!}.`);
         throw new Error(
           'An error occurred while trying to retrieve user data.',
         );
       }
+      log.error(`ProfileBasicDataBySummonerId: ${err?.message!}.`);
+      throw new Error('An error occurred while trying to retrieve user data.');
     }
   }
 
@@ -158,8 +137,8 @@ export class SummonerData {
     var champId: any;
     const champions = Object.keys(response);
     champions.forEach((champ) => {
-      if (response.data[champ].key == id) {
-        champId = response.data[champ].id;
+      if (response[champ].key == id) {
+        champId = response[champ].id;
       }
     });
 
@@ -223,24 +202,18 @@ export class SummonerData {
 
       return mostPlayedChampionsArray;
     } catch (err: any) {
-      if (err?.response?.status! == 401) {
-        throw new Error(
-          'The information could not be obtained as the "Development API Key" provided by Riot Games has expired.',
-        );
-      }
-      if (err?.response?.status! == 404) {
-        throw new Error('This user does not exist in the current region.');
-      }
-      if (err?.response?.status! == 400) {
-        throw new Error(
-          'It has not been possible to obtain the information because the request or request was incorrect.',
-        );
-      } else {
+      if (err?.response) {
+        const error = LolApiErrors[err?.response?.status];
+        if (error) {
+          throw new Error(error);
+        }
         log.error(`MostPlayedChampions: ${err?.message!}.`);
         throw new Error(
           'An error occurred while trying to retrieve user data.',
         );
       }
+      log.error(`MostPlayedChampions: ${err?.message!}.`);
+      throw new Error('An error occurred while trying to retrieve user data.');
     }
   }
 
@@ -264,7 +237,7 @@ export class SummonerData {
     return data;
   }
 
-  async rankedInfo(summonerId: SummonerBasicData['id']): Promise<rankedInfo> {
+  async rankedInfo(summonerId: SummonerBasicData['id']): Promise<RankedInfo> {
     const get = await RedisClient.get(
       `rankedInfo:${summonerId}_${this.region}`,
     );
@@ -308,24 +281,18 @@ export class SummonerData {
       );
       return data;
     } catch (err: any) {
-      if (err?.response?.status! == 401) {
-        throw new Error(
-          'The information could not be obtained as the "Development API Key" provided by Riot Games has expired.',
-        );
-      }
-      if (err?.response?.status! == 404) {
-        throw new Error('This user does not exist in the current region.');
-      }
-      if (err?.response?.status! == 400) {
-        throw new Error(
-          'It has not been possible to obtain the information because the request or request was incorrect.',
-        );
-      } else {
-        log.error(`RankedInfo: ${err?.stack!}.`);
+      if (err?.response) {
+        const error = LolApiErrors[err?.response?.status];
+        if (error) {
+          throw new Error(error);
+        }
+        log.error(`RankedInfo: ${err?.message!}.`);
         throw new Error(
           'An error occurred while trying to retrieve user data.',
         );
       }
+      log.error(`RankedInfo: ${err?.message!}.`);
+      throw new Error('An error occurred while trying to retrieve user data.');
     }
   }
 
@@ -384,29 +351,23 @@ export class SummonerData {
       }
       return data;
     } catch (err: any) {
-      if (err?.response?.status! == 401) {
-        throw new Error(
-          'The information could not be obtained as the "Development API Key" provided by Riot Games has expired.',
-        );
-      }
-      if (err?.response?.status! == 404) {
-        throw new Error('This user does not exist in the current region.');
-      }
-      if (err?.response?.status! == 400) {
-        throw new Error(
-          'It has not been possible to obtain the information because the request or request was incorrect.',
-        );
-      } else {
+      if (err?.response) {
+        const error = LolApiErrors[err?.response?.status];
+        if (error) {
+          throw new Error(error);
+        }
         log.error(`GetCurrentMatch: ${err?.message!}.`);
         throw new Error(
           'An error occurred while trying to retrieve user data.',
         );
       }
+      log.error(`GetCurrentMatch: ${err?.message!}.`);
+      throw new Error('An error occurred while trying to retrieve user data.');
     }
   }
   async lastPlayedMatch(): Promise<any[]> {
     const get = await RedisClient.get(
-      `lastPlayedMatch:${this.username}_${this.region}`,
+      `lastPlayedMatch:${this.username.toLowerCase()}_${this.region}`,
     );
     if (get) return JSON.parse(get);
 
@@ -479,7 +440,7 @@ export class SummonerData {
       });
 
       await RedisClient.set(
-        `lastPlayedMatch:${this.username}_${this.region}`,
+        `lastPlayedMatch:${this.username.toLowerCase()}_${this.region}`,
         JSON.stringify(dataArray),
         {
           EX: 600,
@@ -494,7 +455,7 @@ export class SummonerData {
   }
 
   async getChampions() {
-    const patch = this.getCurrentPatch();
+    const patch = await this.getCurrentPatch();
     const get = await RedisClient.get(`championsObject:${patch}`);
     if (get) return JSON.parse(get);
 
@@ -502,12 +463,11 @@ export class SummonerData {
       `http://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion.json`,
     );
 
-    await RedisClient.set(`championsObject:${patch}`
-      JSON.stringify(champion),
-      { EX: 172800 },
+    await RedisClient.set(
+      `championsObject:${patch}`,
+      JSON.stringify(data.data),
     );
-
-    return data;
+    return data.data;
   }
 
   async getChampRotation() {
@@ -551,8 +511,3 @@ export class SummonerData {
     return champions;
   }
 }
-
-export type rankedInfo = {
-  solo?: rankedData[];
-  flex?: rankedData[];
-};

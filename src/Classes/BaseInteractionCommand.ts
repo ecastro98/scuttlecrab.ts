@@ -29,7 +29,7 @@ export class BaseInteractionCommand<
   current: Array<any> = [];
 
   async onDmBlocked(ctx: Interaction.InteractionContext) {
-    const command = codestring(ctx.name);
+    const command = codestring(ctx.name.split(' ')[1] || ctx.name);
     return await ctx
       .editOrRespond({
         content: `${Emojis.warning} Command ${command} cannot be used in a DM.`,
@@ -47,7 +47,7 @@ export class BaseInteractionCommand<
       if (item.usages - 1 > ratelimit.limit) return;
 
       const user = bold(ctx.user.username);
-      const command = codestring(ctx.name);
+      const command = codestring(ctx.name.split(' ')[1] || ctx.name);
       const timeRemaining = codestring(`${(remaining / 1000).toFixed(2)}`);
       const end = remaining < 1000 ? 'milliseconds' : 'seconds';
 
@@ -111,7 +111,7 @@ export class BaseInteractionCommand<
                 language: 'js',
               }),
             )
-            .setFooter(`Slash Command: ${ctx.name}.`),
+            .setFooter(`Slash Command: ${ctx.name.split(' ')[1]}.`),
         ],
       })
       .catch(() => false);
@@ -151,7 +151,7 @@ export class BaseInteractionCommand<
         codeblock(permissions.map((x) => `${x}: ${Emojis.x}`).join('.\n')),
       )
       .setTimestamp(happened)
-      .setFooter(`${ctx.name} command`);
+      .setFooter(`${ctx.name.split(' ')[1] || ctx.name} command`);
 
     return await ctx
       .editOrRespond({
@@ -239,7 +239,7 @@ export class BaseInteractionCommandOption<
     ctx: Interaction.InteractionContext,
     args: Record<string, any>,
   ) {
-    const command = codestring(ctx.name);
+    const command = codestring(ctx.name.split(' ')[1] || ctx.name);
     return await ctx.editOrRespond({
       content: `⚠ Slash Command \`${command}\` error strangely, give me a report.`,
       flags: MessageFlags.EPHEMERAL,
@@ -252,7 +252,7 @@ export class BaseInteractionCommandOptionGroup<
 > extends Interaction.InteractionCommandOption<ParsedArgsFinished> {
   type = ApplicationCommandOptionTypes.SUB_COMMAND_GROUP;
   async onCancelRun(ctx: InteractionContext, args: Record<string, any>) {
-    const command = codestring(ctx.name);
+    const command = codestring(ctx.name.split(' ')[1] || ctx.name);
     return await ctx.editOrRespond({
       content: `⚠ Slash Command \`${command}\` error strangely, give me a report.`,
       flags: MessageFlags.EPHEMERAL,
