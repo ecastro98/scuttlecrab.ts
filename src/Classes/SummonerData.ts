@@ -24,18 +24,17 @@ const log = new Logger('🎮', {
 const RiotToken = process.env.RIOT_API_TOKEN;
 
 export class SummonerData {
+  region: string;
   baseURL: string;
   username: string;
   currentPatch!: string;
   matchesURL: string;
-  region: string;
   constructor(region: string, username: string) {
-    this.baseURL = `https://${SummonerData.Region(
-      region,
-    )}.api.riotgames.com/lol`;
+    this.region = SummonerData.Region(region);
+    this.baseURL = `https://${this.region}.api.riotgames.com/lol`;
     this.username = username;
     this.matchesURL = SummonerData.twoRegion(region);
-    this.region = SummonerData.Region(region);
+
   }
 
   static Region(region: string): string {
@@ -155,10 +154,9 @@ export class SummonerData {
     if (get) return JSON.parse(get);
 
     const patch = await this.getCurrentPatch();
-    const url = `http://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion.json`;
-    const { data: response } = await axios.get(url);
+    const response = await this.getChampions();
     var champId: any;
-    const champions = Object.keys(response.data);
+    const champions = Object.keys(response);
     champions.forEach((champ) => {
       if (response.data[champ].key == id) {
         champId = response.data[champ].id;
@@ -495,6 +493,23 @@ export class SummonerData {
     }
   }
 
+  async getChampions() {
+    const patch = this.getCurrentPatch();
+    const get = await RedisClient.get(`championsObject:${patch}`);
+    if (get) return JSON.parse(get);
+
+    const { data } = await axios.get(
+      `http://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion.json`,
+    );
+
+    await RedisClient.set(`championsObject:${patch}`
+      JSON.stringify(champion),
+      { EX: 172800 },
+    );
+
+    return data;
+  }
+
   async getChampRotation() {
     const patch = await this.getCurrentPatch();
 
@@ -506,11 +521,9 @@ export class SummonerData {
     );
 
     const freeWeekIds = response.data.freeChampionIds;
-    const championsResponse = await axios.get(
-      `http://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion.json`,
-    );
+    const championsResponse = await this.getChampions();
 
-    const championsInfo = Object.values(championsResponse.data.data);
+    const championsInfo = Object.values(championsResponse);
     const getChampionInfo: any = (id: any) => {
       return championsInfo.find((champion: any) => champion.key === String(id));
     };
