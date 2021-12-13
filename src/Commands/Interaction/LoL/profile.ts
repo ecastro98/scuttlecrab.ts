@@ -1,14 +1,11 @@
 import {
   ApplicationCommandOptionTypes,
   InteractionCallbackTypes,
-  MessageComponentButtonStyles,
-  MessageFlags,
 } from 'detritus-client/lib/constants';
 import { InteractionContext } from 'detritus-client/lib/interaction';
 import {
   ComponentActionRow,
   ComponentButton,
-  Components,
   Embed,
 } from 'detritus-client/lib/utils';
 import { bold, codeblock, underline } from 'detritus-client/lib/utils/markup';
@@ -29,12 +26,7 @@ import {
   RankedEmojis,
   SpellEmojis,
 } from '../../../Utils/emojis';
-import {
-  capitalize,
-  format,
-  getQueueById,
-  summonerIcon,
-} from '../../../Utils/functions';
+import { summonerIcon } from '../../../Utils/functions';
 import { mostPlayed } from '../../../Utils/types';
 
 export interface CommandArgs {
@@ -104,9 +96,6 @@ export class Profile extends BaseInteractionCommandOption {
       const rankedInfo = await summoner_data
         .rankedInfo(basic_data.id)
         .catch(() => null);
-      // const live_match = await summoner_data
-      //   .getCurrentMatch(basic_data.id)
-      //   .catch(() => null);
 
       const most_played_champions = await summoner_data.mostPlayedChampions(
         basic_data.id,
@@ -243,84 +232,7 @@ export class Profile extends BaseInteractionCommandOption {
       }
 
       embeds.push(embed_main);
-      // const embed_live_match = new Embed();
 
-      // if (live_match) {
-      //   const queue = getQueueById(live_match.gameQueueConfigId);
-      //   embed_live_match
-      //     .setColor(EmbedColors.DEFAULT)
-      //     .setTitle(`Live Match: ${underline(basic_data.name)}`)
-      //     .setThumbnail(icon)
-      //     .addField(
-      //       underline('Basic Data'),
-      //       [
-      //         `${capitalize(live_match.gameMode.toLowerCase())}, ${
-      //           queue?.map
-      //         } (${queue?.description}).`,
-      //         `${bold('In game ago:')} ${
-      //           live_match.startTimeGame < 1
-      //             ? '00:00 elapsed'
-      //             : format(Date.now() - live_match.startTimeGame).split(
-      //                 ' | ',
-      //               )[0] + ' elapsed'
-      //         }.`,
-      //       ].join('\n'),
-      //     )
-      //     .addField(
-      //       underline('Blue Team'),
-      //       live_match.userTeam
-      //         .map(
-      //           (player) =>
-      //             `${ChampionEmojis[player.championName]} ${
-      //               player.summonerName === basic_data.name
-      //                 ? underline(player.summonerName)
-      //                 : player.summonerName
-      //             }.`,
-      //         )
-      //         .join('\n'),
-      //     )
-      //     .addField(
-      //       underline('Red Team'),
-      //       live_match.enemyTeam
-      //         .map(
-      //           (player) =>
-      //             `${ChampionEmojis[player.championName]} ${
-      //               player.summonerName === basic_data.name
-      //                 ? underline(player.summonerName)
-      //                 : player.summonerName
-      //             }.`,
-      //         )
-      //         .join('\n'),
-      //       true,
-      //     );
-      // }
-
-      // const components = new Components({
-      //   timeout: 30000,
-      // });
-      // components.createButton({
-      //   label: 'Live match',
-      //   style: MessageComponentButtonStyles.SUCCESS,
-      //   disabled: !live_match,
-      //   run: (context) => {
-      //     if (context.user.id === ctx.user.id) {
-      //       return context.respond(
-      //         InteractionCallbackTypes.CHANNEL_MESSAGE_WITH_SOURCE,
-      //         {
-      //           embeds: [embed_live_match],
-      //         },
-      //       );
-      //     } else {
-      //       return context.respond(
-      //         InteractionCallbackTypes.CHANNEL_MESSAGE_WITH_SOURCE,
-      //         {
-      //           content: `${Emojis.warning} You can't use this button.`,
-      //           flags: MessageFlags.EPHEMERAL,
-      //         },
-      //       );
-      //     }
-      //   },
-      // });
       return await ctx.editOrRespond({
         content: `View on [OP.GG](${makeUrl.opgg(
           OPRegions[region],
@@ -330,7 +242,6 @@ export class Profile extends BaseInteractionCommandOption {
           encodeURIComponent(summoner),
         )}).`,
         embeds: embeds,
-        // components,
       });
     } catch (error: any) {
       if (

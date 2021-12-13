@@ -54,7 +54,7 @@ export enum CommandTypes {
 }
 
 export enum EmbedColors {
-  DEFAULT = 0xae25ff,
+  DEFAULT = 0x0762ff,
   ERROR = 0xff0000,
   SUCCESS = 0x3aff00,
 }
@@ -65,7 +65,7 @@ export const LolApiErrors = {
     'It has not been possible to obtain the information because the request or request was incorrect. Try again.',
   [String(401)]:
     'The information could not be obtained as the "Development API Key" provided by Riot Games has expired. Report on the [support server](https://discord.gg/pE6efwjXYJ).',
-  [String(404)]: 'This user does not exist in the current region.',
+  [String(404)]: "That summoner couldn't be found, at least on that region.",
 };
 
 export const LolRegions = {

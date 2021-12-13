@@ -162,7 +162,7 @@ export class SummonerData {
     return data.data[String(name)];
   }
 
-  async advencedMatchInfo(gameId: string) {
+  async advencedMatchInfo(gameId: number) {
     const url = `${this.matchesURL}/match/v5/matches/${gameId}?api_key=${RiotToken}`;
     const { data: match } = await axios.get(url);
     return match;

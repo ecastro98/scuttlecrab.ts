@@ -95,7 +95,7 @@ async function runEvents() {
   await ScuttleClient.run();
   ScuttleClient.gateway.setPresence({
     activity: {
-      name: 'with Detritus | Powered by Riot Games API',
+      name: 'Powered by Riot Games API',
       type: 0,
     },
     status: 'dnd',

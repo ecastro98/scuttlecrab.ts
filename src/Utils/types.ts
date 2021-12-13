@@ -10,7 +10,7 @@ export type SummonerBasicData = {
 
 export type ObjectChampion = {
   version: string;
-  id: string;
+  id: number;
   key: string;
   name: string;
   title: string;
@@ -98,8 +98,10 @@ export enum mostPlayed {
 export type Team = {
   summonerName: string;
   championName: string;
-  spell: Array<any>;
-  bans: Array<any>;
+  spells: {
+    one: number;
+    two: number;
+  };
 };
 
 export type Bans = {
