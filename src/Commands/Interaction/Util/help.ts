@@ -1,18 +1,17 @@
 import { ApplicationCommandOptionTypes } from 'detritus-client/lib/constants';
 import { InteractionContext } from 'detritus-client/lib/interaction';
 import { Embed } from 'detritus-client/lib/utils';
-import { codeblock, underline } from 'detritus-client/lib/utils/markup';
-import { BaseInteractionCommand } from '../../../Classes/BaseInteractionCommand';
 import {
-  CommandTypes,
-  DiscordPermissions,
-  EmbedColors,
-} from '../../../Utils/constants';
-import { Emojis } from '../../../Utils/emojis';
-import { capitalize, getCommandInfo, getCommands } from '../../../Utils/functions';
+  bold,
+  codeblock,
+  codestring,
+  underline,
+} from 'detritus-client/lib/utils/markup';
+import { BaseInteractionCommand } from '../../../Classes/BaseInteractionCommand';
+import { CommandTypes, EmbedColors } from '../../../Utils/constants';
 
 export interface CommandArgs {
-  command: string;
+  category: string;
 }
 
 export const commandName = 'help';
@@ -21,22 +20,39 @@ export default class Help extends BaseInteractionCommand {
   constructor() {
     super({
       name: commandName,
-      description: 'Get the list of commands from the bot or on a command.',
+      description: 'Get the list of commands from the bot.',
       metadata: {
-        description: 'Get the list of commands from the bot or on a command.',
-        examples: [commandName, `${commandName} ping`],
+        description: 'Get the list of commands from the bot.',
+        examples: [commandName, `${commandName} category: League of Legends`],
         type: CommandTypes.UTIL,
-        usage: `${commandName} (command)`,
+        usage: `${commandName} <category: Category>`,
         onlyDevs: false,
         nsfw: false,
       },
       options: [
         {
-          name: 'command',
-          required: false,
-          description: 'The command you wish to obtain information.',
-          default: null,
+          description: 'Category to get commands.',
+          name: 'category',
           type: ApplicationCommandOptionTypes.STRING,
+          choices: [
+            {
+              name: CommandTypes.LOL,
+              value: CommandTypes.LOL,
+            },
+            {
+              name: CommandTypes.MISC,
+              value: CommandTypes.MISC,
+            },
+            {
+              name: CommandTypes.DOCS,
+              value: CommandTypes.DOCS,
+            },
+            {
+              name: 'Uncategorized',
+              value: 'Uncategorized',
+            },
+          ],
+          required: true,
         },
       ],
       ratelimits: [
@@ -49,84 +65,92 @@ export default class Help extends BaseInteractionCommand {
   }
 
   async run(ctx: InteractionContext, args: CommandArgs) {
-    const command = getCommandInfo(ctx, args.command, 'interaction');
+    const { category } = args;
 
-    if (args?.command && !command) {
-      return ctx.editOrRespond({
-        content: `${Emojis.warning} Unknown command.`,
-      });
+    if (category) {
+      switch (category) {
+        case 'League of Legends':
+          const lol_cmds = ctx?.interactionCommandClient?.commands
+            ?.filter((x) => x.name === 'lol')[0]
+            ?.options!.map(
+              (x, i) =>
+                `${bold(`#${++i}`)} ${codestring(x.name)}: ${x.description}`,
+            );
+
+          const lol_embed = new Embed()
+            .setTitle(underline('League of Legends Commands'))
+            .setColor(EmbedColors.DEFAULT)
+            .setDescription(lol_cmds.join('\n'))
+            .addField(underline('Usage'), codeblock('/lol <command> [options]'))
+            .setFooter('Do not include < > or [ ] when using commands.');
+          await ctx.editOrRespond({
+            embeds: [lol_embed],
+          });
+          break;
+
+        case 'Detritus Client':
+          const docs_cmds = ctx?.interactionCommandClient?.commands
+            ?.filter((x) => x.name === 'detritus')[0]
+            ?.options!.map(
+              (x, i) =>
+                `${bold(`#${++i}`)} ${codestring(x.name)}: ${x.description}`,
+            );
+
+          const docs_embed = new Embed()
+            .setTitle(underline('Detritus Client Commands'))
+            .setColor(EmbedColors.DEFAULT)
+            .setDescription(docs_cmds.join('\n'))
+            .addField(
+              underline('Usage'),
+              codeblock('/detritus <command> [options]'),
+            )
+            .setFooter('Do not include < > or [ ] when using commands.');
+          await ctx.editOrRespond({
+            embeds: [docs_embed],
+          });
+          break;
+
+        case 'Misc':
+          const misc_cmds = ctx?.interactionCommandClient?.commands
+            ?.filter((x) => x.name === 'misc')[0]
+            ?.options!.map(
+              (x, i) =>
+                `${bold(`#${++i}`)} ${codestring(x.name)}: ${x.description}`,
+            );
+
+          const misc_embed = new Embed()
+            .setTitle(underline('Misc Commands'))
+            .setColor(EmbedColors.DEFAULT)
+            .setDescription(misc_cmds.join('\n'))
+            .addField(underline('Usage'), codeblock('/misc <command> [options]'))
+            .setFooter('Do not include < > or [ ] when using commands.');
+          await ctx.editOrRespond({
+            embeds: [misc_embed],
+          });
+          break;
+
+        case 'Uncategorized':
+          const uncategorized_cmds = ctx?.interactionCommandClient?.commands
+            ?.filter(
+              (x) =>
+                x.name !== 'detritus' && x.name !== 'lol' && x.name !== 'misc',
+            )
+            ?.map(
+              (x, i) =>
+                `${bold(`#${++i}`)} ${codestring(x.name)}: ${x.description}`,
+            );
+
+          const uncategorized_embed = new Embed()
+            .setTitle(underline('Uncategorized Commands'))
+            .setColor(EmbedColors.DEFAULT)
+            .setDescription(uncategorized_cmds.join('\n'))
+            .addField(underline('Usage'), codeblock('/<command> [options]'))
+            .setFooter('Do not include < > or [ ] when using commands.');
+          await ctx.editOrRespond({
+            embeds: [uncategorized_embed],
+          });
+          break;
+      }
     }
-
-    if (args?.command && command) {
-      const embed_command_success = new Embed()
-        .setColor(EmbedColors.DEFAULT)
-        .setTitle(`Slash Command ${capitalize(command.name)}`)
-        .addField(
-          underline('Metadata'),
-          codeblock(
-            [
-              `Category: ${command.category}.`,
-              `Usage: /${command.metadata.usage}.`,
-              `Examples: ${command.metadata.examples
-                .map((x: string) => `/${x}`)
-                .join(' | ')}.`,
-              `Only devs: ${command.metadata.onlyDevs ? 'True' : 'False'}.`,
-              `NSFW: ${command.metadata.nsfw ? 'True' : 'False'}.`,
-            ].join('\n'),
-          ),
-        )
-        .addField(
-          underline('Rate Limit'),
-          codeblock(
-            command.ratelimits
-              .map(
-                (x) =>
-                  `${capitalize(x.type as string)}: ${
-                    x.duration / 1000
-                  } seconds (${x.limit} usages per ${x.type}).`,
-              )
-              .join('\n'),
-          ),
-        )
-        .addField(
-          underline('Permissions'),
-          codeblock(
-            [
-              `Client: ${
-                command.permissionsClient
-                  .map((x) => DiscordPermissions[String(x || 0)])
-                  .join(', ') || 'None'
-              }.`,
-              `Author: ${
-                command.permissions
-                  .map((x) => DiscordPermissions[String(x || 0)])
-                  .join(', ') || 'None'
-              }.`,
-            ].join('\n'),
-          ),
-        );
-
-      return await ctx.editOrRespond({
-        embeds: [embed_command_success],
-      });
-    }
-
-    const content: Array<string> = [
-      '# Command List',
-      ' * Type "/help command: <Command Name>" for more info on a command.',
-      '\u200B',
-      '# Detritus Client:',
-      getCommands(ctx, 'Detritus Client', 'interaction', false) as string,
-      '# Image:',
-      getCommands(ctx, 'Image', 'interaction', false) as string,
-      '# Misc:',
-      getCommands(ctx, 'Misc', 'interaction', false) as string,
-      '# Util:',
-      getCommands(ctx, 'Util', 'interaction', false) as string,
-    ];
-
-    return await ctx.editOrRespond({
-      content: codeblock(content.join('\n'), { language: 'markdown' }),
-    });
   }
 }

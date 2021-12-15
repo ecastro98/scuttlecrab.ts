@@ -23,7 +23,7 @@ interface EventImport {
   };
 }
 
-const ScuttleClient = new ShardClient(process.env.token as string, {
+const ScuttleClient = new ShardClient(process.env.token!, {
   cache: {
     channels: {
       limit: 100,
@@ -80,19 +80,15 @@ async function runEvents() {
       ScuttleCommandClient.on(ret.default.name, (payload) =>
         ret.default.run(payload, ScuttleCommandClient),
       );
-
-      log.info(`Loaded event '${file.name.split('.')[0]}' to Command Client.`);
     }
   } catch (e) {
     console.error(e);
   }
 }
-
+// This code is running the ScuttleClient.run() function, which starts up the client and sets it to ready state. The require('./Database/index') line imports all of our database files into this file so that we can use them in other parts of the code. This also sets a presence for our bot with an activity name and type (0 = playing).
 (async () => {
-  const usage = process.memoryUsage();
-  const bytes = 100 * 100 * 100;
-
   await ScuttleClient.run();
+  require('./Database/index');
   ScuttleClient.gateway.setPresence({
     activity: {
       name: 'Powered by Riot Games API',
@@ -102,28 +98,17 @@ async function runEvents() {
   });
   await ScuttleCommandClient.addMultipleIn('./Commands/Prefixed', {
     subdirectories: true,
-  })
-    .then(async ({ commands }) => {
-      log.info(`Loaded ${commands.length.toString()} Commands.`);
-    })
-    .catch((err) => console.error(err));
+  }).catch((err) => console.error(err));
 
   await ScuttleInteractionCommandClient.addMultipleIn(
     './Commands/Interaction',
     {
       subdirectories: true,
     },
-  )
-    .then(async ({ commands }) => {
-      log.info(`Loaded ${commands.length.toString()} Slash Commands.`);
-    })
-    .catch((err) => console.error(err));
+  ).catch((err) => console.error(err));
   await ScuttleCommandClient.run();
   await ScuttleInteractionCommandClient.run();
   await runEvents();
   await RedisClient.connect();
   log.info(`${ScuttleClient.user!.tag} is ready.`);
-  log.info(`Heap Used: ${(usage.heapUsed / bytes).toFixed(2)}mb.`);
-  log.info(`Heap Total: ${(usage.heapTotal / bytes).toFixed(2)}mb.`);
-  log.info(`Memory Usage RSS: ${(usage.rss / bytes).toFixed(2)}mb.`);
 })();

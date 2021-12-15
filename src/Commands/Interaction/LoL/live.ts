@@ -127,7 +127,7 @@ export class Live extends BaseInteractionCommandOption {
             ].join('\n'),
           )
           .addField(underline('Blue Team'), '\u200b', false);
-        live_match.userTeam.map((player, i) =>
+        live_match.userTeam.map((player) =>
           embed_current_match.addField(
             player.summonerName === basic_data.name
               ? underline(player.summonerName)
@@ -145,7 +145,7 @@ export class Live extends BaseInteractionCommandOption {
         );
 
         embed_current_match.addField(underline('Red Team'), '\u200b', false);
-        live_match.enemyTeam.map((player, i) =>
+        live_match.enemyTeam.map((player) =>
           embed_current_match.addField(
             player.summonerName === basic_data.name
               ? underline(player.summonerName)

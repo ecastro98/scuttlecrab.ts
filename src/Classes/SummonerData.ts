@@ -2,7 +2,15 @@ import axios from 'axios';
 import fabricio from '@fabricio-191/ms';
 import { Logger } from '@dimensional-fun/logger';
 import { LolApiErrors, LolRegions, twoLolRegions } from '../Utils/constants';
-import { ObjectChampion, SummonerBasicData, mostPlayed, mostPlayedChampion, queueTypes, CurrentGameInfo, RankedInfo } from '../Utils/types';
+import {
+  ObjectChampion,
+  SummonerBasicData,
+  mostPlayed,
+  mostPlayedChampion,
+  queueTypes,
+  CurrentGameInfo,
+  RankedInfo,
+} from '../Utils/types';
 import { RedisClient } from '../Cache';
 
 const log = new Logger('🎮', {
@@ -21,6 +29,8 @@ export class SummonerData {
   username: string;
   currentPatch!: string;
   matchesURL: string;
+
+  //This code is creating a new SummonerData object. The constructor takes two parameters, region and username. The region parameter is used to set the baseURL variable which will be used in the getSummonerByName function. This code also sets up matchesURL which will be used in the getMatchHistory function.
   constructor(region: string, username: string) {
     this.region = SummonerData.Region(region);
     this.baseURL = `https://${this.region}.api.riotgames.com/lol`;
@@ -28,6 +38,7 @@ export class SummonerData {
     this.matchesURL = SummonerData.twoRegion(region);
   }
 
+  // This code is taking the region string and converting it to lowercase. Then, it checks if there's a parser for that region in the LolRegions object. If there isn't one, then we return `${region + 1}` (the first subregion of that region).
   static Region(region: string): string {
     region = region.toLocaleLowerCase();
     const parser = LolRegions[region];
@@ -35,6 +46,7 @@ export class SummonerData {
     return parser;
   }
 
+  // This code is checking if the region is a valid one. If it isn't, then it will return undefined. Then, it checks if the value of `region` matches any of the keys in `twoLolRegions`. If so, then we get that key and use its value to find what region this user belongs to. Finally, we return that result as a string or undefined depending on whether there was an error or not.
   static twoRegion(region: string): string {
     region = region.toLowerCase();
     const result: any = Object.values(twoLolRegions).find((v: any) =>
@@ -43,6 +55,7 @@ export class SummonerData {
     return result?.value!;
   }
 
+  // This code is retrieving the basic data of a user from Riot's API. The code first checks if there is already a cached version of this data in Redis, and if so returns it. If not, then it makes an HTTP request to the Riot API using axios and parses the response into JSON. Then it caches that JSON in Redis for 10 minutes (600 seconds).
   async profileBasicData(): Promise<SummonerBasicData> {
     const get = await RedisClient.get(
       `basicData:${this.username.toLowerCase()}_${this.region}`,
@@ -81,6 +94,7 @@ export class SummonerData {
     }
   }
 
+  // This code is retrieving the basic data of a summoner from Riot's API. The code retrieves the basic data by using their `summonerId` and stores it in Redis for 10 minutes. This way, we can avoid making multiple requests to the same endpoint over and over again.
   async profileBasicDataBySummonerId(
     summonerId: SummonerBasicData['id'],
   ): Promise<SummonerBasicData> {
@@ -116,6 +130,7 @@ export class SummonerData {
     }
   }
 
+  //This code is getting the current patch from the Riot API. It's storing it in Redis, and then returning that value to the caller of this function. If there was a cached version of this data, we would return that instead.
   async getCurrentPatch(): Promise<string> {
     const get = await RedisClient.get('patch:current');
     if (get) return get;
@@ -128,6 +143,7 @@ export class SummonerData {
     return data[0];
   }
 
+  // This code is getting the champion data from the Riot API. It's using axios to make a request to the Riot API and then parsing it into JSON format. The code block uses RedisClient to store this data in Redis, so that we don't have to make another HTTP request every time we need information about a specific champion. If there is already data stored in Redis, it will return that instead of making an HTTP request again.
   async getChampionById(id: ObjectChampion['id']): Promise<ObjectChampion> {
     const get = await RedisClient.get(`champion:${id}`);
     if (get) return JSON.parse(get);
@@ -153,6 +169,7 @@ export class SummonerData {
     return response_2.data[String(champId)];
   }
 
+  // This code is getting the current patch number from the Riot API. Then it's using axios to get a JSON file with all of the champions in that patch. It then uses lodash to find and return an object with data about a specific champion based on its name.
   async getChampionByName(
     name: ObjectChampion['name'],
   ): Promise<ObjectChampion> {
@@ -162,12 +179,14 @@ export class SummonerData {
     return data.data[String(name)];
   }
 
+  // This code is getting the match information for a specific game. It uses axios to make a request to the Riot API and then parses the response into JSON format. The code block uses RedisClient to store this data in Redis, so that we don't have to make another HTTP request every time we need information about a specific game. If there is already data stored in Redis, it will return that instead of making an HTTP request again.
   async advencedMatchInfo(gameId: number) {
     const url = `${this.matchesURL}/match/v5/matches/${gameId}?api_key=${RiotToken}`;
     const { data: match } = await axios.get(url);
     return match;
   }
 
+  //This code is retrieving the most played champions of a summoner. It's doing this by using the champion mastery API and filtering out only the top 3, 20 or ALL most played champions depending on what type was passed in as an argument.
   async mostPlayedChampions(
     summonerId: SummonerBasicData['id'],
     type: mostPlayed,
@@ -217,6 +236,7 @@ export class SummonerData {
     }
   }
 
+  // This code is getting the last 5 matches of a summoner.
   async getMatchesBySummoner(puuid: string) {
     const get = await RedisClient.get(
       `getMatchesBySummoner:${puuid}_${this.region}`,
@@ -237,6 +257,7 @@ export class SummonerData {
     return data;
   }
 
+  // This code is retrieving the ranked info of a summoner. It uses axios to make a request to the Riot API and then parses the response into JSON format.
   async rankedInfo(summonerId: SummonerBasicData['id']): Promise<RankedInfo> {
     const get = await RedisClient.get(
       `rankedInfo:${summonerId}_${this.region}`,
@@ -365,6 +386,7 @@ export class SummonerData {
       throw new Error('An error occurred while trying to retrieve user data.');
     }
   }
+
   async lastPlayedMatch(): Promise<any[]> {
     const get = await RedisClient.get(
       `lastPlayedMatch:${this.username.toLowerCase()}_${this.region}`,
