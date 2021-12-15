@@ -185,9 +185,10 @@ export class Profile extends BaseInteractionCommandOption {
               underline('Ranked Solo/Duo'),
               solo
                 ? [
-                    `${RankedEmojis[tierName_solo!]} ${tierName_solo!} ${
-                      solo[0].rank
-                    }.`,
+                    // :)
+                    `${
+                      RankedEmojis[tierName_solo as keyof typeof RankedEmojis]
+                    } ${tierName_solo!} ${solo[0].rank}.`,
                     `${bold('LP:')} ${solo[0].leaguePoints}.`,
                     `${bold('Wins:')} ${solo[0].wins}.`,
                     `${bold('Losses:')} ${solo[0].losses}.`,
@@ -214,7 +215,9 @@ export class Profile extends BaseInteractionCommandOption {
             underline('Ranked Flex'),
             solo
               ? [
-                  `${RankedEmojis[tierName_flex]} ${tierName_flex} ${flex[0].rank}.`,
+                  `${
+                    RankedEmojis[tierName_flex as keyof typeof RankedEmojis]
+                  } ${tierName_flex} ${flex[0].rank}.`,
                   `${bold('LP:')} ${flex[0].leaguePoints}.`,
                   `${bold('Wins:')} ${flex[0].wins}.`,
                   `${bold('Losses:')} ${flex[0].losses}.`,

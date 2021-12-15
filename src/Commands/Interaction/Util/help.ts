@@ -1,12 +1,7 @@
 import { ApplicationCommandOptionTypes } from 'detritus-client/lib/constants';
 import { InteractionContext } from 'detritus-client/lib/interaction';
 import { Embed } from 'detritus-client/lib/utils';
-import {
-  bold,
-  codeblock,
-  codestring,
-  underline,
-} from 'detritus-client/lib/utils/markup';
+import { bold, codeblock, underline } from 'detritus-client/lib/utils/markup';
 import { BaseInteractionCommand } from '../../../Classes/BaseInteractionCommand';
 import { CommandTypes, EmbedColors } from '../../../Utils/constants';
 
@@ -69,13 +64,10 @@ export default class Help extends BaseInteractionCommand {
 
     if (category) {
       switch (category) {
-        case 'League of Legends':
+        case CommandTypes.LOL:
           const lol_cmds = ctx?.interactionCommandClient?.commands
             ?.filter((x) => x.name === 'lol')[0]
-            ?.options!.map(
-              (x, i) =>
-                `${bold(`#${++i}`)} ${codestring(x.name)}: ${x.description}`,
-            );
+            ?.options!.map((x) => `${bold(x.name)}: ${x.description}`);
 
           const lol_embed = new Embed()
             .setTitle(underline('League of Legends Commands'))
@@ -88,13 +80,10 @@ export default class Help extends BaseInteractionCommand {
           });
           break;
 
-        case 'Detritus Client':
+        case CommandTypes.DOCS:
           const docs_cmds = ctx?.interactionCommandClient?.commands
             ?.filter((x) => x.name === 'detritus')[0]
-            ?.options!.map(
-              (x, i) =>
-                `${bold(`#${++i}`)} ${codestring(x.name)}: ${x.description}`,
-            );
+            ?.options!.map((x) => `${bold(x.name)}: ${x.description}`);
 
           const docs_embed = new Embed()
             .setTitle(underline('Detritus Client Commands'))
@@ -110,19 +99,19 @@ export default class Help extends BaseInteractionCommand {
           });
           break;
 
-        case 'Misc':
+        case CommandTypes.MISC:
           const misc_cmds = ctx?.interactionCommandClient?.commands
             ?.filter((x) => x.name === 'misc')[0]
-            ?.options!.map(
-              (x, i) =>
-                `${bold(`#${++i}`)} ${codestring(x.name)}: ${x.description}`,
-            );
+            ?.options!.map((x) => `${bold(x.name)}: ${x.description}`);
 
           const misc_embed = new Embed()
             .setTitle(underline('Misc Commands'))
             .setColor(EmbedColors.DEFAULT)
             .setDescription(misc_cmds.join('\n'))
-            .addField(underline('Usage'), codeblock('/misc <command> [options]'))
+            .addField(
+              underline('Usage'),
+              codeblock('/misc <command> [options]'),
+            )
             .setFooter('Do not include < > or [ ] when using commands.');
           await ctx.editOrRespond({
             embeds: [misc_embed],
@@ -135,10 +124,7 @@ export default class Help extends BaseInteractionCommand {
               (x) =>
                 x.name !== 'detritus' && x.name !== 'lol' && x.name !== 'misc',
             )
-            ?.map(
-              (x, i) =>
-                `${bold(`#${++i}`)} ${codestring(x.name)}: ${x.description}`,
-            );
+            ?.map((x) => `${bold(x.name)}: ${x.description}`);
 
           const uncategorized_embed = new Embed()
             .setTitle(underline('Uncategorized Commands'))

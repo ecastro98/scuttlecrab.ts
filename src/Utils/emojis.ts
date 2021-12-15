@@ -4,7 +4,7 @@ export enum Emojis {
   warning = '⚠',
 }
 
-export const ChampionEmojis: any = {
+export const ChampionEmojis: Record<string, string> = {
   Aatrox: '<:Aatrox:888534735498911844>',
   Ahri: '<:Ahri:888534778175950868>',
   Akali: '<:Akali:888534821104672778>',
@@ -164,7 +164,7 @@ export const ChampionEmojis: any = {
   Zyra: '<:Zyra:888555967594250290>',
 };
 
-export const SpellEmojis: any = {
+export const SpellEmojis: Record<number, string> = {
   1: '<:Cleanse:890119517617926174>',
   3: '<:Exhaust:890119602821038122>',
   4: '<:Flash:890119645909102592>',
@@ -184,7 +184,7 @@ export const SpellEmojis: any = {
   55: '<:Placeholder:890120033907396638>',
 };
 
-export const RankedEmojis: any = {
+export const RankedEmojis = {
   Challenger: '<:ChallengerLogo:917827241751248976>',
   Grandmaster: '<:GrandMasterLogo:917827242246144030>',
   Master: '<:MasterLogo:917827241730256906>',
@@ -194,4 +194,4 @@ export const RankedEmojis: any = {
   Silver: '<:SilverLogo:917827241541521479>',
   Bronze: '<:BronzeLogo:917827241566674974>',
   Iron: '<:IronLogo:917827241499562074>',
-};
+} as const;

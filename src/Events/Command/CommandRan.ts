@@ -32,15 +32,15 @@ export default {
       MarkupTimestampStyles.BOTH_LONG,
     );
 
-    const array: Array<string> = [
-      `\`🤖\` ${bold('Command Executed')}`,
+    const array = [
+      `${codestring('🤖')} ${bold('Command Executed')}`,
       '\u200B',
       `Command: ${cmd}.`,
       `Type: ${codestring('Prefixed')}.`,
       `Author: ${author}.`,
       `Guild: ${guild}.`,
       `Date: ${date}.`,
-    ];
+    ] as const;
 
     await channel.createMessage({
       content: array.join('\n'),

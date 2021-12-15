@@ -1,13 +1,13 @@
+import type { MemberOrUser } from 'detritus-client/lib/structures';
 import { ApplicationCommandOptionTypes } from 'detritus-client/lib/constants';
 import { InteractionContext } from 'detritus-client/lib/interaction';
-import { Member, User } from 'detritus-client/lib/structures';
 import { Embed } from 'detritus-client/lib/utils';
 import { codestring } from 'detritus-client/lib/utils/markup';
 import { BaseInteractionCommandOption } from '../../../Classes/BaseInteractionCommand';
 import { CommandTypes, EmbedColors } from '../../../Utils/constants';
 
 export interface CommandArgs {
-  user: Member | User;
+  user: MemberOrUser;
 }
 
 export const commandName = 'avatar';

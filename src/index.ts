@@ -11,7 +11,7 @@ import { RedisClient } from './Cache';
 const log = new Logger('🤖', {
   defaults: {
     timestamp: new Date().toLocaleString('en-US', {
-      timeZone: 'America/Mexico_City',
+      timeZone: 'America/Mexico_City', // 🌮
     }),
   },
 });

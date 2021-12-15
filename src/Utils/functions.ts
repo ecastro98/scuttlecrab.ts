@@ -1,3 +1,4 @@
+import type { MemberOrUser } from 'detritus-client/lib/structures';
 import { Context } from 'detritus-client/lib/command';
 import { InteractionContext } from 'detritus-client/lib/interaction';
 import { codestring } from 'detritus-client/lib/utils/markup';
@@ -5,7 +6,7 @@ import { QueueTypes, Role } from './constants';
 import { Queue } from './types';
 
 export function getAvatar(
-  user: any,
+  user: MemberOrUser,
   type: string = 'png',
   size: number = 512,
 ): string {
@@ -13,9 +14,7 @@ export function getAvatar(
     return getAvatar(user.user, type, size);
   } else {
     if (user.avatar !== null)
-      return `https://cdn.discordapp.com/avatars/${user.id as string}/${
-        user.avatar as string
-      }.${type}?size=${size}`;
+      return `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${type}?size=${size}`;
     return `https://cdn.discordapp.com/embed/avatars/${
       Number(user.discriminator) % 5
     }.png`;
@@ -28,7 +27,7 @@ export function fetchGuildMember(ctx: Context) {
     .slice(ctx.prefix!.length + ctx.command!.name.length)
     .split(' ');
 
-  if (!args[1]) return undefined;
+  if (!args[1]) return;
 
   const m =
     msg.mentions.first() ||
@@ -79,17 +78,22 @@ export function parseMessage(msg: string): Array<MessageFinding> | undefined {
       name = name.slice(1);
       exact = true;
     }
-    let path: any;
-    let member: any;
+    let path: string[];
+    let member: string;
+
     if (name.includes('/')) {
       path = name.split('/');
-      name = path.pop() as string;
+      name = path.pop()!;
     }
     if (name.includes('.')) {
       const [newName, newMember] = name.split('.');
       name = newName;
       member = newMember;
     }
+
+    path ??= [];
+    member ??= "";
+
     findings.push({ name, path, member, exact });
     ind = end;
   }
@@ -185,16 +189,16 @@ export function summonerIcon(patch: string, profileIconId: number) {
   return `http://ddragon.leagueoflegends.com/cdn/${patch}/img/profileicon/${profileIconId}.png`;
 }
 
-export function getRandomObjectKey(obj: any) {
+export function getRandomObjectKey(obj: Object) {
   const keys = Object.keys(obj);
   return keys[(keys.length * Math.random()) << 0];
 }
 
-export function getRandomArrayElement(arr: Array<any>) {
+export function getRandomArrayElement<T = any>(arr: Array<T>) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-export function arraysAreEquivalent(arr1: Array<any>, arr2: Array<any>) {
+export function arraysAreEquivalent<T = any>(arr1: Array<T>, arr2: Array<T>) {
   if (arr1 === undefined || arr2 === undefined) {
     return false;
   }
