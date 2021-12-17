@@ -58,7 +58,7 @@ export default class Eval extends BaseCommand {
         });
       }
 
-      let evaluated = eval(args.code);
+      let evaluated = await eval(args.code);
       if (evaluated instanceof Promise) {
         const m = await ctx.editOrReply({
           content: '⏱️ Evaluating the promise...',

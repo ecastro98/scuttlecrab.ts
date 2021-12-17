@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import fabricio from '@fabricio-191/ms';
 import { Logger } from '@dimensional-fun/logger';
 import { LolApiErrors, LolRegions, twoLolRegions } from '../Utils/constants';
@@ -10,6 +10,8 @@ import {
   queueTypes,
   CurrentGameInfo,
   RankedInfo,
+  RankedData,
+  TwoRegion,
 } from '../Utils/types';
 import { RedisClient } from '../Cache';
 
@@ -49,8 +51,8 @@ export class SummonerData {
   // This code is checking if the region is a valid one. If it isn't, then it will return undefined. Then, it checks if the value of `region` matches any of the keys in `twoLolRegions`. If so, then we get that key and use its value to find what region this user belongs to. Finally, we return that result as a string or undefined depending on whether there was an error or not.
   static twoRegion(region: string): string {
     region = region.toLowerCase();
-    const result: any = Object.values(twoLolRegions).find((v: any) =>
-      v.regions.includes(region),
+    const result: TwoRegion | undefined = Object.values(twoLolRegions).find(
+      (v) => v.regions.includes(region),
     );
     return result?.value!;
   }
@@ -68,7 +70,7 @@ export class SummonerData {
       }/summoner/v4/summoners/by-name/${encodeURIComponent(
         this.username,
       )}?api_key=${RiotToken}`;
-      const { data: basicData } = await axios.get(url);
+      const { data: basicData } = await axios.get<SummonerBasicData>(url);
 
       await RedisClient.set(
         `basicData:${this.username.toLowerCase()}_${this.region}`,
@@ -78,18 +80,18 @@ export class SummonerData {
         },
       );
       return basicData;
-    } catch (err: any) {
-      if (err?.response) {
-        const error = LolApiErrors[err?.response?.status];
+    } catch (err: unknown) {
+      if ((err as AxiosError)?.response) {
+        const error = LolApiErrors[(err as AxiosError)?.response!.status];
         if (error) {
           throw new Error(error);
         }
-        log.error(`ProfileBasicData: ${err?.message!}.`);
+        log.error(`ProfileBasicData: ${(err as Error)?.message!}.`);
         throw new Error(
           'An error occurred while trying to retrieve user data.',
         );
       }
-      log.error(`ProfileBasicData: ${err?.message!}.`);
+      log.error(`ProfileBasicData: ${(err as Error)?.message!}.`);
       throw new Error('An error occurred while trying to retrieve user data.');
     }
   }
@@ -114,18 +116,18 @@ export class SummonerData {
         },
       );
       return basicData;
-    } catch (err: any) {
-      if (err?.response) {
-        const error = LolApiErrors[err?.response?.status];
+    } catch (err: unknown) {
+      if ((err as AxiosError)?.response) {
+        const error = LolApiErrors[(err as AxiosError)?.response!.status];
         if (error) {
           throw new Error(error);
         }
-        log.error(`ProfileBasicDataBySummonerId: ${err?.message!}.`);
+        log.error(`ProfileBasicDataBySummonerId: ${(err as Error)?.message!}.`);
         throw new Error(
           'An error occurred while trying to retrieve user data.',
         );
       }
-      log.error(`ProfileBasicDataBySummonerId: ${err?.message!}.`);
+      log.error(`ProfileBasicDataBySummonerId: ${(err as Error)?.message!}.`);
       throw new Error('An error occurred while trying to retrieve user data.');
     }
   }
@@ -150,14 +152,14 @@ export class SummonerData {
 
     const patch = await this.getCurrentPatch();
     const response = await this.getChampions();
-    var champId: any;
+    var champId: string | null;
     const champions = Object.keys(response);
     champions.forEach((champ) => {
       if (response[champ].key == id) {
         champId = response[champ].id;
       }
     });
-
+    champId ??= null;
     const url_2 = `http://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion/${champId}.json`;
     const { data: response_2 } = await axios.get(url_2);
 
@@ -172,11 +174,22 @@ export class SummonerData {
   // This code is getting the current patch number from the Riot API. Then it's using axios to get a JSON file with all of the champions in that patch. It then uses lodash to find and return an object with data about a specific champion based on its name.
   async getChampionByName(
     name: ObjectChampion['name'],
-  ): Promise<ObjectChampion> {
+  ): Promise<ObjectChampion | null> {
+    const get = await RedisClient.get(`champion:${name}`);
+    if (get) return JSON.parse(get);
+
     const patch = await this.getCurrentPatch();
     const url = `http://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion/${name}.json`;
-    const { data } = await axios.get(url);
-    return data.data[String(name)];
+    const data = await axios.get(url).catch(() => null);
+
+    if (!data) return null;
+
+    await RedisClient.set(
+      `championByName:${name}`,
+      JSON.stringify(data!.data.data[name]),
+    );
+
+    return data!.data.data[name];
   }
 
   // This code is getting the match information for a specific game. It uses axios to make a request to the Riot API and then parses the response into JSON format. The code block uses RedisClient to store this data in Redis, so that we don't have to make another HTTP request every time we need information about a specific game. If there is already data stored in Redis, it will return that instead of making an HTTP request again.
@@ -220,18 +233,18 @@ export class SummonerData {
       );
 
       return mostPlayedChampionsArray;
-    } catch (err: any) {
-      if (err?.response) {
-        const error = LolApiErrors[err?.response?.status];
+    } catch (err: unknown) {
+      if ((err as AxiosError)?.response) {
+        const error = LolApiErrors[(err as AxiosError)?.response!.status];
         if (error) {
           throw new Error(error);
         }
-        log.error(`MostPlayedChampions: ${err?.message!}.`);
+        log.error(`MostPlayedChampions: ${(err as Error)?.message!}.`);
         throw new Error(
           'An error occurred while trying to retrieve user data.',
         );
       }
-      log.error(`MostPlayedChampions: ${err?.message!}.`);
+      log.error(`MostPlayedChampions: ${(err as Error)?.message!}.`);
       throw new Error('An error occurred while trying to retrieve user data.');
     }
   }
@@ -264,16 +277,17 @@ export class SummonerData {
     );
     if (get) return JSON.parse(get);
 
+    // refactorizar esto xd
     try {
       const urlRanked = `${this.baseURL}/league/v4/entries/by-summoner/${summonerId}?api_key=${RiotToken}`;
-      const { data: rankedData } = await axios.get(urlRanked);
-      const data: any = {};
+      const { data: rankedData } = await axios.get<RankedData[]>(urlRanked);
+      const data: Partial<RankedInfo> = {};
       data.solo = [];
       data.flex = [];
-      rankedData.forEach((item: any) => {
+      rankedData.forEach((item) => {
         if (item.queueType == 'RANKED_SOLO_5x5') {
           const { tier, rank, leaguePoints, wins, losses, queueType } = item;
-          data.solo.push({
+          data.solo?.push({
             tier,
             rank,
             leaguePoints,
@@ -283,7 +297,7 @@ export class SummonerData {
           });
         } else if (item.queueType == 'RANKED_FLEX_SR') {
           const { tier, rank, leaguePoints, wins, losses, queueType } = item;
-          data.flex.push({
+          data.flex?.push({
             tier,
             rank,
             leaguePoints,
@@ -301,18 +315,18 @@ export class SummonerData {
         },
       );
       return data;
-    } catch (err: any) {
-      if (err?.response) {
-        const error = LolApiErrors[err?.response?.status];
+    } catch (err: unknown) {
+      if ((err as AxiosError)?.response) {
+        const error = LolApiErrors[(err as AxiosError)?.response!.status];
         if (error) {
           throw new Error(error);
         }
-        log.error(`RankedInfo: ${err?.message!}.`);
+        log.error(`RankedInfo: ${(err as Error)?.message!}.`);
         throw new Error(
           'An error occurred while trying to retrieve user data.',
         );
       }
-      log.error(`RankedInfo: ${err?.message!}.`);
+      log.error(`RankedInfo: ${(err as Error)?.message!}.`);
       throw new Error('An error occurred while trying to retrieve user data.');
     }
   }
@@ -323,8 +337,9 @@ export class SummonerData {
 
     const urlQueues =
       'http://static.developer.riotgames.com/docs/lol/queues.json';
-    const { data } = await axios.get(urlQueues);
-    const queue = data.filter((q: any) => q.queueId == queueId);
+    // xd
+    const { data } = await axios.get<queueTypes[]>(urlQueues);
+    const queue = data.filter((q) => q.queueId == queueId);
 
     await RedisClient.set(`getQueueById:${queueId}`, JSON.stringify(queue[0]));
     return queue[0];
@@ -333,8 +348,32 @@ export class SummonerData {
   async getCurrentMatch(id: string): Promise<CurrentGameInfo> {
     try {
       const urlCurrentMatch = `${this.baseURL}/spectator/v4/active-games/by-summoner/${id}?api_key=${RiotToken}`;
-      const { data: match } = await axios.get(urlCurrentMatch);
-      const data: any = [];
+      const { data: match } = await axios.get<
+        CurrentGameInfo & {
+          bannedChampions: any;
+          gameStartTime: any;
+          participants: any[];
+          userTeam: {
+            summonerName: string;
+            championName: string;
+            spells: {
+              one: string;
+              two: string;
+            };
+          }[];
+          enemyTeam: {
+            summonerName: string;
+            championName: string;
+            spells: {
+              one: string;
+              two: string;
+            };
+          }[];
+        }
+      >(urlCurrentMatch);
+
+      const data: Partial<typeof match> = {};
+
       data.userTeam = [];
       data.enemyTeam = [];
       data.gameId = match.gameId;
@@ -370,19 +409,19 @@ export class SummonerData {
           });
         }
       }
-      return data;
-    } catch (err: any) {
-      if (err?.response) {
-        const error = LolApiErrors[err?.response?.status];
+      return data as any;
+    } catch (err: unknown) {
+      if ((err as AxiosError)?.response) {
+        const error = LolApiErrors[(err as AxiosError)?.response!.status];
         if (error) {
           throw new Error(error);
         }
-        log.error(`GetCurrentMatch: ${err?.message!}.`);
+        log.error(`GetCurrentMatch: ${(err as Error)?.message!}.`);
         throw new Error(
           'An error occurred while trying to retrieve user data.',
         );
       }
-      log.error(`GetCurrentMatch: ${err?.message!}.`);
+      log.error(`GetCurrentMatch: ${(err as Error)?.message!}.`);
       throw new Error('An error occurred while trying to retrieve user data.');
     }
   }
@@ -470,8 +509,8 @@ export class SummonerData {
       );
 
       return dataArray;
-    } catch (e: any) {
-      log.error(`LastPlayedMatch: ${e?.message!}.`);
+    } catch (e: unknown) {
+      log.error(`LastPlayedMatch: ${(e as Error)?.message!}.`);
       return null!;
     }
   }

@@ -19,6 +19,7 @@
     "detritus-client": "0.16.4-beta.6",
     "dotenv": "^10.0.0",
     "emoji-aware": "^3.0.5",
+    "erela.js": "^2.3.3",
     "fuzzysort": "^1.1.4",
     "html-entities": "^2.3.2",
     "i": "^0.3.7",

@@ -51,6 +51,7 @@ export enum CommandTypes {
   UTIL = 'Util',
   LOL = 'League of Legends',
   DOCS = 'Detritus Client',
+  MUSIC = 'Music',
 }
 
 export enum EmbedColors {
@@ -162,16 +163,12 @@ export const URegions = {
   [String('jp')]: 'jp',
 };
 
-interface makeUrl {
-  opgg: (region: string, username: string) => string;
-  ugg: (region: string, username: string) => string;
-}
-
-export const makeUrl: makeUrl = {
-  opgg: (region, username) => {
+// podria ser sin T | string
+export const makeUrl = {
+  opgg: (region: keyof typeof OPRegions | string, username: string) => {
     return `https://${region}.op.gg/summoner/userName=${username}`;
   },
-  ugg: (region, username) => {
+  ugg: (region: keyof typeof URegions | string, username: string) => {
     return `https://u.gg/lol/profile/${region}/${username}/overview`;
   },
 };

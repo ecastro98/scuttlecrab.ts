@@ -1,4 +1,4 @@
-import { Interaction, Structures, Utils } from 'detritus-client';
+import { Interaction, Utils } from 'detritus-client';
 import {
   ApplicationCommandOptionTypes,
   ApplicationCommandTypes,
@@ -6,7 +6,12 @@ import {
 } from 'detritus-client/lib/constants';
 import { InteractionContext } from 'detritus-client/lib/interaction';
 import { ComponentActionRow, ComponentButton } from 'detritus-client/lib/utils';
-import { bold, codeblock, codestring } from 'detritus-client/lib/utils/markup';
+import {
+  bold,
+  codeblock,
+  codestring,
+  underline,
+} from 'detritus-client/lib/utils/markup';
 import { DiscordPermissions, EmbedColors } from '../Utils/constants';
 import { Emojis } from '../Utils/emojis';
 const { Embed } = Utils;
@@ -82,8 +87,9 @@ export class BaseInteractionCommand<
     args: ParsedArgsFinished,
     error: any,
   ) {
+    console.log(error);
     const embed = new Embed()
-      .setTitle(`Command Error`)
+      .setTitle(underline('Command Error'))
       .setColor(EmbedColors.ERROR)
       .setDescription(codeblock(String(error), { language: 'js' }))
       .setFooter('Report it on the support server.');
@@ -104,7 +110,7 @@ export class BaseInteractionCommand<
         content: '<@!221399196480045056>,',
         embeds: [
           new Embed()
-            .setTitle(`Command Error`)
+            .setTitle(underline('Command Error'))
             .setColor(EmbedColors.ERROR)
             .setDescription(
               codeblock(String(error.stack.substring(0, 4000)), {
@@ -142,12 +148,12 @@ export class BaseInteractionCommand<
 
     const embed_no_user_permissions = new Embed()
       .setColor(EmbedColors.ERROR)
-      .setTitle('Missing Permissions')
+      .setTitle(underline('Missing Permissions'))
       .setDescription(
         `${Emojis.warning} You do not have the necessary permissions to execute the command.`,
       )
       .addField(
-        'Necessary Permissions',
+        underline('Necessary Permissions'),
         codeblock(permissions.map((x) => `${x}: ${Emojis.x}`).join('.\n')),
       )
       .setTimestamp(happened)
@@ -178,12 +184,12 @@ export class BaseInteractionCommand<
 
     const embed_no_client_permissions = new Embed()
       .setColor(EmbedColors.ERROR)
-      .setTitle('Missing Permissions')
+      .setTitle(underline('Missing Permissions'))
       .setDescription(
         `${Emojis.warning} I do not have the necessary permissions to execute the command.`,
       )
       .addField(
-        'Necessary Permissions',
+        underline('Necessary Permissions'),
         codeblock(permissions.map((x) => `${x}: ${Emojis.x}`).join('\n')),
       )
       .setTimestamp(happened)
@@ -203,7 +209,7 @@ export class BaseInteractionCommand<
   ) {
     const embed = new Embed()
       .setColor(EmbedColors.ERROR)
-      .setTitle(`Command Argument Error`);
+      .setTitle(underline('Command Argument Error'));
 
     const store: { [key: string]: string } = {};
 

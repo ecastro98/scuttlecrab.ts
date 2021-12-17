@@ -1,6 +1,6 @@
 import { InteractionContext } from 'detritus-client/lib/interaction';
 import { BaseInteractionCommandOption } from '../../../Classes/BaseInteractionCommand';
-import { CommandTypes, EmbedColors } from '../../../Utils/constants';
+import { CommandTypes } from '../../../Utils/constants';
 import { GatewayClientEvents } from 'detritus-client';
 import { parseMessage } from '../../../Utils/functions';
 import fetch from 'node-fetch';
@@ -13,6 +13,7 @@ import {
 } from '../../../Utils/contentFetch';
 import { ApplicationCommandOptionTypes } from 'detritus-client/lib/constants';
 import { Emojis } from '../../../Utils/emojis';
+import { bold, codestring, underline } from 'detritus-client/lib/utils/markup';
 
 export interface CommandArgs {
   query: string;
@@ -35,7 +36,7 @@ export class Docs extends BaseInteractionCommandOption {
           onAutoComplete: async (ctx) => {
             const choices: Array<{ name: string; value: string }> = [];
             let name = ctx.value;
-            let member: any;
+            let member: string | undefined;
             if (name.includes('.')) {
               const [newName, newMember] = name.split('.');
               name = newName;
@@ -110,15 +111,15 @@ async function findAndSend(
   isParsed?: boolean,
   customLimit?: number,
 ): Promise<void> {
-  const messages = new Array<any>();
+  const messages = new Array<string>();
   const parsed = isParsed ? [{ name: queryStr }] : parseMessage(queryStr);
   const links: Array<ExtraSearchData> = [];
   const otherPossibilities = [];
   if (parsed && parsed.length) {
     for (const query of parsed) {
       const item = findInData(query, DATA, {
-        highlight: '',
-        limit: customLimit || 3,
+        highlight: '**',
+        limit: customLimit || 10,
         threshold: query.exact ? -1 : -100,
       });
       if (
@@ -162,37 +163,36 @@ async function findAndSend(
       links
         .map(
           (link, index) =>
-            `**[${link.highlighted || link.obj.name}](${link.fullLink})**${
+            `[${link.highlighted || link.obj.name}](${link.fullLink})${
               link.obj.comment
-                ? `\n> ${(fullComments[index] || link.obj.comment).replace(
-                    /(\r\n|\n|\r)/gm,
-                    ', ',
-                  )}.`
+                ? ` ${codestring(
+                    (fullComments[index] || link.obj.comment).replace(
+                      /(\r\n|\n|\r)/gm,
+                      ', ',
+                    ),
+                  )}`
                 : ''
             }`,
         )
-        .join('\n'),
+        .join('\n') + '.',
     );
 
     if (otherPossibilities.length) {
       messages.push(
-        `\`Other results:\`\n${
+        `> ${codestring('Other results')}\n${
           otherPossibilities.length
             ? otherPossibilities
                 .map(
                   (link) =>
-                    `**[${link.highlighted || link.obj.name}](${
-                      link.fullLink
-                    })**${
+                    `[${link.highlighted || link.obj.name}](${link.fullLink})${
                       link.obj.comment
-                        ? `\n> ${link.obj.comment.replace(
-                            /(\r\n|\n|\r)/gm,
-                            ', ',
-                          )}.`
+                        ? ` ${codestring(
+                            link.obj.comment.replace(/(\r\n|\n|\r)/gm, ', '),
+                          )}`
                         : ''
                     }`,
                 )
-                .join('\n')
+                .join('\n') + '.'
             : 'None'
         }`,
       );

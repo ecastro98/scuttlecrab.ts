@@ -32,12 +32,6 @@ export class Current extends BaseInteractionCommandOption {
   }
 
   async run(ctx: InteractionContext) {
-    if (this.current.length > 0) {
-      return await ctx.editOrRespond({
-        embeds: [this.current[0]],
-      });
-    }
-
     await ctx.respond({
       type: InteractionCallbackTypes.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
     });
@@ -70,7 +64,6 @@ export class Current extends BaseInteractionCommandOption {
         'https://cdn.discordapp.com/attachments/915654347394777161/917981058396467221/120721_LOL1124Infographic_Image_v2.png',
       );
 
-    this.current.push(embed);
     return await ctx.editOrRespond({
       embeds: [embed],
     });

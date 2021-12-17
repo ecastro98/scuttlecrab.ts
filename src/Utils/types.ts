@@ -15,11 +15,16 @@ export type ObjectChampion = {
   name: string;
   title: string;
   blurb: string;
+  lore: string;
   info: InfoChampion;
   image: ImageChampion;
-  tags: TagsChampion;
+  // tags: Array<TagsChampion>;
+  tags: any;
   partype: string;
   stats: StatsChampion;
+  skins: Array<string>;
+  allytips: Array<string>;
+  enemytips: Array<string>;
 };
 
 export type StatsChampion = {
@@ -53,8 +58,12 @@ export type InfoChampion = {
 };
 
 export type TagsChampion = {
-  '0': string;
-  '1': string;
+  Mage: string;
+  Marksman: string;
+  Support: string;
+  Fighter: string;
+  Tank: string;
+  Assassin: string;
 };
 
 export type ImageChampion = {
@@ -81,6 +90,8 @@ export type rankedData = {
   losses: number;
   queueType: string;
 };
+
+export type RankedData = rankedData;
 
 export type queueTypes = {
   queueId: number;
@@ -130,4 +141,14 @@ export type Queue = {
 export type RankedInfo = {
   solo?: rankedData[];
   flex?: rankedData[];
+};
+
+export type TwoRegion = {
+  regions: string[];
+  value: string;
+};
+
+export type DataRanked = {
+  solo: [];
+  flex: [];
 };
