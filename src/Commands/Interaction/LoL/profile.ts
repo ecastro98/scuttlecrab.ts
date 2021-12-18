@@ -253,7 +253,7 @@ export class Profile extends BaseInteractionCommandOption {
         error.message === LolApiErrors[404]
       ) {
         return await ctx.editOrRespond({
-          content: `${Emojis.warning} ${error.message}`,
+          content: `${Emojis.WARNING} ${error.message}`,
         });
       } else {
         console.log(`Profile: ${error.stack}.`);

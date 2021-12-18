@@ -64,7 +64,7 @@ export default class TwEmoji extends BaseInteractionCommand {
 
     if (!regExp.test(args.emoji)) {
       return await ctx.editOrRespond({
-        content: `${Emojis.warning} The entered emoji is not Discord's own, it is a customized one.`,
+        content: `${Emojis.WARNING} The entered emoji is not Discord's own, it is a customized one.`,
       });
     }
 

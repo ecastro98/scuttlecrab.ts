@@ -1,7 +1,7 @@
 import type { MemberOrUser } from 'detritus-client/lib/structures';
 import { Context } from 'detritus-client/lib/command';
 import { InteractionContext } from 'detritus-client/lib/interaction';
-import { codestring } from 'detritus-client/lib/utils/markup';
+import { bold, codestring } from 'detritus-client/lib/utils/markup';
 import { QueueTypes, Role } from './constants';
 import { Queue } from './types';
 
@@ -92,7 +92,7 @@ export function parseMessage(msg: string): Array<MessageFinding> | undefined {
     }
 
     path ??= [];
-    member ??= "";
+    member ??= '';
 
     findings.push({ name, path, member, exact });
     ind = end;
@@ -240,7 +240,7 @@ export function getQueueById(id: number): Queue | null {
   return find ? find : null;
 }
 
-export function format(millis: number) {
+export function format(millis: number): string {
   var h = Math.floor(millis / 3600000),
     m = Math.floor(millis / 60000),
     s = ((millis % 60000) / 1000).toFixed(0);
@@ -252,8 +252,7 @@ export function format(millis: number) {
       (Number(s) < 10 ? '0' : '') +
       s +
       ' | ' +
-      Math.floor(millis / 1000) +
-      ' elapsed'
+      Math.floor(millis / 1000)
     );
   else
     return (
@@ -266,7 +265,66 @@ export function format(millis: number) {
       (Number(s) < 10 ? '0' : '') +
       s +
       ' | ' +
-      Math.floor(millis / 1000) +
-      ' elapse'
+      Math.floor(millis / 1000)
     );
+}
+
+export function createProgressBar(current: number, total: number, max: number) {
+  const percentage = current / total;
+  const percentageText = Math.round(percentage * 100);
+  const progress = Math.round(max * (current / total));
+  const remain = max - progress;
+  return `[${[
+    '▬'.repeat(progress),
+    '<a:CDLogo:921611820421242972>',
+    '▬'.repeat(remain),
+  ].join('')}] | ${bold(`${percentageText}%`)}.`;
+}
+
+export function removeDuplicates(arr: Array<any>) {
+  return arr.filter((elem, index, self) => index === self.indexOf(elem));
+}
+
+export function removeMarkdown(str: string) {
+  str = str.replace(/`/g, '\\`');
+  str = str.replace(/\*/g, '\\*');
+  str = str.replace(/\_/g, '\\_');
+  str = str.replace(/\|/, '\\|');
+  str = str.replace(/\[/g, '(');
+  str = str.replace(/\]/g, ')');
+  return str;
+}
+
+export function getRandomInt(min: number, max: number) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+export function getRandomString(length: number = 10) {
+  var result = '';
+  var characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+export function getRandomColorHex() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+export function isHexColor(color: string) {
+  return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(color);
+}
+
+export function apiImages(str: string) {
+  return `https://process.filestackapi.com/AhTgLagciQByzXpFGRI0Az/output=format:png/${str}`;
 }

@@ -1,7 +1,17 @@
 export enum Emojis {
-  x = '❌',
-  check = '✅',
-  warning = '⚠',
+  ERROR = '❌',
+  CHECK = '✅',
+  WARNING = '⚠',
+  LOADING = '⏱️',
+  NOTE = '🎵',
+  PLAYLIST = '📁',
+  PLAY = '▶',
+  PAUSE = '⏸',
+  STOP = '⏹',
+  SKIP = '⏭',
+  SHUFFLE = '🔀',
+  REPEAT = '🔁',
+  VOLUME = '🔉',
 }
 
 export const ChampionEmojis: Record<string, string> = {

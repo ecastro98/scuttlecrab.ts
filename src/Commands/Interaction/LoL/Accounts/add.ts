@@ -63,7 +63,7 @@ export class Add extends BaseInteractionCommandOption {
     const basic_data = await summonerData.profileBasicData().catch(() => null);
     if (!basic_data)
       return await ctx.editOrRespond(
-        `${Emojis.warning} That summoner couldn't be found, at least on that region.`,
+        `${Emojis.WARNING} That summoner couldn't be found, at least on that region.`,
       );
 
     const summonerModel = await SummonerModel.findOne({
@@ -73,13 +73,13 @@ export class Add extends BaseInteractionCommandOption {
     if (summonerModel) {
       if (summonerModel._id === user.id) {
         return await ctx.editOrRespond({
-          content: `${Emojis.warning} You already have that account linked.`,
+          content: `${Emojis.WARNING} You already have that account linked.`,
         });
       }
 
       if (summonerModel || summonerModel._id !== user.id) {
         return await ctx.editOrRespond({
-          content: `${Emojis.warning} That summoner is already linked to another account.`,
+          content: `${Emojis.WARNING} That summoner is already linked to another account.`,
         });
       }
     }
@@ -91,7 +91,7 @@ export class Add extends BaseInteractionCommandOption {
     });
 
     await ctx.editOrRespond({
-      content: `${Emojis.check} Added ${codestring(summoner)} to your profile.`,
+      content: `${Emojis.CHECK} Added ${codestring(summoner)} to your profile.`,
     });
   }
 }

@@ -98,7 +98,7 @@ export class Live extends BaseInteractionCommandOption {
 
       if (!live_match)
         return await ctx.editOrRespond({
-          content: `${Emojis.warning} ${bold(
+          content: `${Emojis.WARNING} ${bold(
             summoner,
           )} is not currently in a live game.`,
         });
@@ -213,7 +213,7 @@ export class Live extends BaseInteractionCommandOption {
         error.message === LolApiErrors[404]
       ) {
         return await ctx.editOrRespond({
-          content: `${Emojis.warning} ${error.message}`,
+          content: `${Emojis.WARNING} ${error.message}`,
         });
       } else {
         console.error(`Live: ${error.stack}.`);

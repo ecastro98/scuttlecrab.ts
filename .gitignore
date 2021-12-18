@@ -3,3 +3,5 @@ dist/
 .env
 .vscode
 package-lock.json
+logs/
+Lavalink.jar

@@ -91,7 +91,7 @@ export class Docs extends BaseInteractionCommandOption {
     const query = args.query;
     if (!query)
       return await ctx.editOrRespond({
-        content: `${Emojis.warning} Please provide a query.`,
+        content: `${Emojis.WARNING} Please provide a query.`,
       });
     const [name, link] = (query as string).split('~');
     if (!link) {
@@ -135,7 +135,7 @@ async function findAndSend(
     if (!links.length) {
       if (channel instanceof InteractionContext) {
         channel.editOrRespond({
-          content: `${Emojis.warning} I could not find anything about the argument you have entered.`,
+          content: `${Emojis.WARNING} I could not find anything about the argument you have entered.`,
         });
       } else {
         await channel.message.react('❌').catch((e) => {

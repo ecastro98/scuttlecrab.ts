@@ -59,7 +59,7 @@ export class FetchInvite extends BaseInteractionCommandOption {
         code = (regexp.exec(code) as RegExpExecArray)[1];
       } catch (error) {
         return await ctx.editOrRespond({
-          content: `${Emojis.warning} Invitation code is not valid.`,
+          content: `${Emojis.WARNING} Invitation code is not valid.`,
         });
       }
     }
@@ -71,7 +71,7 @@ export class FetchInvite extends BaseInteractionCommandOption {
     } catch (error: any) {
       if (error.response && error.response.statusCode === 404) {
         return await ctx.editOrRespond({
-          content: `${Emojis.warning} Invitation code is not valid.`,
+          content: `${Emojis.WARNING} Invitation code is not valid.`,
         });
       } else {
         return await ctx.editOrRespond({
@@ -159,7 +159,7 @@ export class FetchInvite extends BaseInteractionCommandOption {
       });
     } else {
       return await ctx.editOrRespond({
-        content: `${Emojis.warning} Invitation code is not valid.`,
+        content: `${Emojis.WARNING} Invitation code is not valid.`,
       });
     }
   }

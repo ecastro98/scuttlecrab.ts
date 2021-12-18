@@ -31,13 +31,12 @@ export class BaseInteractionCommand<
   ParsedArgsFinished = Interaction.ParsedArgs,
 > extends Interaction.InteractionCommand<ParsedArgsFinished> {
   declare metadata: CommandMetadata;
-  current: Array<any> = [];
 
   async onDmBlocked(ctx: Interaction.InteractionContext) {
     const command = codestring(ctx.name.split(' ')[1] || ctx.name);
     return await ctx
       .editOrRespond({
-        content: `${Emojis.warning} Command ${command} cannot be used in a DM.`,
+        content: `${Emojis.WARNING} Command ${command} cannot be used in a DM.`,
       })
       .catch(() => false);
   }
@@ -60,21 +59,21 @@ export class BaseInteractionCommand<
         case 'user':
           await ctx
             .editOrRespond({
-              content: `${Emojis.warning} ${user}, you are using the ${command} command too fast, wait ${timeRemaining} ${end}.`,
+              content: `${Emojis.WARNING} ${user}, you are using the ${command} command too fast, wait ${timeRemaining} ${end}.`,
             })
             .catch(() => false);
           break;
         case 'guild':
           await ctx
             .editOrRespond({
-              content: `${Emojis.warning} This guild is using the ${command} command too fast, wait ${timeRemaining} ${end}.`,
+              content: `${Emojis.WARNING} This guild is using the ${command} command too fast, wait ${timeRemaining} ${end}.`,
             })
             .catch(() => false);
           break;
         case 'channel':
           await ctx
             .editOrRespond({
-              content: `${Emojis.warning} This channel is using the ${command} command too fast, wait ${timeRemaining} ${end}.`,
+              content: `${Emojis.WARNING} This channel is using the ${command} command too fast, wait ${timeRemaining} ${end}.`,
             })
             .catch(() => false);
           break;
@@ -150,11 +149,11 @@ export class BaseInteractionCommand<
       .setColor(EmbedColors.ERROR)
       .setTitle(underline('Missing Permissions'))
       .setDescription(
-        `${Emojis.warning} You do not have the necessary permissions to execute the command.`,
+        `${Emojis.WARNING} You do not have the necessary permissions to execute the command.`,
       )
       .addField(
         underline('Necessary Permissions'),
-        codeblock(permissions.map((x) => `${x}: ${Emojis.x}`).join('.\n')),
+        codeblock(permissions.map((x) => `${x}: ${Emojis.ERROR}`).join('.\n')),
       )
       .setTimestamp(happened)
       .setFooter(`${ctx.name.split(' ')[1] || ctx.name} command`);
@@ -186,11 +185,11 @@ export class BaseInteractionCommand<
       .setColor(EmbedColors.ERROR)
       .setTitle(underline('Missing Permissions'))
       .setDescription(
-        `${Emojis.warning} I do not have the necessary permissions to execute the command.`,
+        `${Emojis.WARNING} I do not have the necessary permissions to execute the command.`,
       )
       .addField(
         underline('Necessary Permissions'),
-        codeblock(permissions.map((x) => `${x}: ${Emojis.x}`).join('\n')),
+        codeblock(permissions.map((x) => `${x}: ${Emojis.ERROR}`).join('\n')),
       )
       .setTimestamp(happened)
       .setFooter(`${ctx.name} command`);
@@ -218,10 +217,10 @@ export class BaseInteractionCommand<
       const message = errors[key].message;
       if (message in store) {
         description.push(
-          `${Emojis.warning} **${key}**: Same error as **${store[message]}**.`,
+          `${Emojis.WARNING} **${key}**: Same error as **${store[message]}**.`,
         );
       } else {
-        description.push(`${Emojis.warning} **${key}**: ${message}.`);
+        description.push(`${Emojis.WARNING} **${key}**: ${message}.`);
       }
       store[message] = key;
     }
@@ -239,7 +238,6 @@ export class BaseInteractionCommandOption<
   ParsedArgsFinished = Interaction.ParsedArgs,
 > extends Interaction.InteractionCommandOption<ParsedArgsFinished> {
   type = ApplicationCommandOptionTypes.SUB_COMMAND;
-  current: Array<any> = [];
 
   async onCancelRun(
     ctx: Interaction.InteractionContext,
@@ -247,7 +245,7 @@ export class BaseInteractionCommandOption<
   ) {
     const command = codestring(ctx.name.split(' ')[1] || ctx.name);
     return await ctx.editOrRespond({
-      content: `⚠ Slash Command \`${command}\` error strangely, give me a report.`,
+      content: `⚠ Slash Command ${command} error strangely, give me a report.`,
       flags: MessageFlags.EPHEMERAL,
     });
   }

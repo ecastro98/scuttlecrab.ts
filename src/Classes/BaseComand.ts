@@ -38,7 +38,7 @@ export default class BaseCommand<
             .setColor(EmbedColors.ERROR)
             .setTitle('Disable Command')
             .setDescription(
-              `${Emojis.warning} The ${codestring(
+              `${Emojis.WARNING} The ${codestring(
                 ctx.command!.name,
               )} command is disabled.`,
             )
@@ -65,7 +65,7 @@ export default class BaseCommand<
     const command = codestring(ctx.command!.name);
     return await ctx
       .editOrReply({
-        content: `${Emojis.warning} Command ${command} cannot be used in a DM.`,
+        content: `${Emojis.WARNING} Command ${command} cannot be used in a DM.`,
       })
       .catch(() => false);
   }
@@ -89,21 +89,21 @@ export default class BaseCommand<
           case 'user':
             await ctx
               .editOrReply({
-                content: `${Emojis.warning} ${user}, you are using the ${command} command too fast, wait ${timeRemaining} ${end}.`,
+                content: `${Emojis.WARNING} ${user}, you are using the ${command} command too fast, wait ${timeRemaining} ${end}.`,
               })
               .catch(() => false);
             break;
           case 'guild':
             await ctx
               .editOrReply({
-                content: `${Emojis.warning} This guild is using the ${command} command too fast, wait ${timeRemaining} ${end}.`,
+                content: `${Emojis.WARNING} This guild is using the ${command} command too fast, wait ${timeRemaining} ${end}.`,
               })
               .catch(() => false);
             break;
           case 'channel':
             await ctx
               .editOrReply({
-                content: `${Emojis.warning} This channel is using the ${command} command too fast, wait ${timeRemaining} ${end}.`,
+                content: `${Emojis.WARNING} This channel is using the ${command} command too fast, wait ${timeRemaining} ${end}.`,
               })
               .catch(() => false);
             break;
@@ -174,11 +174,11 @@ export default class BaseCommand<
       .setColor(EmbedColors.ERROR)
       .setTitle('Missing Permissions')
       .setDescription(
-        `${Emojis.warning} You do not have the necessary permissions to execute the command.`,
+        `${Emojis.WARNING} You do not have the necessary permissions to execute the command.`,
       )
       .addField(
         'Necessary Permissions',
-        codeblock(permissions.map((x) => `${x}: ${Emojis.x}`).join('.\n')),
+        codeblock(permissions.map((x) => `${x}: ${Emojis.ERROR}`).join('.\n')),
       )
       .setTimestamp(happened)
       .setFooter(`${ctx.command!.name} command`);
@@ -207,11 +207,11 @@ export default class BaseCommand<
       .setColor(EmbedColors.ERROR)
       .setTitle('Missing Permissions')
       .setDescription(
-        `${Emojis.warning} I do not have the necessary permissions to execute the command.`,
+        `${Emojis.WARNING} I do not have the necessary permissions to execute the command.`,
       )
       .addField(
         'Necessary Permissions',
-        codeblock(permissions.map((x) => `${x}: ${Emojis.x}`).join('\n')),
+        codeblock(permissions.map((x) => `${x}: ${Emojis.ERROR}`).join('\n')),
       )
       .setTimestamp(happened)
       .setFooter(`${ctx.command!.name} command`);
@@ -239,10 +239,10 @@ export default class BaseCommand<
       const message = errors[key].message;
       if (message in store) {
         description.push(
-          `${Emojis.warning} **${key}**: Same error as **${store[message]}**.`,
+          `${Emojis.WARNING} **${key}**: Same error as **${store[message]}**.`,
         );
       } else {
-        description.push(`${Emojis.warning} **${key}**: ${message}.`);
+        description.push(`${Emojis.WARNING} **${key}**: ${message}.`);
       }
       store[message] = key;
     }

@@ -5,7 +5,7 @@ import { FetchInvite } from './fetch-invite';
 
 export default class MiscGroupCommand extends BaseSlashCommand {
   name = 'misc';
-  description = 'xd';
+  description = 'Other commands';
 
   constructor() {
     super({

@@ -35,6 +35,10 @@ export default class Help extends BaseInteractionCommand {
               value: CommandTypes.LOL,
             },
             {
+              name: CommandTypes.MUSIC,
+              value: CommandTypes.MUSIC,
+            },
+            {
               name: CommandTypes.MISC,
               value: CommandTypes.MISC,
             },
@@ -74,9 +78,28 @@ export default class Help extends BaseInteractionCommand {
             .setColor(EmbedColors.DEFAULT)
             .setDescription(lol_cmds.join('\n'))
             .addField(underline('Usage'), codeblock('/lol <command> [options]'))
-            .setFooter('Do not include < > or [ ] when using commands.');
+            .setFooter('You must not include < > or [ ] when using the commands.');
           await ctx.editOrRespond({
             embeds: [lol_embed],
+          });
+          break;
+
+        case CommandTypes.MUSIC:
+          const music_cmds = ctx?.interactionCommandClient?.commands
+            ?.filter((x) => x.name === 'music')[0]
+            ?.options!.map((x) => `${bold(x.name)}: ${x.description}`);
+
+          const music_embed = new Embed()
+            .setTitle(underline('Music Commands'))
+            .setColor(EmbedColors.DEFAULT)
+            .setDescription(music_cmds.join('\n'))
+            .addField(
+              underline('Usage'),
+              codeblock('/music <command> [options]'),
+            )
+            .setFooter('You must not include < > or [ ] when using the commands.');
+          await ctx.editOrRespond({
+            embeds: [music_embed],
           });
           break;
 
@@ -93,7 +116,7 @@ export default class Help extends BaseInteractionCommand {
               underline('Usage'),
               codeblock('/detritus <command> [options]'),
             )
-            .setFooter('Do not include < > or [ ] when using commands.');
+            .setFooter('You must not include < > or [ ] when using the commands.');
           await ctx.editOrRespond({
             embeds: [docs_embed],
           });
@@ -112,7 +135,7 @@ export default class Help extends BaseInteractionCommand {
               underline('Usage'),
               codeblock('/misc <command> [options]'),
             )
-            .setFooter('Do not include < > or [ ] when using commands.');
+            .setFooter('You must not include < > or [ ] when using the commands.');
           await ctx.editOrRespond({
             embeds: [misc_embed],
           });
@@ -131,7 +154,7 @@ export default class Help extends BaseInteractionCommand {
             .setColor(EmbedColors.DEFAULT)
             .setDescription(uncategorized_cmds.join('\n'))
             .addField(underline('Usage'), codeblock('/<command> [options]'))
-            .setFooter('Do not include < > or [ ] when using commands.');
+            .setFooter('You must not include < > or [ ] when using the commands.');
           await ctx.editOrRespond({
             embeds: [uncategorized_embed],
           });

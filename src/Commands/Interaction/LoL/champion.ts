@@ -88,7 +88,7 @@ export class Champion extends BaseInteractionCommandOption {
 
     if (!champion_data)
       return await ctx.editOrRespond({
-        content: `${Emojis.warning} I couldn't find that champion.`,
+        content: `${Emojis.WARNING} I couldn't find that champion.`,
       });
 
     if (champion_data.lore.length > 4096)
