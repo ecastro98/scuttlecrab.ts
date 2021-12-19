@@ -5,6 +5,7 @@ import { Live } from './live';
 import { Add } from './Accounts/add';
 import { Champion } from './champion';
 import { Remove } from './Accounts/remove';
+import { Build } from './build';
 
 export default class LoLGroupCommand extends BaseSlashCommand {
   description = 'A group of League of Legends commands.';
@@ -19,6 +20,7 @@ export default class LoLGroupCommand extends BaseSlashCommand {
         new Add(),
         new Remove(),
         new Champion(),
+        new Build()
       ],
     });
   }

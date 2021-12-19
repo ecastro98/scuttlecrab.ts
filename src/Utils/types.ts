@@ -152,3 +152,11 @@ export type DataRanked = {
   solo: [];
   flex: [];
 };
+
+export type Build = {
+  runesPrimary: string[];
+  runesSecondary: string[];
+  runesShard: string[];
+  items: string[];
+  spells: string[];
+};

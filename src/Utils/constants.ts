@@ -181,6 +181,21 @@ export enum Role {
   JNG = 'JNG',
 }
 
+export enum Spells {
+  HEAL = 'Heal',
+  GHOST = 'Ghost',
+  BARRIER = 'Barrier',
+  EXHAUST = 'Exhaust',
+  MARK = 'Mark',
+  DASH = 'Dash',
+  CLARITY = 'Clarity',
+  FLASH = 'Flash',
+  TELEPORT = 'Teleport',
+  SMITE = 'Smite',
+  CLEANSE = 'Cleanse',
+  IGNITE = 'Ignite',
+}
+
 export enum Modifier {
   CAREFUL = 'CAREFUL',
   CARELESS = 'CARELESS',

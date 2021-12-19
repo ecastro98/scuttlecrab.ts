@@ -29,6 +29,7 @@ import {
   getQueueById,
   summonerIcon,
 } from '../../../Utils/functions';
+import SummonerModel from '../../../Database/src/Models/summoner';
 
 export interface CommandArgs {
   region: string;
@@ -57,16 +58,18 @@ export class Live extends BaseInteractionCommandOption {
       options: [
         {
           name: 'region',
-          required: true,
+          required: false,
           type: ApplicationCommandOptionTypes.STRING,
           description: 'Summoner region to search.',
           choices: ChoicesRegion,
+          default: null,
         },
         {
           name: 'summoner',
-          required: true,
+          required: false,
           type: ApplicationCommandOptionTypes.STRING,
           description: 'Summoner to search.',
+          default: null,
         },
       ],
       ratelimits: [
@@ -79,8 +82,38 @@ export class Live extends BaseInteractionCommandOption {
   }
 
   async run(ctx: InteractionContext, args: CommandArgs) {
+    let region = args.region;
+    let summoner = args.summoner;
+
     try {
-      const { region, summoner } = args;
+      if (!region && !summoner) {
+        const summonerModel = await SummonerModel.findOne({
+          _id: ctx.user.id,
+        });
+
+        if (!summonerModel) {
+          return ctx.editOrRespond({
+            content: `${Emojis.WARNING} You do not yet have an account registered to use the no-argument command.`,
+          });
+        }
+
+        if (summonerModel) {
+          region = summonerModel.region;
+          summoner = summonerModel.summoner;
+        }
+      }
+
+      if (!region) {
+        return await ctx.editOrRespond({
+          content: `${Emojis.WARNING} Please specify a summoner region.`,
+        });
+      }
+
+      if (!summoner) {
+        return await ctx.editOrRespond({
+          content: `${Emojis.WARNING} Please specify a summoner name.`,
+        });
+      }
 
       const summoner_data = new SummonerData(region, summoner);
 
@@ -207,10 +240,18 @@ export class Live extends BaseInteractionCommandOption {
         });
       }
     } catch (error: any) {
+      if (error.message === LolApiErrors[404]) {
+        return await ctx.editOrRespond({
+          content: `${
+            Emojis.WARNING
+          } That summoner couldn't be found, at least on that region: ${codestring(
+            summoner,
+          )} (${codestring(region.toUpperCase())}).`,
+        });
+      }
       if (
         error.message === LolApiErrors[400] ||
-        error.message === LolApiErrors[401] ||
-        error.message === LolApiErrors[404]
+        error.message === LolApiErrors[401]
       ) {
         return await ctx.editOrRespond({
           content: `${Emojis.WARNING} ${error.message}`,

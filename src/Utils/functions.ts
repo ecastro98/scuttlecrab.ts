@@ -3,7 +3,10 @@ import { Context } from 'detritus-client/lib/command';
 import { InteractionContext } from 'detritus-client/lib/interaction';
 import { bold, codestring } from 'detritus-client/lib/utils/markup';
 import { QueueTypes, Role } from './constants';
-import { Queue } from './types';
+import { Build, Queue } from './types';
+import axios from 'axios';
+import cheerio from 'cheerio';
+import { RedisClient } from '../Cache';
 
 export function getAvatar(
   user: MemberOrUser,
@@ -335,4 +338,96 @@ export function uuidv4(): string {
       v = c == 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
+}
+
+const Spells = [
+  'Heal',
+  'Ghost',
+  'Barrier',
+  'Exhaust',
+  'Mark',
+  'Dash',
+  'Clarity',
+  'Flash',
+  'Teleport',
+  'Smite',
+  'Cleanse',
+  'Ignite',
+];
+
+const lanes: any = {
+  top: 'top',
+  mid: 'middle',
+  jungle: 'jungle',
+  adc: 'adc',
+  support: 'support',
+  '': '',
+};
+
+export async function getBuildsAndRunes(
+  champion: string,
+  role: string,
+): Promise<Build[] | undefined> {
+  try {
+    const get = await RedisClient.get(
+      `champBuild:${champion.toLowerCase()}_${role.toLowerCase()}`,
+    );
+    if (get) {
+      return JSON.parse(get);
+    }
+
+    const ArrayData: Build[] = new Array();
+    // if (!Object.keys(lanes).includes(role)) return;
+    const link = `https://www.leagueofgraphs.com/champions/builds/${champion.toLowerCase()}/${role}`;
+    const resNew = await axios.get(link);
+    const a = cheerio.load(resNew.data);
+
+    const runesPrimary = a('img', 'div[style=""]')
+      .toArray()
+      .map((rune) => a(rune).attr().alt)
+      .slice(0, 4);
+
+    const runesSecondary = a('img', 'div[style=""]')
+      .toArray()
+      .map((rune) => a(rune).attr().alt)
+      .slice(4, 6);
+
+    const runesShard = a('img', 'div[style=""]')
+      .toArray()
+      .map((rune) => a(rune).attr().alt)
+      .slice(6, 9);
+
+    const items = [
+      ...new Set(
+        a('img[width="48"]', 'div.championSpell')
+          .toArray()
+          .map((item, index) =>
+            index > 5 && index < 13 ? a(item).attr().alt : '',
+          )
+          .filter((item) => !!item),
+      ),
+    ];
+
+    const spells = a('img[width="48"]', 'div.championSpell')
+      .toArray()
+      .map((spell) => a(spell).attr().alt)
+      .filter((spell) => Spells.includes(spell));
+
+    ArrayData.push({
+      runesPrimary: runesPrimary,
+      runesSecondary: runesSecondary,
+      runesShard: runesShard,
+      items: items,
+      spells: spells,
+    });
+
+    await RedisClient.set(
+      `champBuild:${champion.toLowerCase()}_${role.toLowerCase()}`,
+      JSON.stringify(ArrayData),
+    );
+
+    return ArrayData;
+  } catch (error) {
+    console.log((error as Error).message);
+  }
 }

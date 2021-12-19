@@ -13,7 +13,7 @@ export const ShardClientConfig = {
       expire: 5 * 60000,
     },
     voiceStates: true,
-    emojis: true,
+    emojis: false,
     interactions: false,
     notes: false,
     presences: false,
