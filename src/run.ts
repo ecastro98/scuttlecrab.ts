@@ -10,6 +10,11 @@ import { Logger } from '@dimensional-fun/logger';
 import { Manager } from 'erela.js';
 import { RedisClient } from './Cache';
 import { CommandClientConfig, ShardClientConfig } from './Config';
+import { Emojis } from './Utils/emojis';
+import { codestring } from 'detritus-client/lib/utils/markup';
+import { removeMarkdown } from './Utils/functions';
+import { User } from 'detritus-client/lib/structures';
+import { EmbedColors } from './Utils/constants';
 const log = new Logger('🤖', {
   defaults: {
     timestamp: new Date().toLocaleString('en-US', {
@@ -48,7 +53,75 @@ export const ScuttleMusicManager = new Manager({
   send(_, payload) {
     ScuttleClient.gateway.send(payload.op, payload.d);
   },
-});
+})
+  .on('trackStart', async (player, track) => {
+    const channel = ScuttleClient.channels.get(player.textChannel!);
+    if (!channel) return;
+
+    if (channel) {
+      await channel.createMessage({
+        embeds: [
+          {
+            description: `${Emojis.PLAY} Now playing [${codestring(
+              removeMarkdown(track.title),
+            )}](${track.uri}), requested by ${codestring(
+              (track.requester as User).tag,
+            )}.`,
+            color: EmbedColors.DEFAULT,
+          },
+        ],
+      });
+    }
+  })
+  .on('trackEnd', async (player, track) => {
+    const channel = ScuttleClient.channels.get(player.textChannel!);
+    if (!channel) return;
+
+    if (channel) {
+      await channel
+        .createMessage({
+          embeds: [
+            {
+              description: `${Emojis.END} [${codestring(
+                removeMarkdown(track.title),
+              )}](${track.uri}) requested by ${codestring(
+                (track.requester as User).tag,
+              )} has ended.`,
+              color: EmbedColors.DEFAULT,
+            },
+          ],
+        })
+        .then((msg) => {
+          setTimeout(async () => {
+            await msg.delete().catch(() => null);
+          }, 10000);
+        })
+        .catch(() => null);
+    }
+  })
+  .on('queueEnd', async (player, track) => {
+    const channel = ScuttleClient.channels.get(player.textChannel!);
+    if (player) player.destroy();
+    if (!channel) return;
+
+    if (channel) {
+      await channel
+        .createMessage({
+          embeds: [
+            {
+              description: `${Emojis.END} The queue has ended, thanks for listening.`,
+              color: EmbedColors.DEFAULT,
+            },
+          ],
+        })
+        .then((msg) => {
+          setTimeout(async () => {
+            await msg.delete().catch(() => null);
+          }, 20000);
+        })
+        .catch(() => null);
+    }
+  });
 
 async function runEvents() {
   try {

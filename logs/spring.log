@@ -1,179 +1,60 @@
-2021-12-18 00:15:13.129  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:59524 -- CloseStatus[code=1006, reason=]
-2021-12-18 00:15:13.132  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 00:15:52.963  INFO 2295363 --- [XNIO-1 task-5] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:59814
-2021-12-18 00:15:52.966  INFO 2295363 --- [XNIO-1 task-5] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 00:17:25.071  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"volume","guildId":"684551832793776128","volume":100}
-2021-12-18 00:17:25.076  INFO 2295363 --- [XNIO-1 task-6] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "ytsearch:I'm so sorry imagine dragons"
-2021-12-18 00:17:25.119  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"3ff5ebc5b06ff0d89aa3dc304425b7ca","op":"voiceUpdate","guildId":"684551832793776128","event":{"token":"0b1edfa6e07ffdb5","guild_id":"684551832793776128","endpoint":"atlanta1948.discord.media:443"}}
-2021-12-18 00:17:25.636  INFO 2295363 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: I'm so sorry imagine dragons
-2021-12-18 00:17:25.841  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"play","guildId":"684551832793776128","track":"QAAAdgIADknigJltIFNvIFNvcnJ5AA5JbWFnaW5lRHJhZ29ucwAAAAAAA4ZYAAswSGdKd3J3RUVLUQABACtodHRwczovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PTBIZ0p3cndFRUtRAAd5b3V0dWJlAAAAAAAAAAA="}
-2021-12-18 00:17:48.584  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"pause","guildId":"684551832793776128","pause":true}
-2021-12-18 00:17:48.585  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"destroy","guildId":"684551832793776128"}
-2021-12-18 02:48:31.047  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:59814 -- CloseStatus[code=1006, reason=]
-2021-12-18 02:48:31.048  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 02:48:52.055  INFO 2295363 --- [XNIO-1 task-8] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:60972
-2021-12-18 02:48:52.059  INFO 2295363 --- [XNIO-1 task-8] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 02:50:07.257  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"volume","guildId":"684551832793776128","volume":100}
-2021-12-18 02:50:07.262  INFO 2295363 --- [XNIO-1 task-9] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "ytsearch:I'm so sorry Imagine Dragons"
-2021-12-18 02:50:07.339  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"6c192facbf4bcf03f899812dfe92489f","op":"voiceUpdate","guildId":"684551832793776128","event":{"token":"69aac8872ec479f6","guild_id":"684551832793776128","endpoint":"us-south3797.discord.media:443"}}
-2021-12-18 02:50:07.935  INFO 2295363 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: I'm so sorry Imagine Dragons
-2021-12-18 02:50:08.574  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"play","guildId":"684551832793776128","track":"QAAAdgIADknigJltIFNvIFNvcnJ5AA5JbWFnaW5lRHJhZ29ucwAAAAAAA4ZYAAswSGdKd3J3RUVLUQABACtodHRwczovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PTBIZ0p3cndFRUtRAAd5b3V0dWJlAAAAAAAAAAA="}
-2021-12-18 02:54:09.643  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:60972 -- CloseStatus[code=1006, reason=]
-2021-12-18 02:54:09.644  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 02:54:23.043  INFO 2295363 --- [XNIO-1 task-11] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:32830
-2021-12-18 02:54:23.046  INFO 2295363 --- [XNIO-1 task-11] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 03:41:36.788  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:32830 -- CloseStatus[code=1006, reason=]
-2021-12-18 03:41:36.788  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 03:41:52.466  INFO 2295363 --- [XNIO-1 task-12] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:33120
-2021-12-18 03:41:52.470  INFO 2295363 --- [XNIO-1 task-12] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 03:41:53.343  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:33120 -- CloseStatus[code=1006, reason=]
-2021-12-18 03:41:53.343  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 03:42:08.431  INFO 2295363 --- [XNIO-1 task-13] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:33150
-2021-12-18 03:42:08.434  INFO 2295363 --- [XNIO-1 task-13] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 03:42:33.013  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"volume","guildId":"915654347394777158","volume":100}
-2021-12-18 03:42:33.018  INFO 2295363 --- [XNIO-1 task-14] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "ytsearch:I'm so sorry Imagine Dragons"
-2021-12-18 03:42:33.066  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"07cfeed767d74b7ca50806a8a2ae270f","op":"voiceUpdate","guildId":"915654347394777158","event":{"token":"5ba9e3b584619c37","guild_id":"915654347394777158","endpoint":"us-south9304.discord.media:443"}}
-2021-12-18 03:42:33.613  INFO 2295363 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: I'm so sorry Imagine Dragons
-2021-12-18 03:42:33.741  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"play","guildId":"915654347394777158","track":"QAAAdgIADknigJltIFNvIFNvcnJ5AA5JbWFnaW5lRHJhZ29ucwAAAAAAA4ZYAAswSGdKd3J3RUVLUQABACtodHRwczovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PTBIZ0p3cndFRUtRAAd5b3V0dWJlAAAAAAAAAAA="}
-2021-12-18 03:58:08.004  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:33150 -- CloseStatus[code=1006, reason=]
-2021-12-18 03:58:08.005  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 03:58:33.988  INFO 2295363 --- [XNIO-1 task-16] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:33840
-2021-12-18 03:58:33.992  INFO 2295363 --- [XNIO-1 task-16] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 03:59:19.260  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:33840 -- CloseStatus[code=1006, reason=]
-2021-12-18 03:59:19.260  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 04:00:40.736  INFO 2295363 --- [XNIO-1 task-1] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:33908
-2021-12-18 04:00:40.738  INFO 2295363 --- [XNIO-1 task-1] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 04:03:12.511  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:33908 -- CloseStatus[code=1006, reason=]
-2021-12-18 04:03:12.512  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 04:03:25.712  INFO 2295363 --- [XNIO-1 task-2] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:33978
-2021-12-18 04:03:25.715  INFO 2295363 --- [XNIO-1 task-2] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 04:03:30.953  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"volume","guildId":"915654347394777158","volume":100}
-2021-12-18 04:03:30.959  INFO 2295363 --- [XNIO-1 task-3] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "https://www.youtube.com/watch?v=0HgJwrwEEKQ"
-2021-12-18 04:03:31.105  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"5f4eb790876ac3439692d78c08509d1f","op":"voiceUpdate","guildId":"915654347394777158","event":{"token":"2c39ef91fc6c9ab8","guild_id":"915654347394777158","endpoint":"us-south9304.discord.media:443"}}
-2021-12-18 04:03:31.113  INFO 2295363 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track I’m So Sorry
-2021-12-18 04:03:31.261  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"play","guildId":"915654347394777158","track":"QAAAfwIADknigJltIFNvIFNvcnJ5ABdJbWFnaW5lIERyYWdvbnMgLSBUb3BpYwAAAAAAA4JwAAswSGdKd3J3RUVLUQABACtodHRwczovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PTBIZ0p3cndFRUtRAAd5b3V0dWJlAAAAAAAAAAA="}
-2021-12-18 04:04:25.889  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:33978 -- CloseStatus[code=1006, reason=]
-2021-12-18 04:04:25.889  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 1 playing players.
-2021-12-18 04:04:39.823  INFO 2295363 --- [XNIO-1 task-5] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:34038
-2021-12-18 04:04:39.826  INFO 2295363 --- [XNIO-1 task-5] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 04:04:43.270  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"volume","guildId":"915654347394777158","volume":100}
-2021-12-18 04:04:43.275  INFO 2295363 --- [XNIO-1 task-6] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "https://www.youtube.com/watch?v=0HgJwrwEEKQ"
-2021-12-18 04:04:43.326  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"e34898056da0812d38e3b74d9e77248e","op":"voiceUpdate","guildId":"915654347394777158","event":{"token":"517e5523240b07ab","guild_id":"915654347394777158","endpoint":"us-south9304.discord.media:443"}}
-2021-12-18 04:04:43.363  INFO 2295363 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track I’m So Sorry
-2021-12-18 04:04:43.462  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"play","guildId":"915654347394777158","track":"QAAAfwIADknigJltIFNvIFNvcnJ5ABdJbWFnaW5lIERyYWdvbnMgLSBUb3BpYwAAAAAAA4JwAAswSGdKd3J3RUVLUQABACtodHRwczovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PTBIZ0p3cndFRUtRAAd5b3V0dWJlAAAAAAAAAAA="}
-2021-12-18 04:05:47.041  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"pause","guildId":"915654347394777158","pause":true}
-2021-12-18 04:05:47.042  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"destroy","guildId":"915654347394777158"}
-2021-12-18 04:05:51.054  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:34038 -- CloseStatus[code=1006, reason=]
-2021-12-18 04:05:51.055  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 04:12:11.139  INFO 2295363 --- [XNIO-1 task-8] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:34180
-2021-12-18 04:12:11.142  INFO 2295363 --- [XNIO-1 task-8] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 04:12:12.309  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"volume","guildId":"915654347394777158","volume":100}
-2021-12-18 04:12:12.314  INFO 2295363 --- [XNIO-1 task-9] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "https://www.youtube.com/watch?v=0HgJwrwEEKQ"
-2021-12-18 04:12:12.409  INFO 2295363 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track I’m So Sorry
-2021-12-18 04:12:12.462  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"a8626ec51bd85633bf203d0d3e5aeaab","op":"voiceUpdate","guildId":"915654347394777158","event":{"token":"b292effe242d6077","guild_id":"915654347394777158","endpoint":"us-south9304.discord.media:443"}}
-2021-12-18 04:12:12.531  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"play","guildId":"915654347394777158","track":"QAAAfwIADknigJltIFNvIFNvcnJ5ABdJbWFnaW5lIERyYWdvbnMgLSBUb3BpYwAAAAAAA4JwAAswSGdKd3J3RUVLUQABACtodHRwczovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PTBIZ0p3cndFRUtRAAd5b3V0dWJlAAAAAAAAAAA="}
-2021-12-18 04:12:52.712  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"pause","guildId":"915654347394777158","pause":true}
-2021-12-18 04:12:52.713  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"destroy","guildId":"915654347394777158"}
-2021-12-18 04:12:55.136  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:34180 -- CloseStatus[code=1006, reason=]
-2021-12-18 04:12:55.136  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 04:13:08.348  INFO 2295363 --- [XNIO-1 task-11] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:34238
-2021-12-18 04:13:08.353  INFO 2295363 --- [XNIO-1 task-11] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 04:13:14.180  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"volume","guildId":"915654347394777158","volume":100}
-2021-12-18 04:13:14.185  INFO 2295363 --- [XNIO-1 task-12] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "https://www.youtube.com/watch?v=0HgJwrwEEKQ"
-2021-12-18 04:13:14.232  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"d383c641973e58567ea60c5d10b67123","op":"voiceUpdate","guildId":"915654347394777158","event":{"token":"4b1ed103eeef5717","guild_id":"915654347394777158","endpoint":"us-south9304.discord.media:443"}}
-2021-12-18 04:13:14.266  INFO 2295363 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track I’m So Sorry
-2021-12-18 04:13:14.503  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"play","guildId":"915654347394777158","track":"QAAAfwIADknigJltIFNvIFNvcnJ5ABdJbWFnaW5lIERyYWdvbnMgLSBUb3BpYwAAAAAAA4JwAAswSGdKd3J3RUVLUQABACtodHRwczovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PTBIZ0p3cndFRUtRAAd5b3V0dWJlAAAAAAAAAAA="}
-2021-12-18 04:13:19.571  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"pause","guildId":"915654347394777158","pause":true}
-2021-12-18 04:13:19.572  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"destroy","guildId":"915654347394777158"}
-2021-12-18 04:18:08.705  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:34238 -- CloseStatus[code=1006, reason=]
-2021-12-18 04:18:08.705  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 04:21:58.621  INFO 2295363 --- [XNIO-1 task-14] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:34418
-2021-12-18 04:21:58.623  INFO 2295363 --- [XNIO-1 task-14] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 04:22:00.050  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"volume","guildId":"915654347394777158","volume":100}
-2021-12-18 04:22:00.056  INFO 2295363 --- [XNIO-1 task-15] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "https://www.youtube.com/watch?v=0HgJwrwEEKQ"
-2021-12-18 04:22:00.191  INFO 2295363 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded track I’m So Sorry
-2021-12-18 04:22:00.202  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"79f14191c71689ae1526b04e03f4229c","op":"voiceUpdate","guildId":"915654347394777158","event":{"token":"86688300f40eb643","guild_id":"915654347394777158","endpoint":"us-south9304.discord.media:443"}}
-2021-12-18 04:22:00.341  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"play","guildId":"915654347394777158","track":"QAAAfwIADknigJltIFNvIFNvcnJ5ABdJbWFnaW5lIERyYWdvbnMgLSBUb3BpYwAAAAAAA4JwAAswSGdKd3J3RUVLUQABACtodHRwczovL3d3dy55b3V0dWJlLmNvbS93YXRjaD92PTBIZ0p3cndFRUtRAAd5b3V0dWJlAAAAAAAAAAA="}
-2021-12-18 04:27:14.611  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"79f14191c71689ae1526b04e03f4229c","op":"voiceUpdate","guildId":"915654347394777158","event":{"token":"86688300f40eb643","guild_id":"915654347394777158","endpoint":"us-south9304.discord.media:443"}}
-2021-12-18 04:27:28.449  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:34418 -- CloseStatus[code=1006, reason=]
-2021-12-18 04:27:28.449  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 04:27:42.297  INFO 2295363 --- [XNIO-1 task-1] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:34560
-2021-12-18 04:27:42.299  INFO 2295363 --- [XNIO-1 task-1] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 04:29:48.513  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"volume","guildId":"915654347394777158","volume":100}
-2021-12-18 04:29:48.518  INFO 2295363 --- [XNIO-1 task-2] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "ytsearch:More KDA"
-2021-12-18 04:29:48.657  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"7a3d809ccb1967bb4693a916b683b229","op":"voiceUpdate","guildId":"915654347394777158","event":{"token":"6845c38ded4d5db7","guild_id":"915654347394777158","endpoint":"us-south9304.discord.media:443"}}
-2021-12-18 04:29:49.073  INFO 2295363 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Search results for: More KDA
-2021-12-18 04:29:49.320  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"play","guildId":"915654347394777158","track":"QAAAywIAYEsvREEgLSBNT1JFIGZ0LiBNYWRpc29uIEJlZXIsIChHKUktRExFLCBMZXhpZSBMaXUsIEphaXJhIEJ1cm5zLCBTZXJhcGhpbmUgKE9mZmljaWFsIE11c2ljIFZpZGVvKQARTGVhZ3VlIG9mIExlZ2VuZHMAAAAAAAOGWAALM1ZUa0J1eFU0eWsAAQAraHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj0zVlRrQnV4VTR5awAHeW91dHViZQAAAAAAAAAA"}
-2021-12-18 04:34:46.895  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"7a3d809ccb1967bb4693a916b683b229","op":"voiceUpdate","guildId":"915654347394777158","event":{"token":"6845c38ded4d5db7","guild_id":"915654347394777158","endpoint":"us-south9304.discord.media:443"}}
-2021-12-18 04:35:30.426  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:34560 -- CloseStatus[code=1006, reason=]
-2021-12-18 04:35:30.426  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
-2021-12-18 04:35:43.578  INFO 2295363 --- [XNIO-1 task-4] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:34730
-2021-12-18 04:35:43.581  INFO 2295363 --- [XNIO-1 task-4] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
-2021-12-18 04:38:07.707  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"volume","guildId":"915654347394777158","volume":100}
-2021-12-18 04:38:07.711  INFO 2295363 --- [XNIO-1 task-5] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "https://www.youtube.com/playlist?list=PLv-vE72gxAtoWmLGr5DRQ-8EHjp-KVB4u"
-2021-12-18 04:38:07.826 ERROR 2295363 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Load failed
-
-com.sedmelluq.discord.lavaplayer.tools.FriendlyException: The playlist does not exist.
-	at com.sedmelluq.discord.lavaplayer.source.youtube.DefaultYoutubePlaylistLoader.buildPlaylist(DefaultYoutubePlaylistLoader.java:60) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.DefaultYoutubePlaylistLoader.load(DefaultYoutubePlaylistLoader.java:48) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager$LoadingRoutes.playlist(YoutubeAudioSourceManager.java:240) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager$LoadingRoutes.playlist(YoutubeAudioSourceManager.java:228) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.DefaultYoutubeLinkRouter.routeFromMainDomain(DefaultYoutubeLinkRouter.java:70) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.DefaultYoutubeLinkRouter.route(DefaultYoutubeLinkRouter.java:42) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.loadItemOnce(YoutubeAudioSourceManager.java:196) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.loadItem(YoutubeAudioSourceManager.java:131) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItemOnce(DefaultAudioPlayerManager.java:436) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItem(DefaultAudioPlayerManager.java:418) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.lambda$createItemLoader$0(DefaultAudioPlayerManager.java:217) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) ~[na:na]
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) ~[na:na]
-	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
-	Suppressed: com.sedmelluq.discord.lavaplayer.tools.exception.EnvironmentInformation: 
-  lavaplayer.version: 1.3.96-original
-  os.arch: amd64
-  os.name: Linux
-  os.version: 5.11.0-1022-gcp
-  java.vendor: Oracle Corporation
-  java.version: 17.0.1
-  java.runtime.version: 17.0.1+12-LTS-39
-  java.vm.version: 17.0.1+12-LTS-39
-
-2021-12-18 04:38:07.827 ERROR 2295363 --- [lava-daemon-pool-info-loader-2-thread-1] l.server.player.AudioLoaderRestHandler   : Track loading failed
-
-com.sedmelluq.discord.lavaplayer.tools.FriendlyException: The playlist does not exist.
-	at com.sedmelluq.discord.lavaplayer.source.youtube.DefaultYoutubePlaylistLoader.buildPlaylist(DefaultYoutubePlaylistLoader.java:60) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.DefaultYoutubePlaylistLoader.load(DefaultYoutubePlaylistLoader.java:48) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager$LoadingRoutes.playlist(YoutubeAudioSourceManager.java:240) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager$LoadingRoutes.playlist(YoutubeAudioSourceManager.java:228) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.DefaultYoutubeLinkRouter.routeFromMainDomain(DefaultYoutubeLinkRouter.java:70) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.DefaultYoutubeLinkRouter.route(DefaultYoutubeLinkRouter.java:42) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.loadItemOnce(YoutubeAudioSourceManager.java:196) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.loadItem(YoutubeAudioSourceManager.java:131) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItemOnce(DefaultAudioPlayerManager.java:436) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.checkSourcesForItem(DefaultAudioPlayerManager.java:418) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.lambda$createItemLoader$0(DefaultAudioPlayerManager.java:217) ~[lavaplayer-fork-1.3.96.jar!/:na]
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) ~[na:na]
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) ~[na:na]
-	at java.base/java.lang.Thread.run(Thread.java:833) ~[na:na]
-	Suppressed: com.sedmelluq.discord.lavaplayer.tools.exception.EnvironmentInformation: 
-  lavaplayer.version: 1.3.96-original
-  os.arch: amd64
-  os.name: Linux
-  os.version: 5.11.0-1022-gcp
-  java.vendor: Oracle Corporation
-  java.version: 17.0.1
-  java.runtime.version: 17.0.1+12-LTS-39
-  java.vm.version: 17.0.1+12-LTS-39
-
-2021-12-18 04:38:07.831  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"destroy","guildId":"915654347394777158"}
-2021-12-18 04:39:09.062  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"volume","guildId":"915654347394777158","volume":100}
-2021-12-18 04:39:09.064  INFO 2295363 --- [XNIO-1 task-7] l.server.player.AudioLoaderRestHandler   : Got request to load for identifier "https://www.youtube.com/playlist?list=PLv-vE72gxAtoATGUG0KX6P0_-QiytyDtA"
-2021-12-18 04:39:09.177  INFO 2295363 --- [lava-daemon-pool-info-loader-2-thread-1] lavalink.server.player.AudioLoader       : Loaded playlist Música
-2021-12-18 04:39:09.205  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"sessionId":"45fad23771f0d9ddad9e42a10160864e","op":"voiceUpdate","guildId":"915654347394777158","event":{"token":"fa989c8b2df077ff","guild_id":"915654347394777158","endpoint":"us-south569.discord.media:443"}}
-2021-12-18 04:39:09.331  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"play","guildId":"915654347394777158","track":"QAAAsQIAREdyb3ZlciBXYXNoaW5ndG9uIEpSLiAtIEp1c3QgdGhlIHR3byBvZiB1cyBbIFRyYWR1Y2lkYSBhbCBlc3Bhw7FvbCBdABNDIGggw6sgciByIHkgTHlyaWNzAAAAAAADncgACzlYVXc0d3ZtUnBzAAEAK2h0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9OVhVdzR3dm1ScHMAB3lvdXR1YmUAAAAAAAAAAA=="}
-2021-12-18 04:39:38.121  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"pause","guildId":"915654347394777158","pause":true}
-2021-12-18 04:39:38.122  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : {"op":"destroy","guildId":"915654347394777158"}
-2021-12-18 04:39:40.292  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:34730 -- CloseStatus[code=1006, reason=]
-2021-12-18 04:39:40.292  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 02:39:55.944  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:46202 -- CloseStatus[code=1006, reason=]
+2021-12-19 02:39:55.945  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 02:40:10.503  INFO 2295363 --- [XNIO-1 task-9] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:48798
+2021-12-19 02:40:10.505  INFO 2295363 --- [XNIO-1 task-9] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 02:47:28.637  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:48798 -- CloseStatus[code=1006, reason=]
+2021-12-19 02:47:28.637  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 02:47:43.058  INFO 2295363 --- [XNIO-1 task-10] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:48908
+2021-12-19 02:47:43.060  INFO 2295363 --- [XNIO-1 task-10] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 03:31:11.678  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:48908 -- CloseStatus[code=1006, reason=]
+2021-12-19 03:31:11.678  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 03:45:14.296  INFO 2295363 --- [XNIO-1 task-11] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:49638
+2021-12-19 03:45:14.298  INFO 2295363 --- [XNIO-1 task-11] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 03:47:46.306  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:49638 -- CloseStatus[code=1006, reason=]
+2021-12-19 03:47:46.306  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 03:47:59.959  INFO 2295363 --- [XNIO-1 task-12] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:49706
+2021-12-19 03:47:59.960  INFO 2295363 --- [XNIO-1 task-12] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 03:48:45.381  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:49706 -- CloseStatus[code=1006, reason=]
+2021-12-19 03:48:45.381  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 03:49:46.198  INFO 2295363 --- [XNIO-1 task-13] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:49762
+2021-12-19 03:49:46.200  INFO 2295363 --- [XNIO-1 task-13] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 03:53:49.727  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:49762 -- CloseStatus[code=1006, reason=]
+2021-12-19 03:53:49.728  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 03:54:11.019  INFO 2295363 --- [XNIO-1 task-14] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:49836
+2021-12-19 03:54:11.021  INFO 2295363 --- [XNIO-1 task-14] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 04:04:33.733  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:49836 -- CloseStatus[code=1006, reason=]
+2021-12-19 04:04:33.733  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 04:05:43.727  INFO 2295363 --- [XNIO-1 task-15] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:50110
+2021-12-19 04:05:43.729  INFO 2295363 --- [XNIO-1 task-15] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 06:15:54.635  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:50110 -- CloseStatus[code=1006, reason=]
+2021-12-19 06:15:54.635  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 06:16:50.914  INFO 2295363 --- [XNIO-1 task-16] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:51448
+2021-12-19 06:16:50.916  INFO 2295363 --- [XNIO-1 task-16] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 06:25:55.454  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:51448 -- CloseStatus[code=1006, reason=]
+2021-12-19 06:25:55.454  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 06:26:08.969  INFO 2295363 --- [XNIO-1 task-1] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:52052
+2021-12-19 06:26:08.971  INFO 2295363 --- [XNIO-1 task-1] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 06:27:05.948  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:52052 -- CloseStatus[code=1006, reason=]
+2021-12-19 06:27:05.948  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 06:27:20.857  INFO 2295363 --- [XNIO-1 task-2] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:52096
+2021-12-19 06:27:20.859  INFO 2295363 --- [XNIO-1 task-2] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 06:27:46.775  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:52096 -- CloseStatus[code=1006, reason=]
+2021-12-19 06:27:46.775  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 06:29:07.165  INFO 2295363 --- [XNIO-1 task-3] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:52152
+2021-12-19 06:29:07.167  INFO 2295363 --- [XNIO-1 task-3] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 06:35:15.718  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:52152 -- CloseStatus[code=1006, reason=]
+2021-12-19 06:35:15.719  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 06:35:53.716  INFO 2295363 --- [XNIO-1 task-4] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:52302
+2021-12-19 06:35:53.718  INFO 2295363 --- [XNIO-1 task-4] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 06:40:19.974  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:52302 -- CloseStatus[code=1006, reason=]
+2021-12-19 06:40:19.974  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 06:40:46.965  INFO 2295363 --- [XNIO-1 task-5] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:52392
+2021-12-19 06:40:46.968  INFO 2295363 --- [XNIO-1 task-5] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 06:44:12.969  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:52392 -- CloseStatus[code=1006, reason=]
+2021-12-19 06:44:12.970  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 06:44:34.002  INFO 2295363 --- [XNIO-1 task-6] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:52638
+2021-12-19 06:44:34.004  INFO 2295363 --- [XNIO-1 task-6] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager
+2021-12-19 06:48:16.820  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketServer          : Connection closed from /127.0.0.1:52638 -- CloseStatus[code=1006, reason=]
+2021-12-19 06:48:16.820  INFO 2295363 --- [XNIO-1 I/O-1] lavalink.server.io.SocketContext         : Shutting down 0 playing players.
+2021-12-19 06:48:40.067  INFO 2295363 --- [XNIO-1 task-7] l.server.io.HandshakeInterceptorImpl     : Incoming connection from /127.0.0.1:52920
+2021-12-19 06:48:40.069  INFO 2295363 --- [XNIO-1 task-7] lavalink.server.io.SocketServer          : Connection successfully established from ScuttleMusicManager

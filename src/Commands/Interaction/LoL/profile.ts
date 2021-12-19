@@ -8,7 +8,12 @@ import {
   ComponentButton,
   Embed,
 } from 'detritus-client/lib/utils';
-import { bold, codeblock, underline } from 'detritus-client/lib/utils/markup';
+import {
+  bold,
+  codeblock,
+  underline,
+  codestring,
+} from 'detritus-client/lib/utils/markup';
 import { BaseInteractionCommandOption } from '../../../Classes/BaseInteractionCommand';
 import {
   CommandTypes,
@@ -28,6 +33,7 @@ import {
 } from '../../../Utils/emojis';
 import { summonerIcon } from '../../../Utils/functions';
 import { mostPlayed } from '../../../Utils/types';
+import SummonerModel from '../../../Database/src/Models/summoner';
 
 export interface CommandArgs {
   region: string;
@@ -57,16 +63,18 @@ export class Profile extends BaseInteractionCommandOption {
       options: [
         {
           name: 'region',
-          required: true,
+          required: false,
           type: ApplicationCommandOptionTypes.STRING,
           description: 'Summoner region to search.',
           choices: ChoicesRegion,
+          default: null,
         },
         {
           name: 'summoner',
-          required: true,
+          required: false,
           type: ApplicationCommandOptionTypes.STRING,
           description: 'Summoner to search.',
+          default: null,
         },
       ],
       ratelimits: [
@@ -79,9 +87,39 @@ export class Profile extends BaseInteractionCommandOption {
   }
 
   async run(ctx: InteractionContext, args: CommandArgs) {
+    let region = args.region;
+    let summoner = args.summoner;
+
     try {
-      const region = args.region;
-      const summoner = args.summoner;
+      if (!region && !summoner) {
+        const summonerModel = await SummonerModel.findOne({
+          _id: ctx.user.id,
+        });
+
+        if (!summonerModel) {
+          return ctx.editOrRespond({
+            content: `${Emojis.WARNING} You do not yet have an account registered to use the no-argument command.`,
+          });
+        }
+
+        if (summonerModel) {
+          region = summonerModel.region;
+          summoner = summonerModel.summoner;
+        }
+      }
+
+      if (!region) {
+        return await ctx.editOrRespond({
+          content: `${Emojis.WARNING} Please specify a summoner region.`,
+        });
+      }
+
+      if (!summoner) {
+        return await ctx.editOrRespond({
+          content: `${Emojis.WARNING} Please specify a summoner name.`,
+        });
+      }
+
       const embeds: Array<Embed> = [];
 
       const summoner_data = new SummonerData(region, summoner);
@@ -185,7 +223,6 @@ export class Profile extends BaseInteractionCommandOption {
               underline('Ranked Solo/Duo'),
               solo
                 ? [
-                    // :)
                     `${
                       RankedEmojis[tierName_solo as keyof typeof RankedEmojis]
                     } ${tierName_solo!} ${solo[0].rank}.`,
@@ -247,10 +284,18 @@ export class Profile extends BaseInteractionCommandOption {
         embeds: embeds,
       });
     } catch (error: any) {
+      if (error.message === LolApiErrors[404]) {
+        return await ctx.editOrRespond({
+          content: `${
+            Emojis.WARNING
+          } That summoner couldn't be found, at least on that region: ${codestring(
+            summoner,
+          )} (${codestring(region.toUpperCase())}).`,
+        });
+      }
       if (
         error.message === LolApiErrors[400] ||
-        error.message === LolApiErrors[401] ||
-        error.message === LolApiErrors[404]
+        error.message === LolApiErrors[401]
       ) {
         return await ctx.editOrRespond({
           content: `${Emojis.WARNING} ${error.message}`,

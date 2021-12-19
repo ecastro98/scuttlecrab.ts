@@ -328,3 +328,11 @@ export function isHexColor(color: string) {
 export function apiImages(str: string) {
   return `https://process.filestackapi.com/AhTgLagciQByzXpFGRI0Az/output=format:png/${str}`;
 }
+
+export function uuidv4(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0,
+      v = c == 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}

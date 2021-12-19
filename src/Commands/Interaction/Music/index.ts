@@ -4,6 +4,7 @@ import { Pause } from './pause';
 import { Play } from './play';
 import { Resume } from './resume';
 import { Stop } from './stop';
+import { Volume } from './volume';
 
 export default class MusicGroupCommand extends BaseSlashCommand {
   description = 'A group of Music commands.';
@@ -17,6 +18,7 @@ export default class MusicGroupCommand extends BaseSlashCommand {
         new Pause(),
         new Resume(),
         new NowPlaying(),
+        new Volume(),
       ],
     });
   }

@@ -4,6 +4,7 @@ import {
   Permissions,
 } from 'detritus-client/lib/constants';
 import { InteractionContext } from 'detritus-client/lib/interaction';
+import { Message } from 'detritus-client/lib/structures';
 import { Embed } from 'detritus-client/lib/utils';
 import { codestring } from 'detritus-client/lib/utils/markup';
 import { BaseInteractionCommandOption } from '../../../Classes/BaseInteractionCommand';

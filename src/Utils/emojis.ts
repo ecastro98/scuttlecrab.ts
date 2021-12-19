@@ -12,6 +12,8 @@ export enum Emojis {
   SHUFFLE = '🔀',
   REPEAT = '🔁',
   VOLUME = '🔉',
+  END = '🛑',
+  TADA = '🎉',
 }
 
 export const ChampionEmojis: Record<string, string> = {
