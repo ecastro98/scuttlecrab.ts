@@ -1,6 +1,7 @@
 import { InteractionContext } from 'detritus-client/lib/interaction';
 import { BaseInteractionCommandOption } from '../../../Classes/BaseInteractionCommand';
 import { CommandTypes } from '../../../Utils/constants';
+import { redisPingMS } from '../../../Utils/functions';
 
 export const commandName = 'ping';
 
@@ -29,7 +30,7 @@ export class Ping extends BaseInteractionCommandOption {
   async run(ctx: InteractionContext) {
     const { gateway, rest } = await ctx.client.ping();
     return await ctx.editOrRespond({
-      content: `Pong! (gateway: ${gateway}ms) (rest: ${rest}ms).`,
+      content: `Pong! (gateway: ${gateway}ms) (rest: ${rest}ms) (redis: ${await redisPingMS()}ms).`,
     });
   }
 }

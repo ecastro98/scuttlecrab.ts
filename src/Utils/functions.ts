@@ -431,3 +431,102 @@ export async function getBuildsAndRunes(
     console.log((error as Error).message);
   }
 }
+
+export function formatBytes(bytes: number, decimals: number = 2) {
+  if (bytes === 0) return '0 Bytes';
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+export function formatTime(time: number) {
+  const hours = Math.floor(time / 3600);
+  const minutes = Math.floor((time % 3600) / 60);
+  const seconds = Math.floor(time % 60);
+
+  return `${hours < 10 ? '0' + hours : hours}:${
+    minutes < 10 ? '0' + minutes : minutes
+  }:${seconds < 10 ? '0' + seconds : seconds}`;
+}
+
+export async function redisPingMS() {
+  const start = Date.now();
+  await RedisClient.ping();
+  return Date.now() - start;
+}
+
+export async function fetchLoLItems() {
+  const get = await RedisClient.get('items');
+  if (get) {
+    return JSON.parse(get);
+  }
+
+  const res = await axios.get(
+    'https://ddragon.leagueoflegends.com/api/versions.json',
+  );
+
+  const fetch = await axios.get(
+    `https://ddragon.leagueoflegends.com/cdn/${res.data[0]}/data/en_US/item.json`,
+  );
+
+  await RedisClient.set('items', JSON.stringify(fetch.data.data));
+
+  return fetch.data.data;
+}
+
+export async function getItemID(name: string): Promise<number> {
+  const items = await fetchLoLItems();
+  const item: any = Object.values(items).find(
+    (item: any) => item.name === name,
+  );
+  // if (!item) return null;
+
+  return Number(item.image.full.split('.')[0]);
+}
+
+// async function graphicBar(
+//   data: {
+//     name: string;
+//     value: number;
+//   }[],
+//   title: string,
+//   color: string,
+//   width: number,
+//   height: number,
+//   fontSize: number,
+//   backgroundColor: string,
+//   barColor: string,
+//   barWidth: number,
+// ) {
+//   const canvas = createCanvas(width, height);
+//   const ctx = canvas.getContext('2d');
+
+//   ctx.fillStyle = backgroundColor;
+//   ctx.fillRect(0, 0, width, height);
+
+//   const barHeight = height / data.length;
+
+//   data.forEach((item, index) => {
+//     ctx.fillStyle = barColor;
+//     ctx.fillRect(0, barHeight * index, (item.value / 100) * width, barHeight);
+
+//     ctx.fillStyle = '#fff';
+//     ctx.font = `${fontSize}px Arial`;
+//     ctx.fillText(
+//       item.name,
+//       (item.value / 100) * width + 10,
+//       barHeight * index + fontSize / 2,
+//     );
+//   });
+
+//   ctx.fillStyle = color;
+//   ctx.font = `${fontSize}px Arial`;
+//   ctx.fillText(title, 10, fontSize);
+
+//   return canvas.toBuffer();
+// }

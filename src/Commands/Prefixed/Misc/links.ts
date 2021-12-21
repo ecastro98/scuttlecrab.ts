@@ -10,7 +10,7 @@ export default class Ping extends BaseCommand {
   constructor(client: CommandClient) {
     super(client, {
       name: commandName,
-      aliases: ['invite', 'support'],
+      aliases: ['invite', 'support', 'vote', 'website'],
       metadata: {
         description: 'Get the most important links in the Bot.',
         examples: [commandName],

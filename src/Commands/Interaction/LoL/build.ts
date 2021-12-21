@@ -2,15 +2,19 @@ import { InteractionContext } from 'detritus-client/lib/interaction';
 import { BaseInteractionCommandOption } from '../../../Classes/BaseInteractionCommand';
 import { SummonerData } from '../../../Classes/SummonerData';
 import { CommandTypes, EmbedColors } from '../../../Utils/constants';
-import { Emojis } from '../../../Utils/emojis';
-import { bold, codestring, underline } from 'detritus-client/lib/utils/markup';
+import { Emojis, Items, SpellsEmojisByName } from '../../../Utils/emojis';
+import { codestring, underline } from 'detritus-client/lib/utils/markup';
 import {
   ApplicationCommandOptionTypes,
   InteractionCallbackTypes,
 } from 'detritus-client/lib/constants';
 import { Champions } from '../../../Utils/champions';
 import { Embed } from 'detritus-client/lib/utils';
-import { capitalize, getBuildsAndRunes } from '../../../Utils/functions';
+import {
+  capitalize,
+  getBuildsAndRunes,
+  getItemID,
+} from '../../../Utils/functions';
 
 export interface CommandArgs {
   champion: string;
@@ -138,8 +142,9 @@ export class Build extends BaseInteractionCommandOption {
         .setThumbnail(
           `http://ddragon.leagueoflegends.com/cdn/${patch}/img/champion/${champion_data.image.full}`,
         )
-        .setColor(EmbedColors.DEFAULT)
-        .addField(
+        .setColor(EmbedColors.DEFAULT);
+      if (build[0].runesPrimary) {
+        embed_build.addField(
           underline('Primary Runes'),
           build!
             .map((x) =>
@@ -149,8 +154,11 @@ export class Build extends BaseInteractionCommandOption {
             )
             .join('\n'),
           true,
-        )
-        .addField(
+        );
+      }
+
+      if (build[0].runesSecondary) {
+        embed_build.addField(
           underline('Secondary Runes'),
           build!
             .map((x) =>
@@ -160,8 +168,11 @@ export class Build extends BaseInteractionCommandOption {
             )
             .join('\n'),
           true,
-        )
-        .addField(
+        );
+      }
+
+      if (build[0].runesShard) {
+        embed_build.addField(
           underline('Shard Runes'),
           build!
             .map((x) =>
@@ -171,29 +182,37 @@ export class Build extends BaseInteractionCommandOption {
             )
             .join('\n'),
           true,
-        )
-        .addField(
+        );
+      }
+
+      if (build[0].items) {
+        const items = build[0].items.map(async (item) => {
+          const item_id = await getItemID(item);
+          return `${Items[item_id]} ${item}`;
+        });
+
+        const i = await Promise.all(items);
+
+        embed_build.addField(
           underline('Recommended Items'),
-          build!
-            .map((x) =>
-              x.items
-                .map((value, i) => `${codestring(`${++i}.`)} ${value}.`)
-                .join('\n'),
-            )
-            .join('\n'),
+          i.join('\n'),
           true,
-        )
-        .addField(
+        );
+      }
+
+      if (build[0].spells) {
+        embed_build.addField(
           underline('Recommended Spells'),
           build!
             .map((x) =>
               x.spells
-                .map((value, i) => `${codestring(`${++i}.`)} ${value}.`)
+                .map((value, i) => `${SpellsEmojisByName[value]} ${value}.`)
                 .join('\n'),
             )
             .join('\n'),
           true,
         );
+      }
 
       return await ctx.editOrRespond({
         embeds: [embed_build],

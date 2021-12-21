@@ -50,12 +50,13 @@ export enum CommandTypes {
   PRIVATE = 'Private',
   UTIL = 'Util',
   LOL = 'League of Legends',
+  VALORANT = 'Valorant',
   DOCS = 'Detritus Client',
   MUSIC = 'Music',
 }
 
 export enum EmbedColors {
-  DEFAULT = 0x0762ff,
+  DEFAULT = 0x9126d0,
   ERROR = 0xff0000,
   SUCCESS = 0x3aff00,
 }
@@ -643,5 +644,103 @@ export const QueueTypes = [
     queueId: 2020,
     map: "Summoner's Rift",
     description: 'Tutorial 3',
+  },
+];
+
+export const Agents = [
+  {
+    name: 'Breach',
+    value: 'Breach',
+  },
+  {
+    name: 'Brimstone',
+    value: 'brimstone',
+  },
+  {
+    name: 'Cypher',
+    value: 'cypher',
+  },
+  {
+    name: 'Jett',
+    value: 'jett',
+  },
+  {
+    name: 'Killjoy',
+    value: 'killjoy',
+  },
+  {
+    name: 'Omen',
+    value: 'omen',
+  },
+  {
+    name: 'Phoenix',
+    value: 'phoenix',
+  },
+  {
+    name: 'Raze',
+    value: 'raze',
+  },
+  {
+    name: 'Reyna',
+    value: 'reyna',
+  },
+  {
+    name: 'Sage',
+    value: 'sage',
+  },
+  {
+    name: 'Sova',
+    value: 'sova',
+  },
+  {
+    name: 'Skye',
+    value: 'skye',
+  },
+  {
+    name: 'Viper',
+    value: 'viper',
+  },
+  {
+    name: 'Yoru',
+    value: 'yoru',
+  },
+  {
+    name: 'Kayo',
+    value: 'kayo',
+  },
+  {
+    name: 'Astra',
+    value: 'astra',
+  },
+];
+
+export const ValorantMaps = [
+  {
+    name: 'Fracture',
+    value: 'fracture',
+  },
+  {
+    name: 'Breeze',
+    value: 'breeze',
+  },
+  {
+    name: 'Ice Box',
+    value: 'icebox',
+  },
+  {
+    name: 'Bind',
+    value: 'bind',
+  },
+  {
+    name: 'Haven',
+    value: 'haven',
+  },
+  {
+    name: 'Split',
+    value: 'split',
+  },
+  {
+    name: 'Ascent',
+    value: 'ascent',
   },
 ];

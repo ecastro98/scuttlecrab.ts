@@ -5,37 +5,36 @@ export const ShardClientConfig = {
       expire: 60 * 60 * 1000,
     },
     messages: {
-      limit: 10,
       expire: 5 * 60000,
     },
     members: {
       limit: 1000,
       expire: 5 * 60000,
     },
-    voiceStates: true,
+    voiceStates: false,
     emojis: false,
     interactions: false,
     notes: false,
     presences: false,
     roles: true,
     stickers: false,
-    voiceConnections: true,
+    voiceConnections: false,
     connectedAccounts: false,
     sessions: false,
     stageInstances: false,
     relationships: false,
-    voiceCalls: true,
+    voiceCalls: false,
   },
   imageFormat: 'png',
   gateway: {
     presence: {
       activity: {
-        name: "The Summoner's Rift",
+        name: "The Summoner's Rift | Prefix: '?'",
         type: 3,
       },
       status: 'dnd',
     },
-    intents: 14023,
+    intents: 4753,
   },
 };
 
