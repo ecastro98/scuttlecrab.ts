@@ -9,7 +9,10 @@ const log = new Logger('📚', {
   },
 });
 
-export const RedisClient = createClient();
+const config = {
+  url: process.env.REDIS_HOST ?? 'redis://127.0.0.1:6379'
+}
+export const RedisClient = createClient(config);
 
 RedisClient.on('connect', () => log.info('Redis Client Connected.'));
 RedisClient.on('error', (err) => log.error('Redis Client Error', err));
